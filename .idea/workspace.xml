@@ -6,7 +6,14 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="13835eb8-5fcc-41c5-a942-da5db5ef4977" name="Default" comment="" />
+    <list default="true" id="13835eb8-5fcc-41c5-a942-da5db5ef4977" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/CommandLineTools/CommandLineTools.jar" afterPath="$PROJECT_DIR$/out/artifacts/CommandLineTools/CommandLineTools.jar" />
+      <change beforePath="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/Main.java" afterPath="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/Main.java" />
+      <change beforePath="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/encryption/DecryptCommand.java" afterPath="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/encryption/DecryptCommand.java" />
+      <change beforePath="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/utils/files/FileNamingData.java" afterPath="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/utils/files/FileNamingData.java" />
+      <change beforePath="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/utils/StringProcessing.java" afterPath="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/utils/StringProcessing.java" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,11 +24,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="84" column="26" lean-forward="false" selection-start-line="84" selection-start-column="26" selection-end-line="84" selection-end-column="26" />
+            <state relative-caret-position="425">
+              <caret line="71" column="72" lean-forward="false" selection-start-line="71" selection-start-column="72" selection-end-line="71" selection-end-column="72" />
+              <folding>
+                <element signature="e#3635#3636#0" expanded="true" />
+                <element signature="e#3685#3686#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TODO.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/HelpFiles/TODO.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -56,8 +76,38 @@
       <file leaf-file-name="DecryptCommand.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/encryption/DecryptCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2567">
-              <caret line="174" column="10" lean-forward="false" selection-start-line="174" selection-start-column="10" selection-end-line="174" selection-end-column="10" />
+            <state relative-caret-position="304">
+              <caret line="209" column="46" lean-forward="false" selection-start-line="209" selection-start-column="31" selection-end-line="209" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StringProcessing.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/utils/StringProcessing.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="265">
+              <caret line="172" column="0" lean-forward="true" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FileEncryptor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/utils/files/FileEncryptor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="137">
+              <caret line="242" column="32" lean-forward="false" selection-start-line="242" selection-start-column="27" selection-end-line="242" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FileLister.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/utils/files/FileLister.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="392">
+              <caret line="96" column="44" lean-forward="true" selection-start-line="96" selection-start-column="44" selection-end-line="96" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -66,8 +116,18 @@
       <file leaf-file-name="EncryptCommand.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/encryption/EncryptCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2006">
+            <state relative-caret-position="-85">
               <caret line="141" column="9" lean-forward="false" selection-start-line="141" selection-start-column="9" selection-end-line="141" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FileNamingData.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/utils/files/FileNamingData.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="188">
+              <caret line="244" column="20" lean-forward="true" selection-start-line="244" selection-start-column="20" selection-end-line="244" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -89,8 +149,11 @@
         <option value="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/Command.java" />
         <option value="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/CommandExecutionResult.java" />
         <option value="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/encryption/EncryptCommand.java" />
-        <option value="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/encryption/DecryptCommand.java" />
+        <option value="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/utils/files/FileNamingData.java" />
         <option value="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/Main.java" />
+        <option value="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/encryption/DecryptCommand.java" />
+        <option value="$PROJECT_DIR$/HelpFiles/TODO.txt" />
+        <option value="$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/utils/StringProcessing.java" />
       </list>
     </option>
   </component>
@@ -150,6 +213,11 @@
             <path>
               <item name="CommandLineTools" type="b2602c69:ProjectViewProjectNode" />
               <item name="CommandLineTools" type="462c0819:PsiDirectoryNode" />
+              <item name="HelpFiles" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CommandLineTools" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CommandLineTools" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -164,22 +232,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="commandlinetools" type="462c0819:PsiDirectoryNode" />
               <item name="command" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CommandLineTools" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CommandLineTools" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="commandlinetools" type="462c0819:PsiDirectoryNode" />
-              <item name="command" type="462c0819:PsiDirectoryNode" />
-              <item name="development" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CommandLineTools" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CommandLineTools" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="commandlinetools" type="462c0819:PsiDirectoryNode" />
-              <item name="command" type="462c0819:PsiDirectoryNode" />
-              <item name="exceptions" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CommandLineTools" type="b2602c69:ProjectViewProjectNode" />
@@ -188,24 +240,6 @@
               <item name="commandlinetools" type="462c0819:PsiDirectoryNode" />
               <item name="command" type="462c0819:PsiDirectoryNode" />
               <item name="impl" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CommandLineTools" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CommandLineTools" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="commandlinetools" type="462c0819:PsiDirectoryNode" />
-              <item name="command" type="462c0819:PsiDirectoryNode" />
-              <item name="impl" type="462c0819:PsiDirectoryNode" />
-              <item name="encryption" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CommandLineTools" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CommandLineTools" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="commandlinetools" type="462c0819:PsiDirectoryNode" />
-              <item name="command" type="462c0819:PsiDirectoryNode" />
-              <item name="impl" type="462c0819:PsiDirectoryNode" />
-              <item name="exceptions" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CommandLineTools" type="b2602c69:ProjectViewProjectNode" />
@@ -225,23 +259,6 @@
               <item name="impl" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
               <item name="files" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CommandLineTools" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CommandLineTools" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="commandlinetools" type="462c0819:PsiDirectoryNode" />
-              <item name="command" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CommandLineTools" type="b2602c69:ProjectViewProjectNode" />
-              <item name="CommandLineTools" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="commandlinetools" type="462c0819:PsiDirectoryNode" />
-              <item name="command" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-              <item name="exceptions" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -401,24 +418,26 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5770000" />
+    <option name="totallyTimeSpent" value="10677000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45167854" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.45167854" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20104167" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20104167" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -427,12 +446,31 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45167854" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20104167" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -450,7 +488,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
           <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3635#3636#0" expanded="true" />
+            <element signature="e#3685#3686#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -498,7 +539,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#3635#3636#0" expanded="true" />
+            <element signature="e#3685#3686#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -563,8 +607,183 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/Main.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="65" column="51" lean-forward="false" selection-start-line="65" selection-start-column="51" selection-end-line="65" selection-end-column="51" />
+          <folding>
+            <element signature="e#3635#3636#0" expanded="true" />
+            <element signature="e#3685#3686#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
-          <caret line="84" column="26" lean-forward="false" selection-start-line="84" selection-start-column="26" selection-end-line="84" selection-end-column="26" />
+          <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
+          <folding>
+            <element signature="e#3635#3636#0" expanded="true" />
+            <element signature="e#3685#3686#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/encryption/EncryptCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2006">
+          <caret line="141" column="9" lean-forward="false" selection-start-line="141" selection-start-column="9" selection-end-line="141" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/Command.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10795">
+          <caret line="635" column="77" lean-forward="false" selection-start-line="635" selection-start-column="77" selection-end-line="635" selection-end-column="77" />
+          <folding>
+            <element signature="e#28160#28161#0" expanded="true" />
+            <element signature="e#28194#28195#0" expanded="true" />
+            <element signature="e#28599#28600#0" expanded="true" />
+            <element signature="e#28650#28651#0" expanded="true" />
+            <element signature="e#31178#31179#0" expanded="true" />
+            <element signature="e#31212#31213#0" expanded="true" />
+            <element signature="e#31376#31377#0" expanded="true" />
+            <element signature="e#31430#31431#0" expanded="true" />
+            <element signature="e#32601#32602#0" expanded="true" />
+            <element signature="e#32666#32667#0" expanded="true" />
+            <element signature="e#32810#32811#0" expanded="true" />
+            <element signature="e#32869#32870#0" expanded="true" />
+            <element signature="e#33000#33001#0" expanded="true" />
+            <element signature="e#33050#33051#0" expanded="true" />
+            <element signature="e#33503#33530#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/encryption/DecryptCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2567">
+          <caret line="174" column="10" lean-forward="false" selection-start-line="174" selection-start-column="10" selection-end-line="174" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#3635#3636#0" expanded="true" />
+            <element signature="e#3685#3686#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/utils/Assurance.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="20" column="15" lean-forward="false" selection-start-line="20" selection-start-column="15" selection-end-line="20" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/CommandExecutionResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="96" column="66" lean-forward="false" selection-start-line="96" selection-start-column="66" selection-end-line="96" selection-end-column="66" />
+          <folding>
+            <element signature="e#1538#1539#0" expanded="false" />
+            <element signature="e#1568#1569#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/Command.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="524" column="63" lean-forward="false" selection-start-line="524" selection-start-column="63" selection-end-line="524" selection-end-column="63" />
+          <folding>
+            <element signature="e#28160#28161#0" expanded="true" />
+            <element signature="e#28194#28195#0" expanded="true" />
+            <element signature="e#28599#28600#0" expanded="true" />
+            <element signature="e#28650#28651#0" expanded="true" />
+            <element signature="e#31178#31179#0" expanded="true" />
+            <element signature="e#31212#31213#0" expanded="true" />
+            <element signature="e#31376#31377#0" expanded="true" />
+            <element signature="e#31430#31431#0" expanded="true" />
+            <element signature="e#32601#32602#0" expanded="true" />
+            <element signature="e#32666#32667#0" expanded="true" />
+            <element signature="e#32810#32811#0" expanded="true" />
+            <element signature="e#32869#32870#0" expanded="true" />
+            <element signature="e#33000#33001#0" expanded="true" />
+            <element signature="e#33050#33051#0" expanded="true" />
+            <element signature="e#33503#33530#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/utils/files/FileNamingData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="244" column="20" lean-forward="true" selection-start-line="244" selection-start-column="20" selection-end-line="244" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/encryption/EncryptCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-85">
+          <caret line="141" column="9" lean-forward="false" selection-start-line="141" selection-start-column="9" selection-end-line="141" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="71" column="72" lean-forward="false" selection-start-line="71" selection-start-column="72" selection-end-line="71" selection-end-column="72" />
+          <folding>
+            <element signature="e#3635#3636#0" expanded="true" />
+            <element signature="e#3685#3686#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HelpFiles/TODO.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/utils/files/FileLister.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="96" column="44" lean-forward="true" selection-start-line="96" selection-start-column="44" selection-end-line="96" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/utils/files/FileEncryptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="137">
+          <caret line="242" column="32" lean-forward="false" selection-start-line="242" selection-start-column="27" selection-end-line="242" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/impl/encryption/DecryptCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="209" column="46" lean-forward="false" selection-start-line="209" selection-start-column="31" selection-end-line="209" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/de/hotzjeanpierre/commandlinetools/command/utils/StringProcessing.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="172" column="0" lean-forward="true" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
           <folding />
         </state>
       </provider>

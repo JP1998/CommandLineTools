@@ -246,7 +246,7 @@ public class FileNamingData {
                 // otherwise we'll extract all the informations
                 originalLocation = result.getOriginalName().substring(0, separatorIndex + 1);
                 originalFileName = result.getOriginalName().substring(separatorIndex + 1, extensionPointIndex);
-                originalExtension = result.getOriginalName().substring(extensionPointIndex + 1, result.getOriginalName().length());
+                originalExtension = result.getOriginalName().substring(extensionPointIndex, result.getOriginalName().length());
             }
 
             return new Builder()

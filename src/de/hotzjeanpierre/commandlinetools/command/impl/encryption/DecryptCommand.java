@@ -107,7 +107,7 @@ public class DecryptCommand extends Command {
                                 PARAMETER_NAME_FORMAT,
                                 FileNamingTemplate.class,
                                 PARAMETER_DESCRIPTION_FORMAT,
-                                FileNamingTemplate.parse("{originallocation}{originalname}.{extension}")
+                                FileNamingTemplate.parse("{originallocation}{originalname}{extension}")
                         ),
                         new Parameter(
                                 PARAMETER_NAME_PASSWORD,
@@ -215,6 +215,8 @@ public class DecryptCommand extends Command {
         }
 
         // TODO: Delete folders that may be eventually empty
+
+
 
         return syso.setSuccess(true)
                 .build();

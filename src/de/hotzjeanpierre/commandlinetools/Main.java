@@ -61,36 +61,36 @@ public class Main {
 
                 if(cmd.isDeleteInput()) {
                     // Delete the input made before writing the output that results from the command
-                    try {
-                        runPlatformDependent(
-                                new ProcessBuilder("cmd", "/c", "cls").inheritIO(),
-                                new ProcessBuilder("cmd", "/c", "clear").inheritIO(), // TODO: Google the actual instruction
-                                new ProcessBuilder("cmd", "/c", "cls").inheritIO() // TODO: Google the actual instruction
-                        );
-                    } catch (IOException | InterruptedException ignored) {
-                        ignored.printStackTrace();
-                    }
+                    clear();
                 }
 
                 CommandExecutionResult result = cmd.execute();
 
-                if (!result.isSuccess()) {
+                if (result.isSuccess()) {
+                    System.out.println("Command finished successfully.");
+                } else {
                     System.out.println("Command finished without success.");
                 }
             }
         }
     }
 
-    private static void runPlatformDependent(ProcessBuilder win, ProcessBuilder unix, ProcessBuilder mac)
-            throws IOException, InterruptedException {
+    /**
+     * This method is supposed to clear the console independent on which platform this application runs on.
+     * Will not work in emulated command line interfaces.
+     */
+    private static void clear() {
         String lowerOSName = System.getProperty("os.name").toLowerCase();
 
         if(lowerOSName.contains("window")) {
-            win.start().waitFor();
-        } else if(lowerOSName.contains("mac")) {
-            mac.start().waitFor();
+            try {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
         } else {
-            unix.start().waitFor();
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
         }
     }
 

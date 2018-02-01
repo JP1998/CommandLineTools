@@ -171,7 +171,8 @@ public class StringProcessing {
                     );
                 }
 
-                return replacements[replacementIndex].toString();
+                Object replacement = replacements[replacementIndex];
+                return (replacement != null)? replacement.toString() : "null";
         }
     }
 
