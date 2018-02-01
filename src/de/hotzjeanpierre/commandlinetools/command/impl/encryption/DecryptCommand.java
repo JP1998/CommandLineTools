@@ -201,6 +201,8 @@ public class DecryptCommand extends Command {
                             "Couldn't delete file '{0}'. Please try deleting it manually.",
                             f
                     ));
+
+                    // TODO: Reset the laptop!
                 }
             } else {
                 // if there was an error we'll show the message and abort the command
@@ -214,9 +216,9 @@ public class DecryptCommand extends Command {
             }
         }
 
-        // TODO: Delete folders that may be eventually empty
-
-
+        if(delsrc) {
+            EmptyFolderDeleter.deleteIfEmpty(src);
+        }
 
         return syso.setSuccess(true)
                 .build();

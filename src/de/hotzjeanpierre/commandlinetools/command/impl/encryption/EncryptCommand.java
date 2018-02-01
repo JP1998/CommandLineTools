@@ -212,7 +212,9 @@ public class EncryptCommand extends Command {
             }
         }
 
-        // TODO: Delete folders that may eventually be empty
+        if(delsrc) {
+            EmptyFolderDeleter.deleteIfEmpty(src);
+        }
 
         return syso.setSuccess(true)
                 .build();

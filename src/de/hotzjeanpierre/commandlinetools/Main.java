@@ -20,13 +20,10 @@ import de.hotzjeanpierre.commandlinetools.command.Command;
 import de.hotzjeanpierre.commandlinetools.command.CommandExecutionResult;
 import de.hotzjeanpierre.commandlinetools.command.Parameter;
 import de.hotzjeanpierre.commandlinetools.command.ParameterValuesList;
-import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import org.jetbrains.annotations.Contract;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Map;
-import java.util.Properties;
 import java.util.Scanner;
 
 public class Main {
