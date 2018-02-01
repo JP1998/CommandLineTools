@@ -140,7 +140,7 @@ public class StringProcessing {
      * @param replacements the replacements that were given into the format-method
      * @return the text that is to be put into the wildcards position
      */
-    private static String parseWildcard(String wildcard, Object[] replacements) {
+    private static String parseWildcard(@NotNull String wildcard, Object[] replacements) {
         switch (wildcard) {
             case "{{":
                 return "{";
@@ -235,7 +235,7 @@ public class StringProcessing {
      * @param str the string containing escape sequences
      * @return the string with descaped escape-sequences
      */
-    private static String descape(String str) {
+    private static String descape(@NotNull String str) {
         return str.replace("\\t", "\t").replace("\\b", "\b").replace("\\n", "\n")
                 .replace("\\r", "\r").replace("\\f", "\f").replace("\\'", "\'")
                 .replace("\\\"", "\"").replace("\\\\", "\\");
@@ -250,6 +250,7 @@ public class StringProcessing {
      * @param length the length the given number should be padded to
      * @return the padded representation of the number
      */
+    @NotNull
     public static String zeroPadding(int number, int length) {
         boolean negative = number < 0;
 

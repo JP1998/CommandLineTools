@@ -286,7 +286,7 @@ public abstract class Command implements NamingValidator {
      *
      * @param fullyQualifiedClassNames The fully qualified name of the classes to load.
      */
-    public static void assureLoadingOfCommands(String... fullyQualifiedClassNames) {
+    public static void assureLoadingOfCommands(@NotNull String... fullyQualifiedClassNames) {
         for (String fqcn : fullyQualifiedClassNames) {
             Assurance.tryLoadingClass(fqcn);
         }

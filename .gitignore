@@ -1,2 +1,5 @@
 out/production/
 .idea/workspace.xml
+HelpFiles/TODO.txt
+lib/
+src/de/hotzjeanpierre/commandlinetools/command/impl/utils/asdf.java
