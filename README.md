@@ -52,31 +52,9 @@ public class Main {
 | Name | Description | Parameters |
 |------|-------------|------------|
 | help | Prints the descriptions for all available commands | - |
-| encrypt | Encrypts a bulk of files with a given password and saves it | src - the source to take files from |
-|  |  | out - Where to save the encrypted files |
-|  |  | password - The password to use for encrypting the files |
-|  |  | delsrc (optional; default: true) - whether to delete the source files after they are processed |
-|  |  | filter (optional; default: "") - The filter to apply to the files that are to be encrypted; currently only filtering through file extensions is supported |
-|  |  | filtermode (optional; default: None) - The mode the filter is supposed to act in; AllowOnly will allow only files matching the filter, Filter will allow only files not matching the filter, and None will allow any file |
-|  |  | subdir (optional; default: true) - Whether to also encrypt files from sub directories |
-|  |  | format (optional; default: "{index:10}.encr") - The template to use for naming the encrypted files |
-| decrypt | Decrypts a bulk of files with a given password and saves it; only works for files encrypted with the encrypt-command | src - the source to take files from |
-|  |  | out - Where to save the decrypted files |
-|  |  | password - The password to use for decrypting the files |
-|  |  | delsrc (optional; default: true) - whether to delete the source files after they are processed |
-|  |  | filter (optional; default: "encr") - The filter to apply to the files that are to be decrypted; currently only filtering through file extensions is supported |
-|  |  | filtermode (optional; default: AllowOnly) - The mode the filter is supposed to act in; AllowOnly will allow only files matching the filter, Filter will allow only files not matching the filter, and None will allow any file |
-|  |  | subdir (optional; default: true) - Whether to also decrypt files from sub directories |
-|  |  | format (optional; default: "{originallocation}{originalname}{extension}") - The template to use for naming the encrypted files |
-| list | Lists files contained within a folder | folder - The root folder to list files from |
-|  |  | tree - (optional; default: true) Whether to list the files in a tree structure (highly recommended when also listing files from sub directories) or not |
-|  |  | filter (optional; default: "") - The filter to apply to the files that are to be listed; currently only filtering through file extensions is supported |
-|  |  | filtermode (optional; default: None) - The mode the filter is supposed to act in; AllowOnly will allow only files matching the filter, Filter will allow only files not matching the filter, and None will allow any file |
-|  |  | listfolders (optional; default: true) - Whether to also contain folders in the list of files (we recommend only giving false if also subdir is set to false) |
-|  |  | subdir (optional; default: false) - Whether to also list files from sub directories or not |
-|  |  | format (optional; default: "- ${name}") - The template to use for listing files; "${name}" can be used as a placeholder for the file name |
-
-
+| encrypt | Encrypts a bulk of files with a given password and saves it | **src** - the source to take files from <br/> **out** - Where to save the encrypted files <br/> **password** - The password to use for encrypting the files <br/> **delsrc** (optional; default: true) - whether to delete the source files after they are processed <br/> **filter** (optional; default: "") - The filter to apply to the files that are to be encrypted; currently only filtering through file extensions is supported <br/> **filtermode** (optional; default: None) - The mode the filter is supposed to act in; AllowOnly will allow only files matching the filter, Filter will allow only files not matching the filter, and None will allow any file <br/> **subdir** (optional; default: true) - Whether to also encrypt files from sub directories <br/> **format** (optional; default: "{index:10}.encr") - The template to use for naming the encrypted files |
+| decrypt | Decrypts a bulk of files with a given password and saves it; only works for files encrypted with the encrypt-command | **src** - the source to take files from <br/> **out** - Where to save the decrypted files <br/> **password** - The password to use for decrypting the files <br/> **delsrc** (optional; default: true) - whether to delete the source files after they are processed <br/> **filter** (optional; default: "encr") - The filter to apply to the files that are to be decrypted; currently only filtering through file extensions is supported <br/> **filtermode** (optional; default: AllowOnly) - The mode the filter is supposed to act in; AllowOnly will allow only files matching the filter, Filter will allow only files not matching the filter, and None will allow any file <br/> **subdir** (optional; default: true) - Whether to also decrypt files from sub directories <br/> **format** (optional; default: "{originallocation}{originalname}{extension}") - The template to use for naming the encrypted files |
+| list | Lists files contained within a folder | **folder** - The root folder to list files from <br/> **tree** - (optional; default: true) Whether to list the files in a tree structure (highly recommended when also listing files from sub directories) or not <br/> **filter** (optional; default: "") - The filter to apply to the files that are to be listed; currently only filtering through file extensions is supported <br/> **filtermode** (optional; default: None) - The mode the filter is supposed to act in; AllowOnly will allow only files matching the filter, Filter will allow only files not matching the filter, and None will allow any file <br/> **listfolders** (optional; default: true) - Whether to also contain folders in the list of files (we recommend only giving false if also subdir is set to false) <br/> **subdir** (optional; default: false) - Whether to also list files from sub directories or not <br/> **format** (optional; default: "- ${name}") - The template to use for listing files; "${name}" can be used as a placeholder for the file name <br/>
 
 ## Creation of a new command
 
