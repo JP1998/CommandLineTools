@@ -201,8 +201,6 @@ public class DecryptCommand extends Command {
                             "Couldn't delete file '{0}'. Please try deleting it manually.",
                             f
                     ));
-
-                    // TODO: Reset the laptop!
                 }
             } else {
                 // if there was an error we'll show the message and abort the command

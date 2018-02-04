@@ -32,7 +32,8 @@ public class Main {
 
     public static void main(String[] args) {
         Command.assureLoadingOfCommands(
-                "de.hotzjeanpierre.commandlinetools.Main$ExitCommand"
+                "de.hotzjeanpierre.commandlinetools.Main$ExitCommand",
+                "de.hotzjeanpierre.commandlinetools.Main$ClearCommand"
         );
 
         running = true;
@@ -63,9 +64,7 @@ public class Main {
 
                 CommandExecutionResult result = cmd.execute();
 
-                if (result.isSuccess()) {
-                    System.out.println("Command finished successfully.");
-                } else {
+                if (!result.isSuccess()) {
                     System.out.println("Command finished without success.");
                 }
             }
@@ -98,7 +97,7 @@ public class Main {
             Command.addSupportedCommand(new ExitCommand(
                     "exit",
                     "This command exits the current program.",
-                    new Parameter[]{}
+                    new Parameter[0]
             ));
         }
 
@@ -110,6 +109,30 @@ public class Main {
         @Override
         protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
             Main.running = false;
+            return new CommandExecutionResult.Builder()
+                    .setSuccess(true)
+                    .build();
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static class ClearCommand extends Command {
+
+        static {
+            Command.addSupportedCommand(new ClearCommand(
+                    "clear",
+                    "Clears the current output from the command line.",
+                    new Parameter[0]
+            ));
+        }
+
+        private ClearCommand(String name, String description, Parameter[] params) {
+            super(name, description, params);
+        }
+
+        @Override
+        protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
+            clear();
             return new CommandExecutionResult.Builder()
                     .setSuccess(true)
                     .build();

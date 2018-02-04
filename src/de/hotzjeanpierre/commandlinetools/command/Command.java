@@ -199,7 +199,8 @@ public abstract class Command implements NamingValidator {
         assureLoadingOfCommands(
                 "de.hotzjeanpierre.commandlinetools.command.Command$HelpCommand",
                 "de.hotzjeanpierre.commandlinetools.command.impl.encryption.EncryptCommand",
-                "de.hotzjeanpierre.commandlinetools.command.impl.encryption.DecryptCommand"
+                "de.hotzjeanpierre.commandlinetools.command.impl.encryption.DecryptCommand",
+                "de.hotzjeanpierre.commandlinetools.command.impl.files.ListFilesCommand"
         );
     }
 
