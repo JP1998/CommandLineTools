@@ -8,8 +8,8 @@ which is implementing more complex tasks like bulk renaming of files by a certai
 1. [Usage of the custom and pre-defined commands](#usage-of-the-custom-and-pre-defined-commands)
 2. [List of pre-defined commands](#list-of-pre-defined-commands)
 3. [Creation of a new command](#creation-of-a-new-command)
-4. [Using customly typed parameters](#using-customly-typed-parameters)
-5. [What features are to come soon](#what-features-are-to-come-soon)
+4. [Using custom typed parameters](#using-custom-typed-parameters)
+5. [What features are to come in the future](#what-features-are-to-come-in-the-future)
 
 ## Usage of the custom and pre-defined commands
 
@@ -52,6 +52,31 @@ public class Main {
 | Name | Description | Parameters |
 |------|-------------|------------|
 | help | Prints the descriptions for all available commands | - |
+| encrypt | Encrypts a bulk of files with a given password and saves it | src - the source to take files from |
+|  |  | out - Where to save the encrypted files |
+|  |  | password - The password to use for encrypting the files |
+|  |  | delsrc (optional; default: true) - whether to delete the source files after they are processed |
+|  |  | filter (optional; default: "") - The filter to apply to the files that are to be encrypted; currently only filtering through file extensions is supported |
+|  |  | filtermode (optional; default: None) - The mode the filter is supposed to act in; AllowOnly will allow only files matching the filter, Filter will allow only files not matching the filter, and None will allow any file |
+|  |  | subdir (optional; default: true) - Whether to also encrypt files from sub directories |
+|  |  | format (optional; default: "{index:10}.encr") - The template to use for naming the encrypted files |
+| decrypt | Decrypts a bulk of files with a given password and saves it; only works for files encrypted with the encrypt-command | src - the source to take files from |
+|  |  | out - Where to save the decrypted files |
+|  |  | password - The password to use for decrypting the files |
+|  |  | delsrc (optional; default: true) - whether to delete the source files after they are processed |
+|  |  | filter (optional; default: "encr") - The filter to apply to the files that are to be decrypted; currently only filtering through file extensions is supported |
+|  |  | filtermode (optional; default: AllowOnly) - The mode the filter is supposed to act in; AllowOnly will allow only files matching the filter, Filter will allow only files not matching the filter, and None will allow any file |
+|  |  | subdir (optional; default: true) - Whether to also decrypt files from sub directories |
+|  |  | format (optional; default: "{originallocation}{originalname}{extension}") - The template to use for naming the encrypted files |
+| list | Lists files contained within a folder | folder - The root folder to list files from |
+|  |  | tree - (optional; default: true) Whether to list the files in a tree structure (highly recommended when also listing files from sub directories) or not |
+|  |  | filter (optional; default: "") - The filter to apply to the files that are to be listed; currently only filtering through file extensions is supported |
+|  |  | filtermode (optional; default: None) - The mode the filter is supposed to act in; AllowOnly will allow only files matching the filter, Filter will allow only files not matching the filter, and None will allow any file |
+|  |  | listfolders (optional; default: true) - Whether to also contain folders in the list of files (we recommend only giving false if also subdir is set to false) |
+|  |  | subdir (optional; default: false) - Whether to also list files from sub directories or not |
+|  |  | format (optional; default: "- ${name}") - The template to use for listing files; "${name}" can be used as a placeholder for the file name |
+
+
 
 ## Creation of a new command
 
@@ -64,9 +89,10 @@ to add to the pool. But since you should use a private constructor you'll need t
 and assure the loading of your command class. This can be done by calling `Command.assureLoadingOfCommands(String...)`. The string you give
 as parameters to this method have to be the fully qualified class names of your custom command classes.
 
-Last but not least you'll have to give the command functionality. This is done by implementing the method `Command.execute(ParameterValuesList)`, whereas
+Last but not least you'll have to give the command functionality. This is done by implementing the method `Command.execute(ParameterValuesList, PrintStream)`, whereas
 you can get values from the given parameter list by calling `ParameterValuesList.getValue(String)`-method and simply casting the return
-value to the desired type. This can be done since the type is enforced while the command is being parsed.
+value to the desired type. This can be done since the type is enforced while the command is being parsed. Any output that your command wants to
+print to the user will instead of to `System.out` will have to be printed to the given PrintStream. This is done for a more dynamic solution.
 
 This means that a command class will possibly look like follows:
 
@@ -74,6 +100,7 @@ This means that a command class will possibly look like follows:
 package com.yourname.yourproject.commands;
 
 import de.commandlinetools.command.Command;
+import de.commandlinetools.command.CommandExecutionResult;
 import de.commandlinetools.command.Parameter;
 import de.commandlinetools.command.ParameterValuesList;
 
@@ -106,16 +133,20 @@ public class SampleCommand extends Command {
         );
     }
     
-    public void execute(ParameterValuesList params) {
+    public CommandExecutionResult execute(ParameterValuesList params, PrintStream output) {
         String param1 = (String) params.getValue("param1");
         int param2 = (int) params.getValue("param2");
         
         // TODO: Do something with the parameter you read from the parameter list.
+        
+        return new CommandExecutionResult.Builder()
+                .setSuccess(true)
+                .build();
     }
 }
 ```
 
-## Using customly typed parameters
+## Using custom typed parameters
 
 You can basically provide any type you'd like for a parameter. But unless you either provide a default value for the parameter
 or a custom Converter the command with a parameter with said custom type will not be executable. This is because we need to parse
@@ -156,22 +187,22 @@ public class CustomConverter extends Converter {
     }
 }
 ```
-## What features are to come soon
+## What features are to come in the future
 
 - some default commands such as:
-  - listing of files within a directory
-    - having an option for the folder to list the contained files
-    - having an option to filter files
-    - having an option to list everything but matches to a pattern
-    - having an option to list folders
-    - having an option to recursively search within subdirectories
-    - having an option of how to format the output
   - bulk renaming of files within a directory
     - having an option for the folder to rename the contained files
     - having an option to filter files
     - having an option to rename everything but matches to a pattern
     - having an option to recursively rename within subdirectories
     - having an option to format the result name
+    
+  - a password generator / manager
+  - (low priority) interpreter for the esoteric programming language Brainfuck
+  - (low priority) interpreter for the esoteric programming language False
+
+- some lightweight pattern matching as a better solution for filtering files
+
 - a GUI that is more comfortable to use than the command prompt of Win 7
   - also text based but created by a textbox or similar
   - using streams to read or write (so System.out.println() and Scanner can be used)

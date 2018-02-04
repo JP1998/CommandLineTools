@@ -34,7 +34,7 @@ import java.io.PrintStream;
 public class ListFilesCommand extends Command {
 
     private static final String COMMAND_NAME = "list";
-    private static final String COMMAND_DESCRIPTION = "asdf";
+    private static final String COMMAND_DESCRIPTION = "This command lets you look at the files contained within a folder.\nIt supports listing them as a tree, and also not as a tree (although the tree view is highly recommended).\nAlso it supports filtering files, and a format for how to print the file name.";
 
 
     private static final String PARAMETER_NAME_SOURCE = "folder";

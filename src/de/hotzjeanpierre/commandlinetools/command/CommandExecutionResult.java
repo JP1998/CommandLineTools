@@ -16,8 +16,6 @@
 
 package de.hotzjeanpierre.commandlinetools.command;
 
-import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
-
 /**
  * This class specifies a result of the execution of a command. It may indicate whether there was an
  * error during the execution of the command, whether the input of the command is supposed to be deleted from
