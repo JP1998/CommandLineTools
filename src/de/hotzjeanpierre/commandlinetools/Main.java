@@ -126,6 +126,7 @@ public class Main {
             ));
         }
 
+        @Contract("null, _, _ -> fail; _, null, _ -> fail")
         private ClearCommand(String name, String description, Parameter[] params) {
             super(name, description, params);
         }
