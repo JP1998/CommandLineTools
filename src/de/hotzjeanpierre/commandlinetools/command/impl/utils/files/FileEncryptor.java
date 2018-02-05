@@ -156,10 +156,12 @@ public class FileEncryptor {
                     in.getAbsolutePath().length()
             );
 
-            ByteBuffer buffer = ByteBuffer.allocate(4 + filename.length() + data.length);
+            byte[] filenameBytes = filename.getBytes();
 
-            buffer.putInt(filename.length());
-            buffer.put(filename.getBytes());
+            ByteBuffer buffer = ByteBuffer.allocate(4 + filenameBytes.length + data.length);
+
+            buffer.putInt(filenameBytes.length);
+            buffer.put(filenameBytes);
             buffer.put(data);
 
             return new EncryptionResult(filename, encrypt(buffer.array(), pw));

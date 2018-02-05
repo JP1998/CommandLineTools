@@ -230,30 +230,11 @@ public class FileNamingData {
          * @return the FileNamingData with the extracted information
          */
         public static FileNamingData build(@NotNull FileEncryptor.EncryptionResult result, int index) {
-            int extensionPointIndex = result.getOriginalName().lastIndexOf('.');
-            int separatorIndex = result.getOriginalName().lastIndexOf(File.separatorChar);
-
-            String originalLocation;
-            String originalFileName;
-            String originalExtension;
-
-            if (extensionPointIndex == -1) {
-                // if there is no extension we'll simply extract the name and the location the file was in
-                originalLocation = result.getOriginalName().substring(0, separatorIndex + 1);
-                originalFileName = result.getOriginalName().substring(separatorIndex + 1);
-                originalExtension = "";
-            } else {
-                // otherwise we'll extract all the informations
-                originalLocation = result.getOriginalName().substring(0, separatorIndex + 1);
-                originalFileName = result.getOriginalName().substring(separatorIndex + 1, extensionPointIndex);
-                originalExtension = result.getOriginalName().substring(extensionPointIndex, result.getOriginalName().length());
-            }
-
             return new Builder()
-                    .setOriginalName(originalFileName)
-                    .setExtension(originalExtension)
+                    .setOriginalName(CommonFileUtilities.extractFileName(result.getOriginalName()))
+                    .setExtension(CommonFileUtilities.extractFileExtension(result.getOriginalName()))
                     .setIndex(index)
-                    .setOriginalLocation(originalLocation)
+                    .setOriginalLocation(CommonFileUtilities.extractFolderPath(result.getOriginalName()))
                     .build();
         }
     }

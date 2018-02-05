@@ -141,7 +141,9 @@ public class ListFilesCommand extends Command {
                 true
         );
 
-        return new CommandExecutionResult.Builder().setSuccess(true).build();
+        return new CommandExecutionResult.Builder()
+                .setSuccess(true)
+                .build();
     }
 
     /**

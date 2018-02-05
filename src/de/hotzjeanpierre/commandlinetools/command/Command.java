@@ -669,23 +669,50 @@ public abstract class Command implements NamingValidator {
             super(
                     "help",
                     "Prints the help you are currently reading.",
-                    null
+                    new Parameter[] {
+                            new Parameter(
+                                    "command",
+                                    String.class,
+                                    "The command to print the documentation for.",
+                                    ""
+                            )
+                    }
             );
         }
 
         @Override
         protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
-            CommandExecutionResult.Builder syso = new CommandExecutionResult.Builder();
+            String command = (String) params.getValue("command");
 
-            outputStream.println("Documentation of all recognized commands: ");
-            outputStream.println();
+            if(command.isEmpty()) {
+                outputStream.println("Documentation of all recognized commands: ");
+                outputStream.println();
 
-            for (String key : sSupportedCommands.keySet()) {
-                outputStream.println(sSupportedCommands.get(key).getDocumentation());
+                for (String key : sSupportedCommands.keySet()) {
+                    outputStream.println(sSupportedCommands.get(key).getDocumentation());
+                }
+
+                return new CommandExecutionResult.Builder()
+                        .setSuccess(true)
+                        .build();
+            } else {
+                if(!sSupportedCommands.containsKey(command)) {
+                    outputStream.println(StringProcessing.format(
+                            "The command '{0}' was not recognized.",
+                            command
+                    ));
+                    return new CommandExecutionResult.Builder()
+                            .setSuccess(false)
+                            .build();
+                } else {
+                    outputStream.println(StringProcessing.format("Printing help for command '{0}': ", command));
+                    outputStream.println(sSupportedCommands.get(command).getDocumentation());
+
+                    return new CommandExecutionResult.Builder()
+                            .setSuccess(true)
+                            .build();
+                }
             }
-
-            syso.setSuccess(true);
-            return syso.build();
         }
     }
 }

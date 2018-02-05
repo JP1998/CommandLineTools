@@ -209,6 +209,8 @@ public class EncryptCommand extends Command {
                         f.getAbsolutePath(),
                         result.getErrorMessage()
                 ));
+
+                result.getError().printStackTrace();
             }
         }
 
