@@ -1,4 +1,4 @@
-# CommandLineTools
+# CommandLineTools [![Build Status](https://travis-ci.org/JP1998/CommandLineTools.svg?branch=master)](https://travis-ci.org/JP1998/CommandLineTools)
 
 This is a small project that is trying to aim at programmers and computer-affine people. It creates a command line tool,
 which is implementing more complex tasks like bulk renaming of files by a certain pattern, or en- / decrypting files with a password.
@@ -206,19 +206,6 @@ public class CustomConverter extends Converter {
 - a GUI that is more comfortable to use than the command prompt of Win 7
   - also text based but created by a textbox or similar
   - using streams to read or write (so System.out.println() and Scanner can be used)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
