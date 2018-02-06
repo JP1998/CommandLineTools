@@ -2,5 +2,5 @@ out/production/
 .idea/workspace.xml
 HelpFiles/TODO.txt
 lib/
-src/de/hotzjeanpierre/commandlinetools/command/impl/utils/asdf.java
-src/de/hotzjeanpierre/commandlinetools/TestingMain.kt
+src/main/java/de/hotzjeanpierre/commandlinetools/command/impl/utils/asdf.java
+src/main/java/de/hotzjeanpierre/commandlinetools/TestingMain.kt

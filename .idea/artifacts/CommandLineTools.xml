@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="CommandLineTools">
-    <output-path>$PROJECT_DIR$/out/artifacts/CommandLineTools</output-path>
+    <output-path>$PROJECT_DIR$/target/artifacts/CommandLineTools</output-path>
     <root id="archive" name="CommandLineTools.jar">
       <element id="module-output" name="CommandLineTools" />
       <element id="file-copy" path="$APPLICATION_HOME_DIR$/redist/annotations-java8.jar" />
