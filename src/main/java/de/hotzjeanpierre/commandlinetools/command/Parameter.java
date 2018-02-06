@@ -66,7 +66,6 @@ public class Parameter implements NamingValidator {
      * @throws NullPointerException     in case the name, type or description is {@code null}
      * @throws IllegalArgumentException in case the name or description is empty
      */
-    @Contract("null, _, _ -> fail; _, null, _ -> fail; _, _, null -> fail")
     public Parameter(String name, Class type, String description)
             throws NullPointerException, IllegalArgumentException {
         this(name, type, description, null);
@@ -83,7 +82,6 @@ public class Parameter implements NamingValidator {
      * @throws NullPointerException     in case the name, type or description is {@code null}
      * @throws IllegalArgumentException in case the name or description is empty
      */
-    @Contract("null, _, _, _ -> fail; _, null, _, _ -> fail; _, _, null, _ -> fail")
     public Parameter(String name, Class type, String description, Object defaultValue) {
         if (name == null) {
             throw new NullPointerException("Name of a parameter may not be null.");
