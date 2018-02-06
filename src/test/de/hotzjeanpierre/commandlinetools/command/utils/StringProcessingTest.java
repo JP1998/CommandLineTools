@@ -18,21 +18,22 @@ package test.de.hotzjeanpierre.commandlinetools.command.utils;
 
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import de.hotzjeanpierre.commandlinetools.command.utils.exceptions.StringProcessingFormatException;
-import org.junit.Assert;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 public class StringProcessingTest {
 
     @Test
     public void testFormatValid() {
-        Assert.assertEquals(
-                "Something's wrong with StringProcessing#format(String, Object...).",
+        assertThat(
                 "1234--{asdf}",
-                StringProcessing.format(
+                is(StringProcessing.format(
                         "{0}--{{{1}}}",
                         1234,
                         "asdf"
-                )
+                ))
         );
     }
 
@@ -44,6 +45,16 @@ public class StringProcessingTest {
     @Test(expected = StringProcessingFormatException.class)
     public void testFormatNoWildcardIndex() {
         StringProcessing.format("Hello World {asd}", "asdfg");
+    }
+
+    @Test
+    public void testTokenizing() {
+        String[] tokens = StringProcessing.tokenizeCommand("asdf ghjk lmno pqrs \"\\\"Hello World!\\\"\"");
+
+        assertThat(
+                tokens,
+                is(new String[] { "asdf", "ghjk", "lmno", "pqrs", "\"Hello World!\"" })
+        );
     }
 
 }

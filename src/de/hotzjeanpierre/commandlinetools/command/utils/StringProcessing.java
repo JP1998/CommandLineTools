@@ -72,26 +72,26 @@ public class StringProcessing {
      * Thus the method-call {@code StrinProcessing.format("{{ - {0} - }}", "Hello");} will produce
      * the result {@code "{ - Hello - }"}.
      * <table>
-     * <tr>
-     * <th style="padding:5px; border: 1px solid black;">Format example</th>
-     * <th style="padding:5px; border: 1px solid black;">Focus on</th>
-     * <th style="padding:5px; border: 1px solid black;">Description</th>
-     * </tr>
-     * <tr>
-     * <td style="padding:5px; border: 1px solid black;"><pre><code>some string</code></pre></td>
-     * <td style="padding:5px; border: 1px solid black;"><pre><code>N/A</code></pre></td>
-     * <td style="padding:5px; border: 1px solid black;">Any normal string (except some special cases as explained below) will simply be taken into the result at the specified position.</td>
-     * </tr>
-     * <tr>
-     * <td style="padding:5px; border: 1px solid black;"><pre><code>some {{ - string - }}</code></pre></td>
-     * <td style="padding:5px; border: 1px solid black;"><pre><code>"{{" and "}}"</code></pre></td>
-     * <td style="padding:5px; border: 1px solid black;">Since curly braces are used to qualify a wildcard you need to escape curly braces you want printed in the result.</td>
-     * </tr>
-     * <tr>
-     * <td style="padding:5px; border: 1px solid black;"><pre><code>I want some {0}.</code></pre></td>
-     * <td style="padding:5px; border: 1px solid black;"><pre><code>"{0}"</code></pre></td>
-     * <td style="padding:5px; border: 1px solid black;">A simple wildcard. The wildcard will be replaced by the toString-value of the object given at the index written within the curly braces.</td>
-     * </tr>
+     *     <tr>
+     *         <th style="padding:5px; border: 1px solid black;">Format example</th>
+     *         <th style="padding:5px; border: 1px solid black;">Focus on</th>
+     *         <th style="padding:5px; border: 1px solid black;">Description</th>
+     *     </tr>
+     *     <tr>
+     *         <td style="padding:5px; border: 1px solid black;"><pre><code>some string</code></pre></td>
+     *         <td style="padding:5px; border: 1px solid black;"><pre><code>N/A</code></pre></td>
+     *         <td style="padding:5px; border: 1px solid black;">Any normal string (except some special cases as explained below) will simply be taken into the result at the specified position.</td>
+     *     </tr>
+     *     <tr>
+     *         <td style="padding:5px; border: 1px solid black;"><pre><code>some {{ - string - }}</code></pre></td>
+     *         <td style="padding:5px; border: 1px solid black;"><pre><code>"{{" and "}}"</code></pre></td>
+     *         <td style="padding:5px; border: 1px solid black;">Since curly braces are used to qualify a wildcard you need to escape curly braces you want printed in the result.</td>
+     *     </tr>
+     *     <tr>
+     *         <td style="padding:5px; border: 1px solid black;"><pre><code>I want some {0}.</code></pre></td>
+     *         <td style="padding:5px; border: 1px solid black;"><pre><code>"{0}"</code></pre></td>
+     *         <td style="padding:5px; border: 1px solid black;">A simple wildcard. The wildcard will be replaced by the toString-value of the object given at the index written within the curly braces.</td>
+     *     </tr>
      * </table>
      *
      * @param format       the format with the syntax as specified above.
@@ -162,13 +162,11 @@ public class StringProcessing {
                 }
 
                 if (replacementIndex >= replacements.length) {
-                    throw new StringProcessingFormatException(
-                            StringProcessing.format(
-                                    "Format requires more replacements than you gave us. Expected (at least):{0}; Given:{1}",
-                                    replacementIndex,
-                                    replacements.length
-                            )
-                    );
+                    throw new StringProcessingFormatException(StringProcessing.format(
+                            "Format requires more replacements than you gave us. Expected (at least):{0}; Given:{1}",
+                            replacementIndex,
+                            replacements.length
+                    ));
                 }
 
                 Object replacement = replacements[replacementIndex];
