@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package test.de.hotzjeanpierre.commandlinetools.command.utils;
+package de.hotzjeanpierre.commandlinetools.command.utils;
 
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import de.hotzjeanpierre.commandlinetools.command.utils.exceptions.StringProcessingFormatException;

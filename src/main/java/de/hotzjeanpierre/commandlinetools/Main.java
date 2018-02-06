@@ -20,7 +20,6 @@ import de.hotzjeanpierre.commandlinetools.command.Command;
 import de.hotzjeanpierre.commandlinetools.command.CommandExecutionResult;
 import de.hotzjeanpierre.commandlinetools.command.Parameter;
 import de.hotzjeanpierre.commandlinetools.command.ParameterValuesList;
-import org.jetbrains.annotations.Contract;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -101,7 +100,6 @@ public class Main {
             ));
         }
 
-        @Contract("null, _, _ -> fail; _, null, _ -> fail")
         private ExitCommand(String name, String descr, Parameter[] params) {
             super(name, descr, params);
         }
@@ -126,7 +124,6 @@ public class Main {
             ));
         }
 
-        @Contract("null, _, _ -> fail; _, null, _ -> fail")
         private ClearCommand(String name, String description, Parameter[] params) {
             super(name, description, params);
         }

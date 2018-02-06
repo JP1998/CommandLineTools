@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package test.de.hotzjeanpierre.commandlinetools.command;
+package de.hotzjeanpierre.commandlinetools.command;
 
 import de.hotzjeanpierre.commandlinetools.command.NamingValidator;
 import org.junit.Test;

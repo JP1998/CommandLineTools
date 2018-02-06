@@ -225,7 +225,6 @@ public abstract class Command implements NamingValidator {
      */
     private boolean deleteInput;
 
-    @Contract(value = "null, _, _ -> fail; _, null, _ -> fail")
     protected Command(String name, String description, Parameter[] paramList)
             throws NullPointerException, IllegalArgumentException {
         this(name, description, paramList, false);
@@ -246,8 +245,6 @@ public abstract class Command implements NamingValidator {
      * @throws NullPointerException     if the name, description or one of the items of the given parameter list is null
      * @throws IllegalArgumentException if the name or the description is empty
      */
-    // @Contract(value = "null, _, _, _ -> fail; _, null, _, _ -> fail")
-    @Contract("null, _, _, _ -> fail")
     protected Command(String name, String description, Parameter[] paramList, boolean deleteInput)
             throws NullPointerException, IllegalArgumentException {
         if (name == null) {
