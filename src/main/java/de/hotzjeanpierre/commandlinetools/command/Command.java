@@ -340,7 +340,7 @@ public abstract class Command implements NamingValidator {
      * @throws DuplicateParameterException            if one or more of the parameters have been given multiple times
      * @throws MissingParameterException              if one of the parameters without default-value has not been given
      */
-    @NotNull
+    @NotNull // TODO: Test explicitly
     public static ExecutableCommand parseCommand(String toParse)
             throws CommandArgumentNumberMismatchException, CommandNotSupportedException,
             ParameterNotFoundException, ParameterTypeMismatchException,
@@ -410,7 +410,7 @@ public abstract class Command implements NamingValidator {
      * @return the template of the command with given name
      */
     @Nullable
-    private static Command findTemplateFromName(String cmdName) {
+    /* package-protected */ static Command findTemplateFromName(String cmdName) {
         return sSupportedCommands.get(cmdName);
     }
 
@@ -440,7 +440,7 @@ public abstract class Command implements NamingValidator {
      * @return the parameter names mapped to their respective value
      * @throws DuplicateParameterException if a parameter has a value assigned twice or more
      * @throws MissingParameterException   if a parameter without default value has no value assigned
-     */
+     */ // TODO: Test explicitly
     private static Map<String, Parameter.Value> filterSupplementAndConvertList(@NotNull Command template, List<Parameter.Value> values)
             throws DuplicateParameterException, MissingParameterException {
 
@@ -591,14 +591,6 @@ public abstract class Command implements NamingValidator {
      */
     public boolean isDeleteInput() {
         return deleteInput;
-    }
-
-    /**
-     * This method prints the documentation for a command to the stdout-stream.
-     */
-    @DebuggingPurpose
-    public final void printDocumentation() {
-        System.out.println(getDocumentation());
     }
 
     /**
