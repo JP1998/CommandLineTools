@@ -220,11 +220,7 @@ public class StringProcessing {
 
         // copy the list into an array
         String[] tokensArray = new String[tokens.size()];
-        for (int i = 0; i < tokens.size(); i++) {
-            tokensArray[i] = tokens.get(i);
-        }
-
-        return tokensArray;
+        return tokens.toArray(tokensArray);
     }
 
     /**

@@ -50,7 +50,7 @@ public interface NamingValidator {
      * @param failMessage the message to give the exception in case it is thrown
      */
     default void assureNameValidity(String name, String failMessage) {
-        assureNameValidity(name, failMessage, "");
+        assureNameValidity(name, failMessage, new Object[0]);
     }
 
     /**
@@ -63,7 +63,7 @@ public interface NamingValidator {
     default void assureNameValidity(String name, String failMessageFormat, Object... replacements) {
         if (!sNameValidatorPattern.matcher(name).matches()) {
             throw new InvalidNameException(
-                    StringProcessing.format(failMessageFormat, replacements)
+                    (replacements.length == 0)? failMessageFormat : StringProcessing.format(failMessageFormat, replacements)
             );
         }
     }
@@ -73,7 +73,7 @@ public interface NamingValidator {
      * be validated.
      */
     class InvalidNameException extends RuntimeException {
-        public InvalidNameException(String message) {
+        InvalidNameException(String message) {
             super(message);
         }
     }

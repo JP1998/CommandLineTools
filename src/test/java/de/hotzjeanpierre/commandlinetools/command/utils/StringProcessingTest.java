@@ -16,7 +16,6 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils;
 
-import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import de.hotzjeanpierre.commandlinetools.command.utils.exceptions.StringProcessingFormatException;
 
 import static org.hamcrest.core.Is.is;
@@ -28,12 +27,12 @@ public class StringProcessingTest {
     @Test
     public void testFormatValid() {
         assertThat(
-                "1234--{asdf}",
-                is(StringProcessing.format(
+                StringProcessing.format(
                         "{0}--{{{1}}}",
                         1234,
                         "asdf"
-                ))
+                ),
+                is("1234--{asdf}")
         );
     }
 
@@ -48,12 +47,49 @@ public class StringProcessingTest {
     }
 
     @Test
-    public void testTokenizing() {
-        String[] tokens = StringProcessing.tokenizeCommand("asdf ghjk lmno pqrs \"\\\"Hello World!\\\"\"");
-
+    public void testTokenizingValid() {
         assertThat(
-                tokens,
-                is(new String[] { "asdf", "ghjk", "lmno", "pqrs", "\"Hello World!\"" })
+                StringProcessing.tokenizeCommand(
+                        "asdf ghjk lmno pqrs \"\\\"Hello World!\\\"\""
+                ),
+                is(new String[] {
+                        "asdf",
+                        "ghjk",
+                        "lmno",
+                        "pqrs",
+                        "\"Hello World!\""
+                })
+        );
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testTokenizingInvalidArgumentNumber() {
+        StringProcessing.tokenizeCommand(
+                "asd fgh"
+        );
+    }
+
+    @Test
+    public void testZeroPaddingNegativeNumbers() {
+        assertThat(
+                StringProcessing.zeroPadding(-123, 5),
+                is("-0123")
+        );
+    }
+
+    @Test
+    public void testZeroPaddingLessDigitsThanNeeded() {
+        assertThat(
+                StringProcessing.zeroPadding(123456, 2),
+                is("123456")
+        );
+    }
+
+    @Test
+    public void testZeroPaddingMoreDigitsThanNeeded() {
+        assertThat(
+                StringProcessing.zeroPadding(1234, 8),
+                is("00001234")
         );
     }
 

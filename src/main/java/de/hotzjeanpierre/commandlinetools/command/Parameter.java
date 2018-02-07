@@ -18,7 +18,6 @@ package de.hotzjeanpierre.commandlinetools.command;
 
 import de.hotzjeanpierre.commandlinetools.command.exceptions.ParameterTypeMismatchException;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
-import org.jetbrains.annotations.Contract;
 
 /**
  * This class represents a parameter that can be taken by a command.
@@ -82,10 +81,10 @@ public class Parameter implements NamingValidator {
      * @throws NullPointerException     in case the name, type or description is {@code null}
      * @throws IllegalArgumentException in case the name or description is empty
      */
-    public Parameter(String name, Class type, String description, Object defaultValue) {
+    public Parameter(String name, Class<?> type, String description, Object defaultValue) {
         if (name == null) {
             throw new NullPointerException("Name of a parameter may not be null.");
-        } else if (name.isEmpty()) {
+        } else if (name.trim().length() == 0) {
             throw new IllegalArgumentException("Name of a parameter may not be empty.");
         }
         if (type == null) {
@@ -93,7 +92,7 @@ public class Parameter implements NamingValidator {
         }
         if (description == null) {
             throw new NullPointerException("Description of a parameter may not be null.");
-        } else if (description.isEmpty()) {
+        } else if (description.trim().length() == 0) {
             throw new IllegalArgumentException("Description of a parameter may not be empty.");
         }
 
@@ -102,6 +101,14 @@ public class Parameter implements NamingValidator {
                 "The parameter name '{0}' you were trying to assign is not valid.",
                 name
         );
+
+        if(defaultValue != null && !type.isInstance(defaultValue)) {
+            throw new IllegalArgumentException(StringProcessing.format(
+                    "The value '{0}' cannot be used as default value for type '{1}'.",
+                    defaultValue,
+                    type.getName()
+            ));
+        }
 
         this.name = name;
         this.type = type;

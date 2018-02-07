@@ -32,59 +32,59 @@ import java.util.regex.Pattern;
  * The following syntax is expected for file templates that can be created through the method
  * {@link FileNamingTemplate#parse(String)}:
  * <ul>
- * <li>
- * any valid character may be used for the files structure, whereas the characters ':', '*',
- * '?', '"', '&lt;', '&gt;' and '|' are forbidden.
- * While '\' and '/' are also forbidden for file <b>names</b> they are still allowed to allow
- * creation of a folder structure within the template.
- * </li>
- * <li>
- * the characters '{' and '}' must be escaped with a second one of the character, since
- * they are used to delimit wildcards in the template
- * </li>
- * <li>
- * wildcards are delimited by '{' and  '}'; they are not case-sensitive and a parameter
- * (of which a wildcard may only have one) will be separated from the wildcards name with a colon.
- * In case a wildcard has a parameter, it will also provide a default value for said parameter.
- * </li>
+ *     <li>
+ *         any valid character may be used for the files structure, whereas the characters ':', '*',
+ *         '?', '"', '&lt;', '&gt;' and '|' are forbidden.
+ *         While '\' and '/' are also forbidden for file <b>names</b> they are still allowed to allow
+ *         creation of a folder structure within the template.
+ *     </li>
+ *     <li>
+ *         the characters '{' and '}' must be escaped with a second one of the character, since
+ *         they are used to delimit wildcards in the template
+ *     </li>
+ *     <li>
+ *         wildcards are delimited by '{' and  '}'; they are not case-sensitive and a parameter
+ *         (of which a wildcard may only have one) will be separated from the wildcards name with a colon.
+ *         In case a wildcard has a parameter, it will also provide a default value for said parameter.
+ *     </li>
  * </ul>
  * With the given syntax and the following wildcards you should be able to produce any template you
  * would like to make.
  * <table>
- * <thead>
- * <tr>
- * <th>Name</th>
- * <th>Parameter Type</th>
- * <th>Parameter default value</th>
- * <th>Description</th>
- * </tr>
- * </thead>
- * <tbody>
- * <tr>
- * <td>OriginalName</td>
- * <td>None</td>
- * <td>None</td>
- * <td>Represents the file name of the original file without any folders or extension.</td>
- * </tr>
- * <tr>
- * <td>Index</td>
- * <td>Int</td>
- * <td>0</td>
- * <td>Represents an index of the processed file. May be used in bulk renaming of files. The given parameter therefor represents the minimum length of the index; will be zero-padded</td>
- * </tr>
- * <tr>
- * <td>Extension</td>
- * <td>None</td>
- * <td>None</td>
- * <td>Represents the extension of the original file.</td>
- * </tr>
- * <tr>
- * <td>OriginalLocation</td>
- * <td>None</td>
- * <td>None</td>
- * <td>Represents the subfolder structure of the original file.</td>
- * </tr>
- * </tbody>
+ *     <thead>
+ *         <tr>
+ *             <th>Name</th>
+ *             <th>Parameter Type</th>
+ *             <th>Parameter default value</th>
+ *             <th>Description</th>
+ *         </tr>
+ *     </thead>
+ *     <tbody>
+ *         <tr>
+ *             <td>OriginalName</td>
+ *             <td>None</td>
+ *             <td>None</td>
+ *             <td>Represents the file name of the original file without any folders or extension.</td>
+ *         </tr>
+ *         <tr>
+ *             <td>Index</td>
+ *             <td>Int</td>
+ *             <td>0</td>
+ *             <td>Represents an index of the processed file. May be used in bulk renaming of files. The given parameter therefor represents the minimum length of the index; will be zero-padded</td>
+ *         </tr>
+ *         <tr>
+ *             <td>Extension</td>
+ *             <td>None</td>
+ *             <td>None</td>
+ *             <td>Represents the extension of the original file.</td>
+ *         </tr>
+ *         <tr>
+ *             <td>OriginalLocation</td>
+ *             <td>None</td>
+ *             <td>None</td>
+ *             <td>Represents the subfolder structure of the original file.</td>
+ *         </tr>
+ *     </tbody>
  * </table>
  */
 public class FileNamingTemplate {
@@ -125,15 +125,15 @@ public class FileNamingTemplate {
      * <pre><code>
      * ^
      * (
-     * [^{}/\\:\*\?\"<>\|]*
-     * (
-     * {{                           |
-     * }}                           |
-     * {\s*originalname\s*}         |
-     * {\s*index\s*:\s*[0-9]+\s*}   |
-     * {\s*extension\s*}            |
-     * {\s*originallocation\s*}
-     * )
+     *     [^{}/\\:\*\?\"<>\|]*
+     *     (
+     *         \{\{                         |
+     *         }}                           |
+     *         {\s*originalname\s*}         |
+     *         {\s*index\s*:\s*[0-9]+\s*}   |
+     *         {\s*extension\s*}            |
+     *         {\s*originallocation\s*}
+     *     )
      * )*
      * [^{}/\\:\*\?\"<>\|]*
      * $
@@ -148,13 +148,13 @@ public class FileNamingTemplate {
      * <p>
      * <pre><code>
      * (
-     * [^{}/\\:*?"<>|]+              |
-     * \{\{                          |
-     * }}                            |
-     * \{\s*originalname\s*}         |
-     * \{\s*index\s*:\s*[0-9]+\s*}   |
-     * \{\s*extension\s*}            |
-     * \{\s*originallocation\s*}
+     *     [^{}/\\:*?"<>|]+              |
+     *     \{\{                          |
+     *     }}                            |
+     *     \{\s*originalname\s*}         |
+     *     \{\s*index\s*:\s*[0-9]+\s*}   |
+     *     \{\s*extension\s*}            |
+     *     \{\s*originallocation\s*}
      * )
      * </code></pre>
      */
@@ -319,6 +319,23 @@ public class FileNamingTemplate {
         return result.toString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null ||
+                !(obj instanceof FileNamingTemplate) ||
+                template.length != ((FileNamingTemplate) obj).template.length) {
+            return false;
+        }
+
+        for (int i = 0; i < template.length; i++) {
+            if(!template[i].equals(((FileNamingTemplate) obj).template[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * A base class for any kind of text that is to be taken into account within
      * a FileNamingTemplate.<br>
@@ -357,6 +374,12 @@ public class FileNamingTemplate {
         public String toString() {
             return "{originalname}";
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj != null &&
+                    obj instanceof OriginalNameToken;
+        }
     }
 
     /**
@@ -393,6 +416,13 @@ public class FileNamingTemplate {
                 return StringProcessing.format("{{index:{0}}}", length);
             }
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj != null &&
+                    obj instanceof IndexToken &&
+                    length == ((IndexToken) obj).length;
+        }
     }
 
     /**
@@ -415,6 +445,12 @@ public class FileNamingTemplate {
         public String toString() {
             return "{extension}";
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj != null &&
+                    obj instanceof ExtensionToken;
+        }
     }
 
     /**
@@ -436,6 +472,12 @@ public class FileNamingTemplate {
         @Override
         public String toString() {
             return "{originallocation}";
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj != null &&
+                    obj instanceof OriginalLocationToken;
         }
     }
 
@@ -462,6 +504,13 @@ public class FileNamingTemplate {
         @Override
         public String toString() {
             return text;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj != null &&
+                    obj instanceof TextToken &&
+                    text.equals(((TextToken) obj).text);
         }
     }
 }

@@ -77,35 +77,75 @@ public class Converter {
     public Object convert(String representation, Class toConvertTo) {
         if (String.class.equals(toConvertTo)) {                     // String
             return representation;
-        } else if (File.class.equals(toConvertTo)) {
-            return new File(representation);
-        } else if (toConvertTo == FileNamingTemplate.class) {
+        } else if (File.class.equals(toConvertTo)) {                // File
+            File resultAttempt = new File(representation);
+
+            try {
+                // noinspection ResultOfMethodCallIgnored
+                resultAttempt.getCanonicalPath();
+                return resultAttempt;
+            } catch (Exception e) {
+                return null;
+            }
+        } else if (toConvertTo == FileNamingTemplate.class) {       // FileNamingTemplate
             try {
                 return FileNamingTemplate.parse(representation);
             } catch (Exception e) {
                 return null;
             }
         } else if (Boolean.class.equals(toConvertTo)) {             // boolean
-            return Boolean.parseBoolean(representation);
+            try {
+                return Boolean.parseBoolean(representation);
+            } catch (Exception exc) {
+                return null;
+            }
         } else if (Double.class.equals(toConvertTo)) {              // double
-            return Double.parseDouble(representation);
+            try {
+                return Double.parseDouble(representation);
+            } catch (Exception e) {
+                return null;
+            }
         } else if (Float.class.equals(toConvertTo)) {               // float
-            return Float.parseFloat(representation);
+            try {
+                return Float.parseFloat(representation);
+            } catch (Exception e) {
+                return null;
+            }
         } else if (Byte.class.equals(toConvertTo)) {                // byte
-            return Byte.parseByte(representation);
+            try {
+                return Byte.parseByte(representation);
+            } catch (Exception e) {
+                return null;
+            }
         } else if (Short.class.equals(toConvertTo)) {               // short
-            return Short.parseShort(representation);
+            try {
+                return Short.parseShort(representation);
+            } catch (Exception e) {
+                return null;
+            }
         } else if (Character.class.equals(toConvertTo)) {           // char
             if (representation.length() > 1) {
                 return null;
             }
             return representation.charAt(0);
         } else if (Integer.class.equals(toConvertTo)) {             // int
-            return Integer.parseInt(representation);
+            try {
+                return Integer.parseInt(representation);
+            } catch (Exception e) {
+                return null;
+            }
         } else if (Long.class.equals(toConvertTo)) {                // long
-            return Long.parseLong(representation);
+            try {
+                return Long.parseLong(representation);
+            } catch (Exception e) {
+                return null;
+            }
         } else if (toConvertTo != null && toConvertTo.isEnum()) {   // any enum
-            return Enum.valueOf(toConvertTo, representation);
+            try {
+                return Enum.valueOf(toConvertTo, representation);
+            } catch (Exception e) {
+                return null;
+            }
         }
 
         return null;

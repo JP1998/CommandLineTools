@@ -16,6 +16,8 @@
 
 package de.hotzjeanpierre.commandlinetools.command;
 
+import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
+
 import java.util.Map;
 
 /**
@@ -36,6 +38,11 @@ public class ParameterValuesList {
      * @param values the map of the parameter names to the values
      */
     public ParameterValuesList(Map<String, Parameter.Value> values) {
+        if(values == null) {
+            throw new NullPointerException(StringProcessing.format(
+                    "You cannot have a 'null' list of parameter values. If you want to create an empty list, give an empty map."
+            ));
+        }
         this.values = values;
     }
 
