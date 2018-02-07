@@ -16,7 +16,7 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils;
 
-import de.hotzjeanpierre.commandlinetools.command.impl.utils.files.FileNamingTemplate;
+import de.hotzjeanpierre.commandlinetools.command.utils.files.FileNamingTemplate;
 import org.junit.Test;
 
 import java.io.File;
@@ -68,7 +68,7 @@ public class ConverterTest {
     }
 
     @Test
-    public void testBooleanConversionValid() {
+    public void testBooleanConversionValidTrue() {
         assertThat(
                 new Converter().convert("true", Boolean.class),
                 is(true)
@@ -76,10 +76,18 @@ public class ConverterTest {
     }
 
     @Test
+    public void testBooleanConversionValidFalse() {
+        assertThat(
+                new Converter().convert("false", Boolean.class),
+                is(false)
+        );
+    }
+
+    @Test
     public void testBooleanConversionInvalid() {
         assertThat(
                 new Converter().convert("true af", Boolean.class),
-                is(false)
+                nullValue()
         );
     }
 

@@ -1,4 +1,4 @@
-out/production/
+target/
 .idea/workspace.xml
 HelpFiles/TODO.txt
 lib/

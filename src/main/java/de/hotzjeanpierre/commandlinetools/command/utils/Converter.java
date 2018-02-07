@@ -16,7 +16,8 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils;
 
-import de.hotzjeanpierre.commandlinetools.command.impl.utils.files.FileNamingTemplate;
+import de.hotzjeanpierre.commandlinetools.command.utils.arrays.ArrayHelper;
+import de.hotzjeanpierre.commandlinetools.command.utils.files.FileNamingTemplate;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -78,14 +79,13 @@ public class Converter {
         if (String.class.equals(toConvertTo)) {                     // String
             return representation;
         } else if (File.class.equals(toConvertTo)) {                // File
-            File resultAttempt = new File(representation);
-
-            try {
-                // noinspection ResultOfMethodCallIgnored
-                resultAttempt.getCanonicalPath();
-                return resultAttempt;
-            } catch (Exception e) {
+            if(ArrayHelper.contains(
+                    ArrayHelper.cast(representation.toCharArray()),
+                    '<', '>', ':', '"', '|', '?', '*'
+            )) {
                 return null;
+            } else {
+                return new File(representation);
             }
         } else if (toConvertTo == FileNamingTemplate.class) {       // FileNamingTemplate
             try {
@@ -94,9 +94,11 @@ public class Converter {
                 return null;
             }
         } else if (Boolean.class.equals(toConvertTo)) {             // boolean
-            try {
-                return Boolean.parseBoolean(representation);
-            } catch (Exception exc) {
+            if(representation.trim().equalsIgnoreCase("true")) {
+                return true;
+            } else if(representation.trim().equalsIgnoreCase("false")) {
+                return false;
+            } else {
                 return null;
             }
         } else if (Double.class.equals(toConvertTo)) {              // double

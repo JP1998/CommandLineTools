@@ -20,7 +20,7 @@ import de.hotzjeanpierre.commandlinetools.command.Command;
 import de.hotzjeanpierre.commandlinetools.command.CommandExecutionResult;
 import de.hotzjeanpierre.commandlinetools.command.Parameter;
 import de.hotzjeanpierre.commandlinetools.command.ParameterValuesList;
-import de.hotzjeanpierre.commandlinetools.command.impl.utils.files.*;
+import de.hotzjeanpierre.commandlinetools.command.utils.files.*;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 
 import java.io.File;
