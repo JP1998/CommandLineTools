@@ -17,10 +17,10 @@
 package de.hotzjeanpierre.commandlinetools.command.utils;
 
 import de.hotzjeanpierre.commandlinetools.command.utils.exceptions.StringProcessingFormatException;
+import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import org.junit.Test;
 
 public class StringProcessingTest {
 
@@ -37,8 +37,13 @@ public class StringProcessingTest {
     }
 
     @Test(expected = StringProcessingFormatException.class)
-    public void testFormatInvalid() {
+    public void testFormatInvalidUnescapedCurlyBrackets() {
         StringProcessing.format("Hello World {");
+    }
+
+    @Test(expected = StringProcessingFormatException.class)
+    public void testFormatInvalidToHighIndex() {
+        StringProcessing.format("Hello World {123}");
     }
 
     @Test(expected = StringProcessingFormatException.class)

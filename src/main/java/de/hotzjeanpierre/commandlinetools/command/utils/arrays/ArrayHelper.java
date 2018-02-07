@@ -57,6 +57,7 @@ public class ArrayHelper {
         return false;
     }
 
+    @Contract(pure = true)
     public static Character[] cast(char[] characters) {
         Character[] result = new Character[characters.length];
 

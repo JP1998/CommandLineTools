@@ -147,19 +147,7 @@ public class StringProcessing {
             case "}}":
                 return "}";
             default:
-                int replacementIndex;
-                try {
-                    replacementIndex = Integer.parseInt(wildcard.substring(1, wildcard.length() - 1).trim());
-                } catch (NumberFormatException exc) {
-                    throw new StringProcessingFormatException(
-                            StringProcessing.format(
-                                    "Token '{0}' cannot be mapped to a index of an replacement; '{1}' does not represent a positive integer",
-                                    wildcard,
-                                    wildcard.substring(1, wildcard.length() - 1).trim()
-                            ),
-                            exc
-                    );
-                }
+                int replacementIndex = Integer.parseInt(wildcard.substring(1, wildcard.length() - 1).trim());
 
                 if (replacementIndex >= replacements.length) {
                     throw new StringProcessingFormatException(StringProcessing.format(
@@ -190,15 +178,19 @@ public class StringProcessing {
 
         List<String> tokens = new ArrayList<>();
 
-        // extract the commands name
+        // apply the group extracting pattern onto the given String we're trying to tokenize
         Matcher commandNameMatcher = sCommandNameExtractor.matcher(toTokenize);
 
         if (!commandNameMatcher.find()) {
+            // usually unreachable statement, since the given String has been verified to
+            // at least have one match with the pattern for group extraction
+            // still checked for information in case something goes wrong during development.
             throw new IllegalArgumentException(StringProcessing.format(
                     "Command '{0}' cannot be parsed due to an error in the Regex of the tokenizer.", toTokenize
             ));
         }
 
+        // extract the commands name
         tokens.add(commandNameMatcher.group());
 
         // strip away the command name since we already processed it
