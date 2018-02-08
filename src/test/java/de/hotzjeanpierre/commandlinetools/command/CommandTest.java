@@ -19,6 +19,7 @@ package de.hotzjeanpierre.commandlinetools.command;
 import static org.hamcrest.core.Is.*;
 import static org.junit.Assert.*;
 
+import de.hotzjeanpierre.commandlinetools.command.exceptions.CommandArgumentNumberMismatchException;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeClass;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeSubClass;
 import org.junit.Test;
@@ -156,6 +157,11 @@ public class CommandTest {
                 Command.findTemplateFromName("somename").getDescription(),
                 is("some description")
         );
+    }
+
+    @Test(expected = CommandArgumentNumberMismatchException.class)
+    public void testParsingInvalidNumberOfParameters() {
+        Command.parseCommand("somecommand somparameter");
     }
 
     @SuppressWarnings("unused")

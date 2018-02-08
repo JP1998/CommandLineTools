@@ -16,7 +16,6 @@
 
 package de.hotzjeanpierre.commandlinetools.command;
 
-import de.hotzjeanpierre.commandlinetools.command.development.DebuggingPurpose;
 import de.hotzjeanpierre.commandlinetools.command.exceptions.*;
 import de.hotzjeanpierre.commandlinetools.command.utils.Assurance;
 import de.hotzjeanpierre.commandlinetools.command.utils.Converter;
@@ -166,7 +165,7 @@ import java.util.Map;
  * </div>
  *
  * @see Converter
- */
+ */ // TODO: Update description
 public abstract class Command implements NamingValidator {
 
     /*                                                                 *
