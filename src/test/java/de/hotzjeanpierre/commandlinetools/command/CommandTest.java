@@ -22,7 +22,6 @@ import static org.junit.Assert.*;
 import de.hotzjeanpierre.commandlinetools.command.exceptions.*;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeClass;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeSubClass;
-import org.junit.After;
 import org.junit.Test;
 
 import java.io.PrintStream;
@@ -355,12 +354,6 @@ public class CommandTest {
     }
 
 
-
-
-
-
-
-
     @SuppressWarnings("unused")
     static class SomeUnloadedCommand extends Command {
 
@@ -414,7 +407,7 @@ public class CommandTest {
         @Override
         protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
             for (Parameter param : this.params) {
-                if (params.getValue(param.getName()).equals(param.getDefaultValue()) == false) {
+                if (!params.getValue(param.getName()).equals(param.getDefaultValue())) {
                     throw new IllegalArgumentException("Parameter '" + param.getName() + "' is not set to its default value.");
                 }
             }
@@ -422,5 +415,4 @@ public class CommandTest {
             return null;
         }
     }
-
 }

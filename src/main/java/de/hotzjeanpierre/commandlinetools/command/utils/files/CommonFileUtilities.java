@@ -64,7 +64,7 @@ public class CommonFileUtilities {
      * @return the name without the extension of the given file
      */
     @NotNull
-    public static String extractFileName(@NotNull File f) {
+    public static String extractFileName(@NotNull File f)    {
         return extractFileName(f.getAbsolutePath());
     }
 

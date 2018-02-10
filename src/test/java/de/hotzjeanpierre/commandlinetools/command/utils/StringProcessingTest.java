@@ -67,6 +67,11 @@ public class StringProcessingTest {
         );
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testTokenizingInvalidFormat() {
+        StringProcessing.tokenizeCommand("99asdf");
+    }
+
     // Tests exception that does not apply anymore!
 //    @Test(expected = IllegalArgumentException.class)
 //    public void testTokenizingInvalidArgumentNumber() {
