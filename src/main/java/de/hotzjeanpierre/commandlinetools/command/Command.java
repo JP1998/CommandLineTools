@@ -339,7 +339,7 @@ public abstract class Command implements NamingValidator {
      * @throws DuplicateParameterException            if one or more of the parameters have been given multiple times
      * @throws MissingParameterException              if one of the parameters without default-value has not been given
      */
-    @NotNull // TODO: Test explicitly
+    @NotNull
     public static ExecutableCommand parseCommand(String toParse)
             throws CommandArgumentNumberMismatchException, CommandNotSupportedException,
             ParameterNotFoundException, ParameterTypeMismatchException,

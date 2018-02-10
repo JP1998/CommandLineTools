@@ -46,7 +46,8 @@ public class StringProcessing {
      * The pattern to validate the syntax of commands with.
      */
     private static final Pattern sCommandValidator =
-            Pattern.compile("^\\s*([_a-zA-Z][_a-zA-Z0-9]*)(\\s+([_a-zA-Z][_a-zA-Z0-9]*)\\s+((\"(?:[^\"\\\\]|\\\\[tbnrf'\"\\\\])*\")|([^\\s]+)))*\\s*$");
+            Pattern.compile("^\\s*([_a-zA-Z][_a-zA-Z0-9]*)(\\s+((\"(?:[^\"\\\\]|\\\\[tbnrf'\"\\\\])*\")|([^\\s]+)))*\\s*$");
+    // ^\s*([_a-zA-Z][_a-zA-Z0-9]*)(\s+([_a-zA-Z][_a-zA-Z0-9]*)\s+(("(?:[^"\\]|\\[tbnrf'"\\])*")|([^\s]+)))*\s*$
     /**
      * The pattern to extract the name of a command with.
      */
@@ -202,7 +203,7 @@ public class StringProcessing {
         while (commandParameterMatcher.find()) {
             String token = commandParameterMatcher.group();
 
-            // descape and remove double quotes from strings
+            // descape and remove double quotes from quoted parameters strings
             if (sCommandParameterStringValidator.matcher(token).matches()) {
                 token = descape(token.substring(1, token.length() - 1));
             }

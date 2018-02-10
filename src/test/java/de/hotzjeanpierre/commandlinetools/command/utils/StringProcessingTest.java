@@ -67,12 +67,13 @@ public class StringProcessingTest {
         );
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testTokenizingInvalidArgumentNumber() {
-        StringProcessing.tokenizeCommand(
-                "asd fgh"
-        );
-    }
+    // Tests exception that does not apply anymore!
+//    @Test(expected = IllegalArgumentException.class)
+//    public void testTokenizingInvalidArgumentNumber() {
+//        StringProcessing.tokenizeCommand(
+//                "asd fgh"
+//        );
+//    }
 
     @Test
     public void testZeroPaddingNegativeNumbers() {

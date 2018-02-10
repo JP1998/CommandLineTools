@@ -19,9 +19,10 @@ package de.hotzjeanpierre.commandlinetools.command;
 import static org.hamcrest.core.Is.*;
 import static org.junit.Assert.*;
 
-import de.hotzjeanpierre.commandlinetools.command.exceptions.CommandArgumentNumberMismatchException;
+import de.hotzjeanpierre.commandlinetools.command.exceptions.*;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeClass;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeSubClass;
+import org.junit.After;
 import org.junit.Test;
 
 import java.io.PrintStream;
@@ -164,6 +165,202 @@ public class CommandTest {
         Command.parseCommand("somecommand somparameter");
     }
 
+    @Test(expected = CommandNotSupportedException.class)
+    public void testUnsupportedCommand() {
+        Command.parseCommand("someunsupportedcommand someignoredparameter someignoredparametervalue");
+    }
+
+    @Test(expected = ParameterNotFoundException.class)
+    public void testUnknownParameter() {
+        Command.addSupportedCommand(
+                new SomeCustomCommand(
+                        "command_testunknownparameter",
+                        "some description",
+                        new Parameter[] {
+                                new Parameter("supportedparam1", SomeClass.class, "some description", new SomeClass(1, 2.3)),
+                                new Parameter("supportedparam2", SomeClass.class, "some description", new SomeClass(1, 2.3)),
+                                new Parameter("supportedparam2", SomeClass.class, "some description", new SomeClass(1, 2.3))
+                        }
+                )
+        );
+
+        Command.parseCommand("command_testunknownparameter unsupportedparam true");
+    }
+
+    @Test(expected = ParameterTypeMismatchException.class)
+    public void testCommandParameterTypeMismatch() {
+        Command.addSupportedCommand(
+                new SomeCustomCommand(
+                        "command_testparametertypemismatch",
+                        "some description",
+                        new Parameter[] {
+                                new Parameter("supportedparam1", SomeClass.class, "some description", new SomeClass(1, 2.3)),
+                                new Parameter("supportedparam2", SomeClass.class, "some description", new SomeClass(1, 2.3)),
+                                new Parameter("supportedparam2", SomeClass.class, "some description", new SomeClass(1, 2.3))
+                        }
+                )
+        );
+
+        Command.parseCommand("command_testparametertypemismatch supportedparam1 asdf");
+    }
+
+    @Test
+    public void testCommandParameterTypeValid() {
+        Command.addSupportedCommand(
+                new SomeCustomCommand(
+                        "command_testparametertypevalid",
+                        "some description",
+                        new Parameter[] {
+                                new Parameter("supportedparam1", String.class, "some description")
+                        }
+                )
+        );
+
+        Command.parseCommand("command_testparametertypevalid supportedparam1 \"This is \\\"some\\\" text\"");
+    }
+
+    @Test(expected = DuplicateParameterException.class)
+    public void testCommandDuplicateParameterFailing() {
+        Command.addSupportedCommand(
+                new SomeCustomCommand(
+                        "command_testduplicateparameterfailing",
+                        "some description",
+                        new Parameter[] {
+                                new Parameter("supportedparam1", String.class, "some description")
+                        }
+                )
+        );
+
+        Command.parseCommand("command_testduplicateparameterfailing supportedparam1 asdf supportedparam1 ghjk");
+    }
+
+    @Test
+    public void testCommandDefaultValueTaken() {
+        Command.addSupportedCommand(
+                new DefaultValueEnforcingCommand(
+                        "command_testdefaultvaluetaken",
+                        "some description",
+                        new Parameter[]{
+                                new Parameter("supportedparam1", String.class, "some description", "default")
+                        }
+                )
+        );
+
+        Command.parseCommand("command_testdefaultvaluetaken").execute();
+    }
+
+    @Test(expected = MissingParameterException.class)
+    public void testCommandMissingParameterWithoutDefaultValueFailing() {
+        Command.addSupportedCommand(
+                new SomeCustomCommand(
+                        "command_testmissingparameterwithoutdefaultvaluefailing",
+                        "some description",
+                        new Parameter[]{
+                                new Parameter("supportedparam1", SomeClass.class, "description", null)
+                        }
+                )
+        );
+
+        Command.parseCommand("command_testmissingparameterwithoutdefaultvaluefailing");
+    }
+
+    @Test
+    public void testGetDocumentationFormatting() {
+        Command toTestFor = new SomeCustomCommand(
+                "command_testgetdocumentationformatting",
+                "this is some kind of description of the command.\nIt is split across several lines and should be\ndisplayed very neatly.",
+                new Parameter[]{
+                        new Parameter(
+                                "supportedparam1",
+                                String.class,
+                                "This is the description of the parameter.\nIts default value will do this and that.",
+                                "Hello World"
+                        ),
+                        new Parameter(
+                                "supportedparam2",
+                                String.class,
+                                "This is the description of another parameter.\nIts has no default value."
+                        ),
+                }
+        );
+
+        assertThat(
+                toTestFor.getDocumentation(),
+                is(
+                        "command_testgetdocumentationformatting: \n" +
+                        "    this is some kind of description of the command.\n" +
+                        "    It is split across several lines and should be\n" +
+                        "    displayed very neatly.\n" +
+                        "  Parameters: \n" +
+                        "    - supportedparam1 (String|Hello World): This is the description of the parameter.\n" +
+                        "              Its default value will do this and that.\n" +
+                        "    - supportedparam2 (String): This is the description of another parameter.\n" +
+                        "              Its has no default value.\n"
+                )
+        );
+    }
+
+    @Test
+    public void testExecutableCommandIsDeleteInput() {
+        Command.addSupportedCommand(
+                new SomeCustomCommand(
+                        "command_testexecutablecommandisdeleteinput",
+                        "some description",
+                        new Parameter[0],
+                        true
+                )
+        );
+
+        assertThat(
+                Command.parseCommand("command_testexecutablecommandisdeleteinput").isDeleteInput(),
+                is(true)
+        );
+    }
+
+    @Test
+    public void testHelpAll() {
+        assertThat(
+                Command.parseCommand("help").execute().isSuccess(),
+                is(true)
+        );
+    }
+
+    @Test
+    public void testHelpSpecificAvailableCommand() {
+        Command.addSupportedCommand(
+                new SomeCustomCommand(
+                        "command_testhelpspecificavailablecommand",
+                        "some description",
+                        new Parameter[0]
+                )
+        );
+
+        assertThat(
+                Command
+                        .parseCommand(
+                                "help command command_testhelpspecificavailablecommand"
+                        )
+                        .execute()
+                        .isSuccess(),
+                is(true)
+        );
+    }
+
+    @Test
+    public void testHelpSpecificUnavailableCommand() {
+        assertThat(
+                Command.parseCommand("help command someunknowncommand").execute().isSuccess(),
+                is(false)
+        );
+    }
+
+
+
+
+
+
+
+
     @SuppressWarnings("unused")
     static class SomeUnloadedCommand extends Command {
 
@@ -202,6 +399,27 @@ public class CommandTest {
                     getName().equals(((SomeCustomCommand) obj).getName()) &&
                     getDescription().equals(((SomeCustomCommand) obj).getDescription()) &&
                     isDeleteInput() == ((SomeCustomCommand) obj).isDeleteInput();
+        }
+    }
+
+    static class DefaultValueEnforcingCommand extends Command {
+
+        private Parameter[] params;
+
+        public DefaultValueEnforcingCommand(String name, String description, Parameter[] params) {
+            super(name, description, params);
+            this.params = params;
+        }
+
+        @Override
+        protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
+            for (Parameter param : this.params) {
+                if (params.getValue(param.getName()).equals(param.getDefaultValue()) == false) {
+                    throw new IllegalArgumentException("Parameter '" + param.getName() + "' is not set to its default value.");
+                }
+            }
+
+            return null;
         }
     }
 
