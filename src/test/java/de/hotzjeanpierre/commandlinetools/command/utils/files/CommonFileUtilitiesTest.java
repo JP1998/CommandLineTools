@@ -19,7 +19,6 @@ package de.hotzjeanpierre.commandlinetools.command.utils.files;
 import org.junit.Test;
 
 import java.io.File;
-import java.nio.file.FileSystemException;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -185,6 +184,28 @@ public class CommonFileUtilitiesTest {
         );
     }
 
+    @Test
+    public void testExtractFolderPathFileOnDirectory() {
+        assertThat(
+                CommonFileUtilities.extractFolderPath(new File(System.getProperty("user.home"))),
+                is(System.getProperty("user.home"))
+        );
+    }
+
+    @Test
+    public void testExtractFolderPathFileOnFile() {
+        assertThat(
+                new File(CommonFileUtilities.extractFolderPath(new File(System.getProperty("user.home"), "somefile.someextension"))),
+                is(new File(System.getProperty("user.home")))
+        );
+    }
 
 
+    @Test
+    public void testExtractFolderPathStringOnDirectory() {
+        assertThat(
+                CommonFileUtilities.extractFolderPath(new File(System.getProperty("user.home"))),
+                is(System.getProperty("user.home"))
+        );
+    }
 }

@@ -90,6 +90,9 @@ public class CommonFileUtilities {
      */
     @NotNull
     public static String extractFolderPath(@NotNull File f) {
+        if(f.isDirectory()) {
+            return f.getAbsolutePath();
+        }
         return extractFolderPath(f.getAbsolutePath());
     }
 
