@@ -156,4 +156,17 @@ public class FileNamingDataTest {
         );
     }
 
+    @Test
+    public void testFileNamingDataToStringFormat() {
+        assertThat(
+                new FileNamingData(
+                        "name",
+                        123,
+                        ".ext",
+                        "/the/location/"
+                ).toString(),
+                is("FileNamingDate[originalName='name', index=123, extension='.ext', originalLocation='/the/location/']")
+        );
+    }
+
 }
