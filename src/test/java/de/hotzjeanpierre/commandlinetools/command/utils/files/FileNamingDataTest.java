@@ -169,4 +169,17 @@ public class FileNamingDataTest {
         );
     }
 
+    @Test
+    public void testGetOriginalName() {
+        assertThat(
+                new FileNamingData(
+                        "name",
+                        123,
+                        ".ext",
+                        "/the/location"
+                ).getOriginalName(),
+                is("name")
+        );
+    }
+
 }
