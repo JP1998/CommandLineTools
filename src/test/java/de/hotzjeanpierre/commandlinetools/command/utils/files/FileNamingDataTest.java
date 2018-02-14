@@ -41,4 +41,13 @@ public class FileNamingDataTest {
         );
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testCreationOfFileNamingDataWithoutName() {
+        new FileNamingData.Builder()
+                .setIndex(0)
+                .setOriginalLocation("/")
+                .setExtension(".ext")
+                .build();
+    }
+
 }
