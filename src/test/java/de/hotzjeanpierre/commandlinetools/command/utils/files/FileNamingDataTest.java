@@ -18,6 +18,8 @@ package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
 import org.junit.Test;
 
+import java.io.File;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -131,6 +133,25 @@ public class FileNamingDataTest {
                         0,
                         ".ext",
                         "/"
+                ))
+        );
+    }
+
+    @Test
+    public void testCreationOfFileNamingDataFromEncryptionResult() {
+        assertThat(
+                FileNamingData.Builder.build(
+                        new FileEncryptor.EncryptionResult(
+                                File.separator + "some" + File.separator + "goddamn folder" + File.separator + "somefile.someextension",
+                                new byte[0]
+                        ),
+                        0
+                ),
+                is(new FileNamingData(
+                        "somefile",
+                        0,
+                        ".someextension",
+                        File.separator + "some" + File.separator + "goddamn folder" + File.separator
                 ))
         );
     }

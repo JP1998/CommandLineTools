@@ -16,6 +16,7 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
+import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -104,6 +105,17 @@ public class FileNamingData {
                     data.originalName.equals(originalName);
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return StringProcessing.format(
+                "FileNamingDate[originalName='{0}', index={1}, extension='{2}', originalLocation='{3}']",
+                originalName,
+                index,
+                extension,
+                originalLocation
+        );
     }
 
     /**

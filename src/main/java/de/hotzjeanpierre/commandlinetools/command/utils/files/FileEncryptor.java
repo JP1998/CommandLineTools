@@ -320,7 +320,7 @@ public class FileEncryptor {
          *
          * @param error the Exception which aborted the de- or encryption
          */
-        private EncryptionResult(Exception error) {
+        /* package-protected */ EncryptionResult(Exception error) {
             this.originalName = null;
             this.data = null;
             this.success = false;
@@ -334,7 +334,7 @@ public class FileEncryptor {
          * @param originalName the name of the original file
          * @param data         the data that was originally stored in the file with given name
          */
-        private EncryptionResult(String originalName, byte[] data) {
+        /* package-protected */ EncryptionResult(String originalName, byte[] data) {
             this.originalName = originalName;
             this.data = data;
             this.success = true;
