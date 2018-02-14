@@ -81,12 +81,31 @@ public class FileNamingDataTest {
     public void testCreationOfFileNamingDataOriginalNameIgnoringNull() {
         assertThat(
                 new FileNamingData.Builder()
-                    .setOriginalName("somename")
-                    .setOriginalName(null)
-                    .setIndex(0)
-                    .setExtension(".ext")
-                    .setOriginalLocation("/")
-                    .build(),
+                        .setOriginalName("somename")
+                        .setOriginalName(null)
+                        .setIndex(0)
+                        .setExtension(".ext")
+                        .setOriginalLocation("/")
+                        .build(),
+                is(new FileNamingData(
+                        "somename",
+                        0,
+                        ".ext",
+                        "/"
+                ))
+        );
+    }
+
+    @Test
+    public void testCreationOfFileNamingDataExtensionIgnoringNull() {
+        assertThat(
+                new FileNamingData.Builder()
+                        .setOriginalName("somename")
+                        .setIndex(0)
+                        .setExtension(".ext")
+                        .setExtension(null)
+                        .setOriginalLocation("/")
+                        .build(),
                 is(new FileNamingData(
                         "somename",
                         0,
