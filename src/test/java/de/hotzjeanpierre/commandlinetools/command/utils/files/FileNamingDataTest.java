@@ -68,4 +68,13 @@ public class FileNamingDataTest {
                 .build();
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testCreationOfFileNamingDataWithoutOriginalLocation() {
+        new FileNamingData.Builder()
+                .setIndex(0)
+                .setExtension(".ext")
+                .setOriginalName("asdf")
+                .build();
+    }
+
 }
