@@ -112,7 +112,7 @@ public class FileLister {
         } else if (mode == FilterMode.AllowOnly) {
             return fileExtensionContained(findExtension(f), filter);
         } else {
-            return true /* !f.isDirectory() || listFolders */;
+            return true;
         }
     }
 

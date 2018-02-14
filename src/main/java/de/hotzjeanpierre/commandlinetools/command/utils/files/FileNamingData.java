@@ -53,7 +53,7 @@ public class FileNamingData {
      * @param extension        The extension of the original file
      * @param originalLocation The location (folder) of the original file
      */
-    private FileNamingData(
+    /* package-protected */ FileNamingData(
             String originalName,
             int index,
             String extension,
@@ -91,6 +91,19 @@ public class FileNamingData {
      */
     public String getOriginalLocation() {
         return originalLocation;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof FileNamingData) {
+            FileNamingData data = (FileNamingData) obj;
+
+            return data.index == index &&
+                    data.extension.equals(extension) &&
+                    data.originalLocation.equals(originalLocation) &&
+                    data.originalName.equals(originalName);
+        }
+        return false;
     }
 
     /**
