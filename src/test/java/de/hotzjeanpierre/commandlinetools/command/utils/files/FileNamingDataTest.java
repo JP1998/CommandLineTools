@@ -195,4 +195,17 @@ public class FileNamingDataTest {
         );
     }
 
+    @Test
+    public void testGetExtension() {
+        assertThat(
+                new FileNamingData(
+                        "name",
+                        123,
+                        ".ext",
+                        "/the/location"
+                ).getExtension(),
+                is(".ext")
+        );
+    }
+
 }
