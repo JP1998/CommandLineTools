@@ -115,4 +115,24 @@ public class FileNamingDataTest {
         );
     }
 
+    @Test
+    public void testCreationOfFileNamingDataOriginalLocationIgnoringNull() {
+        assertThat(
+                new FileNamingData.Builder()
+                        .setOriginalName("somename")
+                        .setIndex(0)
+                        .setExtension(".ext")
+                        .setExtension(null)
+                        .setOriginalLocation("/")
+                        .setOriginalLocation(null)
+                        .build(),
+                is(new FileNamingData(
+                        "somename",
+                        0,
+                        ".ext",
+                        "/"
+                ))
+        );
+    }
+
 }
