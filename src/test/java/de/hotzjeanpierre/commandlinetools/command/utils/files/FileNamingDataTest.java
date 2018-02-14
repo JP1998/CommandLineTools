@@ -182,4 +182,17 @@ public class FileNamingDataTest {
         );
     }
 
+    @Test
+    public void testGetIndex() {
+        assertThat(
+                new FileNamingData(
+                        "name",
+                        123,
+                        ".ext",
+                        "/the/location"
+                ).getIndex(),
+                is(123)
+        );
+    }
+
 }
