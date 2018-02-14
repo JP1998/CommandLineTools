@@ -77,4 +77,23 @@ public class FileNamingDataTest {
                 .build();
     }
 
+    @Test
+    public void testCreationOfFileNamingDataOriginalNameIgnoringNull() {
+        assertThat(
+                new FileNamingData.Builder()
+                    .setOriginalName("somename")
+                    .setOriginalName(null)
+                    .setIndex(0)
+                    .setExtension(".ext")
+                    .setOriginalLocation("/")
+                    .build(),
+                is(new FileNamingData(
+                        "somename",
+                        0,
+                        ".ext",
+                        "/"
+                ))
+        );
+    }
+
 }
