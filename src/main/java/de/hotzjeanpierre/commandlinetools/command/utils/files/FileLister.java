@@ -61,6 +61,10 @@ public class FileLister {
         // push the original folder onto the stack we are supposed to processed
         directories.push(folder);
 
+        if(listFolders) {
+            files.add(folder);
+        }
+
         // we'll go through every directory that is to be processed, while the number of
         // folders might be incremented during this loop, whereas a for-loop is not practical
         while (!directories.empty()) {
