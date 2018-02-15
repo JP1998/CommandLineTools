@@ -30,7 +30,6 @@ import static org.junit.Assert.*;
 
 public class FileListerTest {
 
-
     @Before
     public void setupFiles() throws IOException {
         for(int i = 0; i < filesToTestOn.length; i++) {
@@ -117,10 +116,16 @@ public class FileListerTest {
         );
     }
 
-
-
-
-
+    @Test
+    public void testListFilesWithFilterFilter() {
+        assertThat(
+                ArrayHelper.arrayContentEquals(
+                        FileLister.list(rootFile, true, FilterMode.Filter, "txt", true),
+                        expectedin_testListFilesWithFilterFilter
+                ),
+                is(true)
+        );
+    }
 
     ///
     /// Expected results of the tests and the files used for testing in general.
@@ -373,6 +378,77 @@ public class FileListerTest {
             new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0008.txt"),
             new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0009.txt"),
             new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0010.txt")
+    };
+
+    private static final File[] expectedin_testListFilesWithFilterFilter = {
+            new File(System.getProperty("user.home"), "/somefolder/"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/def/"),
+            new File(System.getProperty("user.home"), "/somefolder/someimage0001.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/someimage0002.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/someimage0003.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/someimage0004.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/someimage0005.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/someimage0006.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/someimage0007.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/someimage0008.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/someimage0009.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/someimage0010.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/someimage0001.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/someimage0002.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/someimage0003.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/someimage0004.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/someimage0005.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/someimage0006.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/someimage0007.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/someimage0008.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/someimage0009.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/someimage0010.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/someimage0001.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/someimage0002.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/someimage0003.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/someimage0004.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/someimage0005.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/someimage0006.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/someimage0007.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/someimage0008.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/someimage0009.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/someimage0010.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/someimage0001.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/someimage0002.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/someimage0003.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/someimage0004.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/someimage0005.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/someimage0006.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/someimage0007.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/someimage0008.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/someimage0009.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/someimage0010.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/someimage0001.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/someimage0002.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/someimage0003.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/someimage0004.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/someimage0005.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/someimage0006.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/someimage0007.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/someimage0008.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/someimage0009.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/someimage0010.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/someimage0001.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/someimage0002.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/someimage0003.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/someimage0004.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/someimage0005.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/someimage0006.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/someimage0007.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/someimage0008.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/someimage0009.jpq"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/someimage0010.jpq")
     };
 
 
