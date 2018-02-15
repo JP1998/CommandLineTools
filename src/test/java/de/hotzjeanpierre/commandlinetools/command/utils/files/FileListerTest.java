@@ -100,7 +100,18 @@ public class FileListerTest {
         assertThat(
                 ArrayHelper.arrayContentEquals(
                         FileLister.list(rootFile, false, FilterMode.None, "", true),
-                        expectedin_testListFilesWithoutSubdirectoriesr
+                        expectedin_testListFilesWithoutSubdirectories
+                ),
+                is(true)
+        );
+    }
+
+    @Test
+    public void testListFilesWithFilterAllowOnly() {
+        assertThat(
+                ArrayHelper.arrayContentEquals(
+                        FileLister.list(rootFile, true, FilterMode.AllowOnly, "txt", true),
+                        expectedin_testListFilesWithFilterAllowOnly
                 ),
                 is(true)
         );
@@ -281,6 +292,87 @@ public class FileListerTest {
             new File(System.getProperty("user.home"), "/somefolder/someimage0008.jpq"),
             new File(System.getProperty("user.home"), "/somefolder/someimage0009.jpq"),
             new File(System.getProperty("user.home"), "/somefolder/someimage0010.jpq")
+    };
+
+    private static final File[] expectedin_testListFilesWithFilterAllowOnly = {
+            new File(System.getProperty("user.home"), "/somefolder/"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/def/"),
+            new File(System.getProperty("user.home"), "/somefolder/sometext0001.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/sometext0002.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/sometext0003.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/sometext0004.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/sometext0005.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/sometext0006.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/sometext0007.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/sometext0008.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/sometext0009.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/sometext0010.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/sometext0001.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/sometext0002.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/sometext0003.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/sometext0004.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/sometext0005.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/sometext0006.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/sometext0007.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/sometext0008.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/sometext0009.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/sometext0010.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/sometext0001.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/sometext0002.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/sometext0003.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/sometext0004.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/sometext0005.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/sometext0006.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/sometext0007.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/sometext0008.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/sometext0009.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/txt/sometext0010.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/sometext0001.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/sometext0002.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/sometext0003.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/sometext0004.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/sometext0005.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/sometext0006.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/sometext0007.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/sometext0008.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/sometext0009.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/b/sometext0010.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/sometext0001.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/sometext0002.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/sometext0003.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/sometext0004.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/sometext0005.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/sometext0006.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/sometext0007.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/sometext0008.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/sometext0009.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some subfolder/c/sometext0010.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/sometext0001.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/sometext0002.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/sometext0003.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/sometext0004.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/sometext0005.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/sometext0006.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/sometext0007.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/sometext0008.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/sometext0009.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/sometext0010.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0001.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0002.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0003.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0004.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0005.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0006.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0007.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0008.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0009.txt"),
+            new File(System.getProperty("user.home"), "/somefolder/some other subfolder/abc/sometext0010.txt")
     };
 
 
