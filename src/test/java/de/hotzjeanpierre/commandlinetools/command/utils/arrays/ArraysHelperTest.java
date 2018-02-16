@@ -16,5 +16,19 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils.arrays;
 
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+import static org.hamcrest.core.Is.*;
+
 public class ArraysHelperTest {
+
+    @Test
+    public void testContainWithSingleElement() {
+        assertThat(
+                ArrayHelper.contains(new Integer    [] { 1, 3, 5, 7, 9 }, 7),
+                is(true)
+        );
+    }
+
 }
