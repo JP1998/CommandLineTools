@@ -74,6 +74,7 @@ public class ArrayHelper {
      * @param <T> An arbitrary type that the array is declared with.
      * @return Whether or not the content of the two given arrays are equal.
      */
+    @Contract("null, null -> true; null, !null -> false; !null, null -> false")
     public static <T> boolean arrayContentEquals(T[] arr1, T[] arr2) {
         if(arr1 == null && arr2 == null) {
             return true;
@@ -121,6 +122,11 @@ public class ArrayHelper {
         return (el1 == null && el2 == null) || (el1 != null && el1.equals(el2));
     }
 
+    /**
+     * This method casts a
+     * @param characters
+     * @return
+     */
     @Contract(pure = true)
     public static Character[] cast(@NotNull char[] characters) {
         Character[] result = new Character[characters.length];
