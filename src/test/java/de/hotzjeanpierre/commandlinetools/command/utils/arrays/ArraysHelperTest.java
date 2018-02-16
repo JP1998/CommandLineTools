@@ -24,10 +24,18 @@ import static org.hamcrest.core.Is.*;
 public class ArraysHelperTest {
 
     @Test
-    public void testContainWithSingleElement() {
+    public void testContainsWithSingleElement() {
         assertThat(
                 ArrayHelper.contains(new Integer    [] { 1, 3, 5, 7, 9 }, 7),
                 is(true)
+        );
+    }
+
+    @Test
+    public void testContainsWithoutElement() {
+        assertThat(
+                ArrayHelper.contains(new Integer[] { 1, 3, 5, 7, 9 }),
+                is(false)
         );
     }
 
