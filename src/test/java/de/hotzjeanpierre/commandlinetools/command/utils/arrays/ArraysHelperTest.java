@@ -62,4 +62,58 @@ public class ArraysHelperTest {
                 is(true)
         );
     }
+
+    @Test
+    public void testArrayContentEqualsDualNullArrays() {
+        assertThat(
+                ArrayHelper.arrayContentEquals(null, null),
+                is(true)
+        );
+    }
+
+    @Test
+    public void testArrayContentEqualsSingleNullArrays() {
+        assertThat(
+                ArrayHelper.arrayContentEquals(new Object[0], null),
+                is(false)
+        );
+    }
+
+    @Test
+    public void testArrayContentEqualsArraysWithDifferentLengths() {
+        assertThat(
+                ArrayHelper.arrayContentEquals(new Object[12], new Object[11]),
+                is(false)
+        );
+    }
+
+    @Test
+    public void testArrayContentEqualsArraysWithDifferentContent() {
+        assertThat(
+                ArrayHelper.arrayContentEquals(
+                        new Integer[] { 1, 2, 3, 4, 5 },
+                        new Integer[] { 6, 7, 8, 9, 0 }
+                ),
+                is(false)
+        );
+    }
+
+    @Test
+    public void testArrayContentEqualsArraysWithSameContent() {
+        assertThat(
+                ArrayHelper.arrayContentEquals(
+                        new Integer[] { 1, 2, 3, 4, 5 },
+                        new Integer[] { 4, 2, 5, 3, 1 }
+                ),
+                is(true)
+        );
+    }
+
+    @Test
+    public void testCast() {
+        assertArrayEquals(
+                new Character[] { 'a', 's', 'd', 'f' },
+                ArrayHelper.cast(new char[] { 'a', 's', 'd', 'f' })
+        );
+    }
 }
