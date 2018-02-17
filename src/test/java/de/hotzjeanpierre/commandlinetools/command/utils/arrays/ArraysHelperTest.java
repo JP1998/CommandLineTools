@@ -24,19 +24,42 @@ import static org.hamcrest.core.Is.*;
 public class ArraysHelperTest {
 
     @Test
-    public void testContainsWithSingleElement() {
+    public void testContainsWithNullArray() {
         assertThat(
-                ArrayHelper.contains(new Integer    [] { 1, 3, 5, 7, 9 }, 7),
-                is(true)
+                ArrayHelper.containsAny(null, 7, 6, 4, 3),
+                is(false)
         );
     }
 
     @Test
     public void testContainsWithoutElement() {
         assertThat(
-                ArrayHelper.contains(new Integer[] { 1, 3, 5, 7, 9 }),
+                ArrayHelper.containsAny(new Integer[] { 1, 3, 5, 7, 9 }),
                 is(false)
         );
     }
 
+    @Test
+    public void testContainsWithSingleElement() {
+        assertThat(
+                ArrayHelper.containsAny(new Integer[] { 1, 3, 5, 7, 9 }, 7),
+                is(true)
+        );
+    }
+
+    @Test
+    public void testContainsWithSeveralElements() {
+        assertThat(
+                ArrayHelper.containsAny(new Integer[] { 1, 3, 5, 7, 9 }, 2, 4, 6, 7),
+                is(true)
+        );
+    }
+
+    @Test
+    public void testContainsWithNullElement() {
+        assertThat(
+                ArrayHelper.containsAny(new Integer[] { 1, 3, 5, null, 9 }, 2, 4, 6, 8, null),
+                is(true)
+        );
+    }
 }

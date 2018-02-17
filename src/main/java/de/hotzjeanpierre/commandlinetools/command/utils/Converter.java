@@ -79,7 +79,7 @@ public class Converter {
         if (String.class.equals(toConvertTo)) {                     // String
             return representation;
         } else if (File.class.equals(toConvertTo)) {                // File
-            if(ArrayHelper.contains(
+            if(ArrayHelper.containsAny(
                     ArrayHelper.cast(representation.toCharArray()),
                     '<', '>', ':', '"', '|', '?', '*'
             )) {

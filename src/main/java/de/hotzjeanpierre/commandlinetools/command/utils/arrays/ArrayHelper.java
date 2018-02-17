@@ -38,7 +38,7 @@ public class ArrayHelper {
      * @return Whether any of the given elements are contained within the array.
      */
     @Contract("null, _ -> false")
-    public static <T> boolean contains(T[] arr, T... elements) {
+    public static <T> boolean containsAny(T[] arr, T... elements) {
         if(arr == null || arr.length == 0) {
             return false;
         }

@@ -167,7 +167,7 @@ public class ListFilesCommand extends Command {
     private static void list(PrintStream out, File a, File[] toList, int depth, String format, boolean tree, boolean absolute) {
         // in case the current file is absolute (and thus the root-folder)
         // or it is contained in the files that are to be listed
-        if(absolute || ArrayHelper.contains(toList, a)) {
+        if(absolute || ArrayHelper.containsAny(toList, a)) {
 
             // we'll print the file itself
             out.println(

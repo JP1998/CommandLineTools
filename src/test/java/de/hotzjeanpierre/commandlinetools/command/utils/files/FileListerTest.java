@@ -18,9 +18,7 @@ package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import de.hotzjeanpierre.commandlinetools.command.utils.arrays.ArrayHelper;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,8 +28,8 @@ import static org.junit.Assert.*;
 
 public class FileListerTest {
 
-    @Before
-    public void setupFiles() throws IOException {
+    @BeforeClass
+    public static void setupFiles() throws IOException {
         for(int i = 0; i < filesToTestOn.length; i++) {
             if(i < 8) {
                 if(!filesToTestOn[i].mkdir()) {
@@ -47,8 +45,8 @@ public class FileListerTest {
         System.out.println("Setup files for testing.");
     }
 
-    @After
-    public void deleteFiles() {
+    @AfterClass
+    public static void deleteFiles() {
         for(int i = filesToTestOn.length - 1; i >= 0; i--) {
             if(!filesToTestOn[i].delete()) {
                 System.out.println(StringProcessing.format(
@@ -58,7 +56,7 @@ public class FileListerTest {
             }
         }
 
-        System.out.println("Cleaned files for testing.");
+        System.out.println("Cleaned up files for testing.");
     }
 
     @Test(expected = IllegalArgumentException.class)
