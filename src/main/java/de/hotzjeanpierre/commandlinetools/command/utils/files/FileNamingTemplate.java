@@ -99,7 +99,7 @@ public class FileNamingTemplate {
      *
      * @param templateTokens the Tokens that represent the template
      */
-    private FileNamingTemplate(Token[] templateTokens) {
+    /* package-protected */ FileNamingTemplate(Token[] templateTokens) {
         this.template = templateTokens;
     }
 
@@ -127,11 +127,11 @@ public class FileNamingTemplate {
      * (
      *     [^{}/\\:\*\?\"<>\|]*
      *     (
-     *         \{\{                         |
-     *         }}                           |
-     *         {\s*originalname\s*}         |
-     *         {\s*index\s*:\s*[0-9]+\s*}   |
-     *         {\s*extension\s*}            |
+     *         \{\{                             |
+     *         }}                               |
+     *         {\s*originalname\s*}             |
+     *         {\s*index\s*(:\s*[0-9]+\s*)?}    |
+     *         {\s*extension\s*}                |
      *         {\s*originallocation\s*}
      *     )
      * )*
@@ -140,7 +140,7 @@ public class FileNamingTemplate {
      * </code></pre>
      */
     private static final Pattern TEMPLATE_VALIDITY_PATTERN = Pattern.compile(
-            "^([^{}:*?\"<>|]*(\\{\\{|}}|\\{\\s*originalname\\s*}|\\{\\s*index\\s*:\\s*[0-9]+\\s*}|\\{\\s*extension\\s*}|\\{\\s*originallocation\\s*}))*[^{}:*?\"<>|]*$"
+            "^([^{}:*?\"<>|]*(\\{\\{|}}|\\{\\s*originalname\\s*}|\\{\\s*index\\s*(:\\s*[0-9]+\\s*)?}|\\{\\s*extension\\s*}|\\{\\s*originallocation\\s*}))*[^{}:*?\"<>|]*$"
     );
     /**
      * The pattern that is used to extract the single groups from the template string.
@@ -159,7 +159,7 @@ public class FileNamingTemplate {
      * </code></pre>
      */
     private static final Pattern TEMPLATE_GROUPTEXTRACTOR_PATTERN = Pattern.compile(
-            "([^{}:*?\"<>|]+|\\{\\{|}}|\\{\\s*originalname\\s*}|\\{\\s*index\\s*:\\s*[0-9]+\\s*}|\\{\\s*extension\\s*}|\\{\\s*originallocation\\s*})"
+            "([^{}:*?\"<>|]+|\\{\\{|}}|\\{\\s*originalname\\s*}|\\{\\s*index\\s*(:\\s*[0-9]+\\s*)?}|\\{\\s*extension\\s*}|\\{\\s*originallocation\\s*})"
     );
 
     /**
@@ -287,7 +287,7 @@ public class FileNamingTemplate {
                 return new OriginalLocationToken();
             default:
                 throw new IllegalAccessError(
-                        "You may have accessed the method FileNamingTemplate#resolveToken(String) without having access granted to said method."
+                        "You may have accessed the method FileNamingTemplate#resolveToken(String) without having access granted to said method.\nAre you using reflection to access private methods?"
                 );
         }
     }
@@ -342,7 +342,7 @@ public class FileNamingTemplate {
      * Thus any wildcard or plain text will resolve to some kind of token, which
      * is to be determined by the implementing classes of this interface.
      */
-    private interface Token {
+    /* package-protected */ interface Token {
 
         /**
          * This method is supposed to return the value this token resolves to
@@ -360,7 +360,7 @@ public class FileNamingTemplate {
      * Thus any wildcard with name "originalname" will resolve
      * to an instance of this class.
      */
-    private static class OriginalNameToken implements Token {
+    /* package-protected */ static class OriginalNameToken implements Token {
 
         /* package-protected */ OriginalNameToken() {
         }
@@ -388,7 +388,7 @@ public class FileNamingTemplate {
      * Thus any wildcard with name "index" will resolve
      * to an instance of this class.
      */
-    private static class IndexToken implements Token {
+    /* package-protected */ static class IndexToken implements Token {
 
         /**
          * The length the index will be padded to
@@ -431,7 +431,7 @@ public class FileNamingTemplate {
      * Thus any wildcard with name "extension" will resolve
      * to an instance of this class.
      */
-    private static class ExtensionToken implements Token {
+    /* package-protected */ static class ExtensionToken implements Token {
 
         /* package-protected */ ExtensionToken() {
         }
@@ -459,7 +459,7 @@ public class FileNamingTemplate {
      * Thus any wildcard with name "originallocation" will resolve
      * to an instance of this class.
      */
-    private static class OriginalLocationToken implements Token {
+    /* package-protected */ static class OriginalLocationToken implements Token {
 
         /* package-protected */ OriginalLocationToken() {
         }
@@ -485,7 +485,7 @@ public class FileNamingTemplate {
      * This class represents any plain text within a FileNamingTemplate, and
      * will resolve to the same text without regard of the given data.
      */
-    private static class TextToken implements Token {
+    /* package-protected */ static class TextToken implements Token {
 
         /**
          * The text the token represents
@@ -503,7 +503,7 @@ public class FileNamingTemplate {
 
         @Override
         public String toString() {
-            return text;
+            return text.replace("{", "{{").replace("}", "}}");
         }
 
         @Override
