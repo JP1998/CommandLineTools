@@ -39,13 +39,13 @@ public class FileLister {
      *
      * @param folder       the file to list files from
      * @param searchSubDir whether to search within sub directories or not
-     * @param mode         the mode the filter is supposed to perform in
+     * @param filterMode   the mode the filter is supposed to perform in
      * @param filter       the extensions to apply the filter to, separated by semicolons
      * @param listFolders  whether to list folders or not
      * @return the list of files within the given folder with given parameters applied
      */
     @NotNull
-    public static File[] list(@NotNull File folder, boolean searchSubDir, FilterMode mode, String filter, boolean listFolders) {
+    public static File[] list(@NotNull File folder, boolean searchSubDir, FilterMode filterMode, String filter, boolean listFolders) {
         // check whether the given folder actually exists and whether it is a folder
         if (!folder.exists() || !folder.isDirectory()) {
             throw new IllegalArgumentException(StringProcessing.format(
@@ -78,7 +78,7 @@ public class FileLister {
                 // we'll iterate over all files within the folder
                 for (File f : toProcess) {
                     // if a file is to list we'll add it
-                    if (fileToList(f, mode, filter, listFolders)) {
+                    if(filterMode.allow(f, filter, listFolders)) {
                         files.add(f);
                     }
 
@@ -94,60 +94,5 @@ public class FileLister {
         // finally convert the list into an array and return it
         File[] result = new File[files.size()];
         return files.toArray(result);
-    }
-
-    /**
-     * This method is used to determine whether a given file is to be
-     * listed after applying the given filter parameters.
-     *
-     * @param f           the file to check
-     * @param mode        the mode the filter is performing in
-     * @param filter      the extensions to filter
-     * @param listFolders whether to list folders
-     * @return whether or not the given file is supposed to be listed
-     */
-    private static boolean fileToList(@NotNull File f, FilterMode mode, String filter, boolean listFolders) {
-        if (f.isDirectory()) {
-            return listFolders;
-        }
-
-        if (mode == FilterMode.Filter) {
-            return !fileExtensionContained(findExtension(f), filter);
-        } else if (mode == FilterMode.AllowOnly) {
-            return fileExtensionContained(findExtension(f), filter);
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * This method gives you the extension of the given file.
-     *
-     * @param f the file to determine the extension of
-     * @return the extension of the given file
-     */
-    @NotNull
-    private static String findExtension(@NotNull File f) {
-        int dot = f.getAbsolutePath().lastIndexOf('.');
-        return dot == -1 ? "" : f.getAbsolutePath().substring(dot + 1);
-    }
-
-    /**
-     * This method determines whether a specific extension is to be filtered.
-     *
-     * @param extension         the extension to check
-     * @param extensionsToCheck the list of extensions to filter
-     * @return whether or not the given extension is within the list
-     */
-    private static boolean fileExtensionContained(String extension, @NotNull String extensionsToCheck) {
-        String[] extensions = extensionsToCheck.split(";");
-
-        for (String ext : extensions) {
-            if (extension.trim().equalsIgnoreCase(ext.trim())) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
