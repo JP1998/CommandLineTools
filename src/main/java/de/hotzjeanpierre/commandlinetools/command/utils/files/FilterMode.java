@@ -63,6 +63,15 @@ public enum FilterMode {
 
     private FilterModeApplication application;
 
+    /**
+     * This method is used to determine whether a given file is to be
+     * listed after applying the given filter parameters.
+     *
+     * @param f         the file to check
+     * @param filter    the extensions to filter
+     * @param lf        whether to list folders
+     * @return whether or not the given file is supposed to be listed
+     */
     public boolean allow(@NotNull File f, String filter, boolean lf) {
         return this.application.allow(f, filter, lf);
     }
