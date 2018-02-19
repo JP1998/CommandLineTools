@@ -16,7 +16,6 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
-import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -52,20 +51,10 @@ public class EmptyFolderDeleter {
         File[] children = folder.listFiles();
 
         if(children != null) {
-            // in case there are children
+            // in case there are children (which can only be folders)
             for (File fileToDelete : children) {
                 // we'll delete each and every one of them
-                if (fileToDelete.isDirectory()) {
-                    deleteWithChildren(fileToDelete);
-                } else {
-                    // in case there is an file we'll throw an Error
-                    // The error is only thrown since this case can in fact never happen,
-                    // unless the process this program is executed on is heavily manipulated from outside
-                    throw new IllegalAccessError(StringProcessing.format(
-                            "The file '{0}' cannot exist in a folder that has just been checked to be empty.",
-                            fileToDelete.getAbsolutePath()
-                    ));
-                }
+                deleteWithChildren(fileToDelete);
             }
         }
 
