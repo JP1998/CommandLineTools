@@ -18,7 +18,10 @@ package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FilenameFilter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import static org.hamcrest.core.Is.*;
 import static org.junit.Assert.*;
@@ -75,6 +78,46 @@ public class FileNamingTemplateTest {
                                 .build()
                         ),
                 is("/some/location/4321 - filename.ext")
+        );
+    }
+
+    @Test(expected = InvocationTargetException.class)
+    public void testResolveTokenIllegalAccess() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method toInvoke = FileNamingTemplate.class.getDeclaredMethod("resolveToken", String.class);
+        toInvoke.setAccessible(true);
+        toInvoke.invoke(null, "someillegaltoken");
+    }
+
+    @Test
+    public void testEqualsWithDifferentLengths() {
+        assertThat(
+                FileNamingTemplate.parse("{index}{originalname}asdf{extension}").equals(FileNamingTemplate.parse("")),
+                is(false)
+        );
+    }
+
+    @Test
+    public void testEqualsWithNonMatchingType() {
+        assertThat(
+                FileNamingTemplate.parse("").equals(new Object()),
+                is(false)
+        );
+    }
+
+    @Test
+    public void testEqualsWithNull() {
+        assertThat(
+                FileNamingTemplate.parse("").equals(null),
+                is(false)
+        );
+    }
+
+    @Test
+    public void testEqualsWithSameLengthButDifferentTokens() {
+        assertThat(
+                FileNamingTemplate.parse("asdf{index}{originalname}{extension}")
+                        .equals(FileNamingTemplate.parse("asdf{index}{{originalname}}{extension}")),
+                is(false)
         );
     }
 }

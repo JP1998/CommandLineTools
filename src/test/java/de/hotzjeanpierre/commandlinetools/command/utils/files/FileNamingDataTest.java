@@ -221,4 +221,16 @@ public class FileNamingDataTest {
         );
     }
 
+    @Test
+    public void testEqualsWithIncompatibleTypes() {
+        assertThat(
+                new FileNamingData(
+                        "name",
+                        123,
+                        ".ext",
+                        "/location/"
+                ).equals(new Object()),
+                is(false)
+        );
+    }
 }
