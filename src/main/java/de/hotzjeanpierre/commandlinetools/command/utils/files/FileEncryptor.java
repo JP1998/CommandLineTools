@@ -49,7 +49,7 @@ public class FileEncryptor {
      * @throws IOException in case an error occurs during reading (e.g. the file doesn't exist)
      */
     @NotNull
-    private static byte[] readFile(@NotNull File file) throws IOException {
+    public static byte[] readFile(@NotNull File file) throws IOException {
         return Files.readAllBytes(file.toPath());
     }
 

@@ -52,7 +52,4 @@ public class CommandExecutionResultTest {
                 is(true)
         );
     }
-
-
-
 }
