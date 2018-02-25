@@ -16,12 +16,10 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.junit.Test;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
@@ -49,5 +47,29 @@ public class FileEncryptorTest {
         );
 
         toRead.delete();
+    }
+
+    private static final String TESTWRITEFILE_TOWRITE = "This is some different but also weird kind of text.\nIt is used to test whether the class FileEncryptor actually correctly writes data to files.";
+    private static final byte[] TESTWRITEFILE_EXPECTED = TESTWRITEFILE_TOWRITE.getBytes();
+
+    @Test
+    public void testWriteFile() throws IOException {
+        File toWrite = new File(System.getProperty("user.home"), "sometestfile.txt");
+
+        FileEncryptor.writeFile(toWrite, TESTWRITEFILE_EXPECTED);
+
+        byte[] readData = new byte[(int) toWrite.length()];
+
+        try (FileInputStream stream = new FileInputStream(toWrite)) {
+            if(stream.read(readData) != readData.length) {
+                throw new IOException("Length of file does not match the detected data.");
+            }
+        } catch (IOException e) {
+            throw new AssertionError(
+                    "Couldn't test since there was an error setting up the test environment.", e
+            );
+        }
+
+        toWrite.delete();
     }
 }
