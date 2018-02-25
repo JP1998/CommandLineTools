@@ -180,6 +180,8 @@ public class CustomConverter extends Converter {
   - a password generator / manager
   - (low priority) interpreter for the esoteric programming language Brainfuck
   - (low priority) interpreter for the esoteric programming language False
+- a list of parameters given by order (at least for the parameters without default value)
+- the possibility of giving boolean parameters without "false" or "true", but with "-&lt;name&gt;" (instead of "&lt;name&gt; false") and "--&lt;name&gt;" (instead of "&lt;name&gt; true")
 - some lightweight pattern matching as a better solution for filtering files
 - a GUI that is more comfortable to use than the command prompt of Win 7
   - also text based but created by a textbox or similar
