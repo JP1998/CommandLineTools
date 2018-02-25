@@ -16,6 +16,7 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
+import de.hotzjeanpierre.commandlinetools.command.testutilities.ByteArrayProcessor;
 import org.junit.Test;
 
 import java.io.*;
@@ -40,9 +41,9 @@ public class FileEncryptorTest {
             );
         }
 
-        assertArrayEquals(
+        assertThat(
                 FileEncryptor.readFile(toRead),
-                TESTREADFILE_EXPECTED
+                is(TESTREADFILE_EXPECTED)
         );
 
         toRead.delete();
@@ -68,12 +69,44 @@ public class FileEncryptorTest {
                     "Couldn't test since there was an error setting up the test environment.", e
             );
         }
-        
-        assertArrayEquals(
+
+        assertThat(
                 readData,
-                TESTWRITEFILE_EXPECTED
+                is(TESTWRITEFILE_EXPECTED)
         );
 
         toWrite.delete();
+    }
+
+    /**
+     * The password we're using to determine the integrity of the method FileEncryptor#createPrivateKey(String).
+     */
+    public static String TESTCREATEPRIVATEKEYVALID_USEDPASSWORD = "asdf1234";
+    /**
+     * The hash (312433c28349f63c4f387953ff337046e794bea0f9b9ebfcb08e90046ded9c76) has been determined
+     * using https://www.tools4noobs.com/online_tools/hash/ with SHA-256 and the text "asdf1234".
+     * Since AES uses keys of 16 bytes length we'll also have to trim the hash to said length´.
+     */
+    public static byte[] TESTCREATEPRIVATEKEYVALID_EXPECTED =
+            ByteArrayProcessor.bringToLength(
+                    ByteArrayProcessor.parseFromHexString(
+                            "312433c28349f63c4f387953ff337046e794bea0f9b9ebfcb08e90046ded9c76"
+                    ),
+                    16
+            );
+
+    @Test
+    public void testCreatePrivateKeyValid() {
+        assertThat(
+                FileEncryptor.createPrivateKey(TESTCREATEPRIVATEKEYVALID_USEDPASSWORD).getSecretKey().getEncoded(),
+                is(TESTCREATEPRIVATEKEYVALID_EXPECTED)
+        );
+    }
+
+    @Test
+    public void testCreatePrivateKeyInvalid() {
+//        assertThat(
+//
+//        );
     }
 }
