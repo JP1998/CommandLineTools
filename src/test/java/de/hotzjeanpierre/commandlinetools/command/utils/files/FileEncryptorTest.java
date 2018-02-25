@@ -16,7 +16,6 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.junit.Test;
 
 import java.io.*;
@@ -69,6 +68,11 @@ public class FileEncryptorTest {
                     "Couldn't test since there was an error setting up the test environment.", e
             );
         }
+        
+        assertArrayEquals(
+                readData,
+                TESTWRITEFILE_EXPECTED
+        );
 
         toWrite.delete();
     }
