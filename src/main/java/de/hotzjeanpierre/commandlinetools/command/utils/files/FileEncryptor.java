@@ -138,7 +138,7 @@ public class FileEncryptor {
      * @param in the file that is to be encrypted
      */
     @NotNull
-    public static EncryptionResult encrypt(SecretKeySpec pw, File in, File relativeTo) {
+    public static EncryptionResult encryptFile(SecretKeySpec pw, File in, File relativeTo) {
         if (in == null || !in.isFile() || !in.exists()) {
             return new EncryptionResult(
                     new FileCouldNotBeEncryptedException(StringProcessing.format(
@@ -155,6 +155,8 @@ public class FileEncryptor {
                     relativeTo.getAbsolutePath().length(),
                     in.getAbsolutePath().length()
             );
+
+            System.out.println(filename);
 
             byte[] filenameBytes = filename.getBytes();
 
@@ -181,7 +183,7 @@ public class FileEncryptor {
      * @param in the file that is to be decrypted
      */
     @NotNull
-    public static EncryptionResult decrypt(SecretKeySpec pw, File in) {
+    public static EncryptionResult decryptFile(SecretKeySpec pw, File in) {
         if (in == null || !in.isFile() || !in.exists()) {
             return new EncryptionResult(
                     new FileCouldNotBeEncryptedException(StringProcessing.format(

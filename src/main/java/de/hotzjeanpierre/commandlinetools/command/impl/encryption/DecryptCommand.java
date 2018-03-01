@@ -162,7 +162,7 @@ public class DecryptCommand extends Command {
 
         for (File f : toDecrypt) {
             // read from the file and decrypt it
-            FileEncryptor.EncryptionResult result = FileEncryptor.decrypt(
+            FileEncryptor.EncryptionResult result = FileEncryptor.decryptFile(
                     secretkeyresult.getSecretKey(), f
             );
 

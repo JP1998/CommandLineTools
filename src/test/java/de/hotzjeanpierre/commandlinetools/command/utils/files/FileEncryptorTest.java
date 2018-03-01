@@ -17,6 +17,7 @@
 package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
 import de.hotzjeanpierre.commandlinetools.command.testutilities.ByteArrayProcessor;
+import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import org.junit.Test;
 
 import java.io.*;
@@ -80,11 +81,11 @@ public class FileEncryptorTest {
         toWrite.delete();
     }
 
-    /**
+    /*
      * The password we're using to determine the integrity of the method FileEncryptor#createPrivateKey(String).
      */
     public static String TESTCREATEPRIVATEKEYVALID_USEDPASSWORD = "asdf1234";
-    /**
+    /*
      * The hash (312433c28349f63c4f387953ff337046e794bea0f9b9ebfcb08e90046ded9c76) has been determined
      * using https://www.tools4noobs.com/online_tools/hash/ with SHA-256 and the text "asdf1234".
      * Since AES uses keys of 16 bytes length we'll also have to trim the hash to said length´.
@@ -117,7 +118,7 @@ public class FileEncryptorTest {
     private static final String TESTENCRYPT_USEDDATATEXT = "This is some text the FileEncryptor-class is supposed to encrypt with the password 'asdf1234'.\nIf this fails... well something's just wrong :D";
     private static final byte[] TESTENCRYPT_USEDDATA = TESTENCRYPT_USEDDATATEXT.getBytes(Charset.forName("UTF-8"));
 
-    /**
+    /*
      * This byte array has been determined by some straight-forward but rather long Kotlin-code.
      * Thus this test is rather a mock than a real test, but it's better than nothing.
      * Here's the actual code that determined the result:
@@ -193,7 +194,7 @@ public class FileEncryptorTest {
     @Test
     public void testEncryptFileNull() {
         assertThat(
-                FileEncryptor.encrypt(
+                FileEncryptor.encryptFile(
                         FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
                         null,
                         new File(System.getProperty("user.home"))
@@ -205,12 +206,121 @@ public class FileEncryptorTest {
     @Test
     public void testEncryptFileNonExisting() {
         assertThat(
-                FileEncryptor.encrypt(
+                FileEncryptor.encryptFile(
                         FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
                         new File(System.getProperty("user.home"), "somenonexistingfile.txt"),
                         new File(System.getProperty("user.home"))
                 ).isSuccess(),
                 is(false)
+        );
+    }
+
+    @Test
+    public void testEncryptFileNullKeySpec() throws IOException {
+        File toTestOn = new File(System.getProperty("user.home"), "sometextfile.txt");
+
+        toTestOn.createNewFile();
+
+        assertThat(
+                FileEncryptor.encryptFile(null, toTestOn, toTestOn.getParentFile()).isSuccess(),
+                is(false)
+        );
+
+        toTestOn.delete();
+    }
+
+
+    private static final String TESTENCRYPTFILE_USEDPASSWORD = "asdf1234";
+    private static final String TESTENCRYPTFILE_USEDDATATEXT = "This is some text the FileEncryptor-class is supposed to encrypt with the password 'asdf1234'.\nIf this fails... well something's just wrong :D";
+    /*
+     * This byte array has been determined by some straight-forward but rather long Kotlin-code.
+     * Thus this test is rather a mock than a real test, but it's better than nothing.
+     * Here's the actual code that determined the result:
+     *
+     import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing
+     import java.nio.ByteBuffer
+     import java.security.MessageDigest
+     import javax.crypto.Cipher
+     import javax.crypto.spec.SecretKeySpec
+
+     fun main(args: Array<String>) {
+
+         val password = "asdf1234"
+         val toEncrypt = "This is some text the FileEncryptor-class is supposed to encrypt with the password 'asdf1234'.\nIf this fails... well something's just wrong :D"
+         val filename = "\somenewtextfile.txt".toByteArray()
+
+         var keyByte = password.toByteArray()
+         val sha256 = MessageDigest.getInstance("SHA-256")
+
+         keyByte = sha256.digest(keyByte).copyOfRange(0, 16)
+
+         println(keyByte.size)
+
+         val key = SecretKeySpec(keyByte, "AES")
+
+         var dataEncrypted = toEncrypt.toByteArray()
+
+         val buffer = ByteBuffer.allocate(dataEncrypted.size + 4 + filename.size)
+
+         buffer.putInt(filename.size)
+         buffer.put(filename)
+         buffer.put(dataEncrypted)
+
+         dataEncrypted = buffer.array()
+
+         val aesEnc = Cipher.getInstance("AES")
+
+         aesEnc.init(Cipher.ENCRYPT_MODE, key)
+
+         dataEncrypted = aesEnc.doFinal(dataEncrypted)
+
+         println(String(dataEncrypted))
+         println(dataEncrypted.ctoString())
+     }
+
+     fun ByteArray.ctoString() : String {
+         val resultBuilder = StringBuilder()
+
+         for(i in 0 until this.size) {
+             resultBuilder.append(StringProcessing.zeroPadding(this[i].toInt() and 0xFF, 2, 16))
+         }
+
+         return resultBuilder.toString()
+     }
+     */
+    private static final byte[] TESTENCRYPTFILE_EXPECTED = determineTESTENCRYPTFILE_EXPECTED();
+
+    public static byte[] determineTESTENCRYPTFILE_EXPECTED() {
+        if(File.separatorChar == '/') {
+            return ByteArrayProcessor.parseFromHexString(
+                    "2680f650e65257a0b7f3342398d36acbf473b102c1f32319039c0ed1a43778cf862cfed7cc417bedf4fe24845c285f4fb909b3d6a995902be4936cd0e3a58576cd5ceb53ea73803d77e047dd0d98d9fa5c7b337757ac5596c69c52b207798fea8190f3746d1f1396de7dd75624a5090a56b5a6f3072c9127d73d52e8efcf3a8d13bbb2b12ad8ce688a3a096d25177d00db05e76689ca6e6380e3bfe40171fad678f1f8adf5badf6f93974df527b60584"
+            );
+        } else {
+            return ByteArrayProcessor.parseFromHexString(
+                    "7b3b6eb795a9c90f10de69e202ea8775f473b102c1f32319039c0ed1a43778cf862cfed7cc417bedf4fe24845c285f4fb909b3d6a995902be4936cd0e3a58576cd5ceb53ea73803d77e047dd0d98d9fa5c7b337757ac5596c69c52b207798fea8190f3746d1f1396de7dd75624a5090a56b5a6f3072c9127d73d52e8efcf3a8d13bbb2b12ad8ce688a3a096d25177d00db05e76689ca6e6380e3bfe40171fad678f1f8adf5badf6f93974df527b60584"
+            );
+        }
+    }
+
+    @Test
+    public void testEncryptFile() {
+        File toTestOn = new File(System.getProperty("user.home"), "somenewtextfile.txt");
+
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(toTestOn))) {
+            writer.write(TESTENCRYPTFILE_USEDDATATEXT);
+        } catch (IOException e) {
+            fail(StringProcessing.format(
+                    "The test failed due to restrictions on the file system:\n{0}", e.getMessage()
+            ));
+        }
+
+        assertThat(
+                FileEncryptor.encryptFile(
+                        FileEncryptor.createPrivateKey(TESTENCRYPTFILE_USEDPASSWORD).getSecretKey(),
+                        toTestOn,
+                        toTestOn.getParentFile()
+                ).getData(),
+                is(TESTENCRYPTFILE_EXPECTED)
         );
     }
 }

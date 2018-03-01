@@ -162,7 +162,7 @@ public class EncryptCommand extends Command {
 
         for (File f : toEncrypt) {
             // read from the file and encrypt it
-            FileEncryptor.EncryptionResult result = FileEncryptor.encrypt(
+            FileEncryptor.EncryptionResult result = FileEncryptor.encryptFile(
                     secretkeyresult.getSecretKey(), f, src
             );
 
