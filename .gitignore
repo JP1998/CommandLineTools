@@ -4,3 +4,4 @@ HelpFiles/TODO.txt
 lib/
 src/main/java/de/hotzjeanpierre/commandlinetools/command/impl/utils/asdf.java
 src/main/java/de/hotzjeanpierre/commandlinetools/TestingMain.kt
+src/main/java/de/hotzjeanpierre/commandlinetools/TestMain.kt

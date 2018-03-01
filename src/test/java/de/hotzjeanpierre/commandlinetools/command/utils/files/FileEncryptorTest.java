@@ -20,6 +20,8 @@ import de.hotzjeanpierre.commandlinetools.command.testutilities.ByteArrayProcess
 import org.junit.Test;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.security.GeneralSecurityException;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
@@ -105,8 +107,110 @@ public class FileEncryptorTest {
 
     @Test
     public void testCreatePrivateKeyInvalid() {
-//        assertThat(
-//
-//        );
+        assertThat(
+                FileEncryptor.createPrivateKey(null).isSuccess(),
+                is(false)
+        );
+    }
+
+    private static final String TESTENCRYPT_USEDPASSWORD = "asdf1234";
+    private static final String TESTENCRYPT_USEDDATATEXT = "This is some text the FileEncryptor-class is supposed to encrypt with the password 'asdf1234'.\nIf this fails... well something's just wrong :D";
+    private static final byte[] TESTENCRYPT_USEDDATA = TESTENCRYPT_USEDDATATEXT.getBytes(Charset.forName("UTF-8"));
+
+    /**
+     * This byte array has been determined by some straight-forward but rather long Kotlin-code.
+     * Thus this test is rather a mock than a real test, but it's better than nothing.
+     * Here's the actual code that determined the result:
+     *
+     *
+     import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing
+     import java.security.MessageDigest
+     import javax.crypto.Cipher
+     import javax.crypto.spec.SecretKeySpec
+
+     fun main(args: Array<String>) {
+         val password = "asdf1234"
+         val toEncrypt = "This is some text the FileEncryptor-class is supposed to encrypt with the password 'asdf1234'.\nIf this fails... well something's just wrong :D"
+
+         var keyByte = password.toByteArray()
+         val sha256 = MessageDigest.getInstance("SHA-256")
+
+         keyByte = sha256.digest(keyByte).copyOfRange(0, 16)
+
+         println(keyByte.size)
+
+         val key = SecretKeySpec(keyByte, "AES")
+
+         var dataEncrypted = toEncrypt.toByteArray()
+         val aesEnc = Cipher.getInstance("AES")
+
+         aesEnc.init(Cipher.ENCRYPT_MODE, key)
+
+         dataEncrypted = aesEnc.doFinal(dataEncrypted)
+
+         println(String(dataEncrypted))
+         // this print statement actually prints the expected result:
+         println(dataEncrypted.ctoString())
+     }
+
+     fun ByteArray.ctoString() : String {
+         val resultBuilder = StringBuilder()
+
+         for(i in 0 until this.size) {
+             resultBuilder.append(StringProcessing.zeroPadding(this[i].toInt() and 0xFF, 2, 16))
+         }
+
+         return resultBuilder.toString()
+     }
+     */
+    private static final byte[] TESTENCRYPT_EXPECTED =
+            ByteArrayProcessor.parseFromHexString(
+                    "dec622de4f00bd6aefa3d73c9a61e3475774860554d217f0159d8393d02aa6dffc404b3a167d0e0772d56f5ce0eaa34dafc79fe99be81cdc38528378c9d30f5add4101aa8d961b56eb7caedce4f9c80a54c104f2467e0d204796124eff94f9a164534f2e6ae709e2781b372dbc47ee9e21e1161a71de9c2f78d0a4ecab50af995075a0d1124d966f3e4876dcd6d94ddb"
+            );
+
+    @Test
+    public void testEncrypt() throws GeneralSecurityException {
+        assertThat(
+                FileEncryptor.encrypt(
+                        TESTENCRYPT_USEDDATA,
+                        FileEncryptor.createPrivateKey(TESTENCRYPT_USEDPASSWORD).getSecretKey()
+                ),
+                is(TESTENCRYPT_EXPECTED)
+        );
+    }
+
+    @Test
+    public void testDecrypt() throws GeneralSecurityException {
+        assertThat(
+                new String(FileEncryptor.decrypt(
+                        TESTENCRYPT_EXPECTED,
+                        FileEncryptor.createPrivateKey(TESTENCRYPT_USEDPASSWORD).getSecretKey()
+                )),
+                is(TESTENCRYPT_USEDDATATEXT)
+        );
+    }
+
+    @Test
+    public void testEncryptFileNull() {
+        assertThat(
+                FileEncryptor.encrypt(
+                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                        null,
+                        new File(System.getProperty("user.home"))
+                ).isSuccess(),
+                is(false)
+        );
+    }
+
+    @Test
+    public void testEncryptFileNonExisting() {
+        assertThat(
+                FileEncryptor.encrypt(
+                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                        new File(System.getProperty("user.home"), "somenonexistingfile.txt"),
+                        new File(System.getProperty("user.home"))
+                ).isSuccess(),
+                is(false)
+        );
     }
 }

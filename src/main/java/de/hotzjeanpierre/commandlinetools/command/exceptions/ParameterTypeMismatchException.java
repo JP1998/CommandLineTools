@@ -22,22 +22,7 @@ package de.hotzjeanpierre.commandlinetools.command.exceptions;
  */
 public class ParameterTypeMismatchException extends RuntimeException {
 
-    public ParameterTypeMismatchException() {
-    }
-
     public ParameterTypeMismatchException(String message) {
         super(message);
-    }
-
-    public ParameterTypeMismatchException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ParameterTypeMismatchException(Throwable cause) {
-        super(cause);
-    }
-
-    public ParameterTypeMismatchException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

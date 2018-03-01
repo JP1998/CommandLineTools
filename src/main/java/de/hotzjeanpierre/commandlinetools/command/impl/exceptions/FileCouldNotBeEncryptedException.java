@@ -21,22 +21,7 @@ package de.hotzjeanpierre.commandlinetools.command.impl.exceptions;
  */
 public class FileCouldNotBeEncryptedException extends Exception {
 
-    public FileCouldNotBeEncryptedException() {
-    }
-
     public FileCouldNotBeEncryptedException(String message) {
         super(message);
-    }
-
-    public FileCouldNotBeEncryptedException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public FileCouldNotBeEncryptedException(Throwable cause) {
-        super(cause);
-    }
-
-    public FileCouldNotBeEncryptedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

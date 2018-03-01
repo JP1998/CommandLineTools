@@ -23,22 +23,7 @@ package de.hotzjeanpierre.commandlinetools.command.exceptions;
  */
 public class CommandArgumentNumberMismatchException extends RuntimeException {
 
-    public CommandArgumentNumberMismatchException() {
-    }
-
     public CommandArgumentNumberMismatchException(String message) {
         super(message);
-    }
-
-    public CommandArgumentNumberMismatchException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public CommandArgumentNumberMismatchException(Throwable cause) {
-        super(cause);
-    }
-
-    public CommandArgumentNumberMismatchException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

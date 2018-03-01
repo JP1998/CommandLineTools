@@ -239,6 +239,10 @@ public class StringProcessing {
      */
     @NotNull
     public static String zeroPadding(int number, int length) {
+        return zeroPadding(number, length, 10);
+    }
+
+    public static String zeroPadding(int number, int length, int radix) {
         boolean negative = number < 0;
 
         if (negative) {
@@ -246,7 +250,7 @@ public class StringProcessing {
         }
 
         StringBuilder result = new StringBuilder(
-                Integer.toString(Math.abs(number))
+                Integer.toString(Math.abs(number), radix)
         );
 
         while (result.length() < length) {

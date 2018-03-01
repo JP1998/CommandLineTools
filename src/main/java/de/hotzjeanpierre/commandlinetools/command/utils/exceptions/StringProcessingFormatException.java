@@ -22,22 +22,7 @@ package de.hotzjeanpierre.commandlinetools.command.utils.exceptions;
  */
 public class StringProcessingFormatException extends RuntimeException {
 
-    public StringProcessingFormatException() {
-    }
-
     public StringProcessingFormatException(String message) {
         super(message);
-    }
-
-    public StringProcessingFormatException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public StringProcessingFormatException(Throwable cause) {
-        super(cause);
-    }
-
-    public StringProcessingFormatException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

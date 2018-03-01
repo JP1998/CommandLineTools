@@ -76,7 +76,7 @@ public class FileEncryptor {
      * the errors message (if applicable), and the SecretKeySpec (also if applicable)
      */
     @NotNull
-    public static HashingResult createPrivateKey(@NotNull String pw) {
+    public static HashingResult createPrivateKey(String pw) {
         try {
             byte[] key = pw.getBytes(Charset.forName("UTF-8"));
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
@@ -100,7 +100,7 @@ public class FileEncryptor {
      * @throws NoSuchPaddingException in case there is an error while encrypting
      */
     @NotNull
-    private static byte[] encrypt(byte[] data, SecretKeySpec pw)
+    /* package-protected */ static byte[] encrypt(byte[] data, SecretKeySpec pw)
             throws GeneralSecurityException {
 
         Cipher aes = Cipher.getInstance("AES");
@@ -118,7 +118,7 @@ public class FileEncryptor {
      * @throws GeneralSecurityException in case there is an error while decrypting; most likely due to a wrong password
      */
     @NotNull
-    private static byte[] decrypt(byte[] data, SecretKeySpec pw)
+    /* package-protected */ static byte[] decrypt(byte[] data, SecretKeySpec pw)
             throws GeneralSecurityException {
 
         Cipher aes = Cipher.getInstance("AES");
