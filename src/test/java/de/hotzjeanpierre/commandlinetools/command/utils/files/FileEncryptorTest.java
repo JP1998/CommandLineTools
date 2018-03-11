@@ -291,15 +291,15 @@ public class FileEncryptorTest {
     private static final byte[] TESTENCRYPTFILE_EXPECTED = determineTESTENCRYPTFILE_EXPECTED();
 
     private static byte[] determineTESTENCRYPTFILE_EXPECTED() {
-//        if(File.separatorChar == '/') {
-//            return ByteArrayProcessor.parseFromHexString(
-//                    "2680f650e65257a0b7f3342398d36acbf473b102c1f32319039c0ed1a43778cf862cfed7cc417bedf4fe24845c285f4fb909b3d6a995902be4936cd0e3a58576cd5ceb53ea73803d77e047dd0d98d9fa5c7b337757ac5596c69c52b207798fea8190f3746d1f1396de7dd75624a5090a56b5a6f3072c9127d73d52e8efcf3a8d13bbb2b12ad8ce688a3a096d25177d00db05e76689ca6e6380e3bfe40171fad678f1f8adf5badf6f93974df527b60584"
-//            );
-//        } else {
+        if(File.separatorChar == '/') {
+            return ByteArrayProcessor.parseFromHexString(
+                    "2680f650e65257a0b7f3342398d36acbf473b102c1f32319039c0ed1a43778cf862cfed7cc417bedf4fe24845c285f4fb909b3d6a995902be4936cd0e3a58576cd5ceb53ea73803d77e047dd0d98d9fa5c7b337757ac5596c69c52b207798fea8190f3746d1f1396de7dd75624a5090a56b5a6f3072c9127d73d52e8efcf3a8d13bbb2b12ad8ce688a3a096d25177d00db05e76689ca6e6380e3bfe40171fad678f1f8adf5badf6f93974df527b60584"
+            );
+        } else {
             return ByteArrayProcessor.parseFromHexString(
                     "7b3b6eb795a9c90f10de69e202ea8775f473b102c1f32319039c0ed1a43778cf862cfed7cc417bedf4fe24845c285f4fb909b3d6a995902be4936cd0e3a58576cd5ceb53ea73803d77e047dd0d98d9fa5c7b337757ac5596c69c52b207798fea8190f3746d1f1396de7dd75624a5090a56b5a6f3072c9127d73d52e8efcf3a8d13bbb2b12ad8ce688a3a096d25177d00db05e76689ca6e6380e3bfe40171fad678f1f8adf5badf6f93974df527b60584"
             );
-//        }
+        }
     }
 
     @Test
