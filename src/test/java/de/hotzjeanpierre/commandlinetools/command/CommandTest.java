@@ -335,11 +335,11 @@ public class CommandTest {
         assertThat(
                 stream.evaluate(),
                 is(
-                        "Printing help for command 'help': \r\n" +
+                        "Printing help for command 'help': " + System.lineSeparator() +
                                 "help: \n" +
                                 "    Prints the help you are currently reading.\n" +
                                 "  Parameters: \n" +
-                                "    - command (String|): The command to print the documentation for.\n\r\n"
+                                "    - command (String|): The command to print the documentation for.\n" + System.lineSeparator()
                 )
         );
     }
@@ -380,7 +380,7 @@ public class CommandTest {
 
         assertThat(
                 stream.evaluate(),
-                is("The command 'someunknowncommand' was not recognized.\r\n")
+                is("The command 'someunknowncommand' was not recognized." + System.lineSeparator())
         );
     }
 
