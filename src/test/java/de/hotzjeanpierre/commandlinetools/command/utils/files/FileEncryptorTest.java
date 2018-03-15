@@ -18,6 +18,8 @@ package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
 import de.hotzjeanpierre.commandlinetools.command.testutilities.ByteArrayProcessor;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
+import de.hotzjeanpierre.commandlinetools.command.utils.files.exceptions.EncryptionAbortedException;
+import de.hotzjeanpierre.commandlinetools.command.utils.files.exceptions.HashingAbortedException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -25,6 +27,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
 
@@ -115,6 +118,33 @@ public class FileEncryptorTest {
         );
     }
 
+    @Test
+    public void testHashingResultGetErrorMessageWithoutError() {
+        assertThat(
+                FileEncryptor.createPrivateKey("").getErrorMessage(),
+                nullValue()
+        );
+    }
+
+    @Test
+    public void testHashingResultGetErrorMessageWithError() {
+        assertThat(
+                FileEncryptor.createPrivateKey(null).getErrorMessage(),
+                is("Hashing has been aborted.")
+        );
+    }
+
+    @Test
+    public void testHashingResultGetError() {
+        assertThat(
+                FileEncryptor.createPrivateKey(null).getError(),
+                is(new HashingAbortedException(
+                        "Hashing has been aborted.",
+                        new NullPointerException()
+                ))
+        );
+    }
+
     private static final String TESTENCRYPT_USEDPASSWORD = "asdf1234";
     private static final String TESTENCRYPT_USEDDATATEXT = "This is some text the FileEncryptor-class is supposed to encrypt with the password 'asdf1234'.\nIf this fails... well something's just wrong :D";
     private static final byte[] TESTENCRYPT_USEDDATA = TESTENCRYPT_USEDDATATEXT.getBytes(Charset.forName("UTF-8"));
@@ -201,6 +231,55 @@ public class FileEncryptorTest {
                         new File(System.getProperty("user.home"))
                 ).isSuccess(),
                 is(false)
+        );
+    }
+
+    // TODO: HERE
+
+
+    @Test
+    public void testEncryptionResultGetErrorMessageWithoutError() {
+        assertThat(
+                FileEncryptor.encryptFile(
+                        null,
+                        null,
+                        null
+                ).getErrorMessage(),
+                is("The file 'null' does not exist and can thus not be encrypted.")
+        );
+    }
+
+    @Test
+    public void testEncryptionResultGetErrorMessageWithError() {
+        File toTestOn = new File(System.getProperty("user.home"), "somenewtextfile.txt");
+
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(toTestOn))) {
+            writer.write(TESTENCRYPTFILE_USEDDATATEXT);
+        } catch (IOException e) {
+            fail(StringProcessing.format(
+                    "The test failed due to restrictions on the file system:\n{0}", e.getMessage()
+            ));
+        }
+
+        assertThat(
+                FileEncryptor.encryptFile(
+                        FileEncryptor.createPrivateKey(TESTENCRYPTFILE_USEDPASSWORD).getSecretKey(),
+                        toTestOn,
+                        toTestOn.getParentFile()
+                ).getError(),
+                nullValue()
+        );
+    }
+
+    @Test
+    public void testEncryptionResultGetError() {
+        assertThat(
+                FileEncryptor.encryptFile(
+                        null,
+                        null,
+                        null
+                ).getError(),
+                is(new EncryptionAbortedException("The file 'null' does not exist and can thus not be encrypted.", null))
         );
     }
 
@@ -323,6 +402,43 @@ public class FileEncryptorTest {
                 ).getData(),
                 is(TESTENCRYPTFILE_EXPECTED)
         );
+
+        toTestOn.delete();
     }
 
+    private static final String TESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED = determineTESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED();
+
+    private static String determineTESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED() {
+        if(File.separatorChar == '/') {
+            return "/myDir/asdf.txt";
+        } else {
+            return "\\myDir\\asdf.txt";
+        }
+    }
+
+    @Test
+    public void testEncryptionResultGetOriginalName() {
+        File toTestOn = new File(System.getProperty("user.home"), "myDir/asdf.txt");
+
+        toTestOn.getParentFile().mkdirs();
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(toTestOn))) {
+            writer.write(TESTENCRYPTFILE_USEDDATATEXT);
+        } catch (IOException e) {
+            fail(StringProcessing.format(
+                    "The test failed due to restrictions on the file system:\n{0}", e.getMessage()
+            ));
+        }
+
+        assertThat(
+                FileEncryptor.encryptFile(
+                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                        toTestOn,
+                        new File(System.getProperty("user.home"))
+                ).getOriginalName(),
+                is(TESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED)
+        );
+
+        toTestOn.delete();
+        toTestOn.getParentFile().delete();
+    }
 }

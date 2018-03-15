@@ -19,6 +19,8 @@ package de.hotzjeanpierre.commandlinetools.command.utils.files;
 import de.hotzjeanpierre.commandlinetools.command.development.DebuggingPurpose;
 import de.hotzjeanpierre.commandlinetools.command.impl.exceptions.FileCouldNotBeEncryptedException;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
+import de.hotzjeanpierre.commandlinetools.command.utils.files.exceptions.EncryptionAbortedException;
+import de.hotzjeanpierre.commandlinetools.command.utils.files.exceptions.HashingAbortedException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Cipher;
@@ -88,7 +90,7 @@ public class FileEncryptor {
 
             return new HashingResult(new SecretKeySpec(key, "AES"));
         } catch (Exception e) {
-            return new HashingResult(e);
+            return new HashingResult(new HashingAbortedException("Hashing has been aborted.", e));
         }
     }
 
@@ -142,10 +144,10 @@ public class FileEncryptor {
     public static EncryptionResult encryptFile(SecretKeySpec pw, File in, File relativeTo) {
         if (in == null || !in.isFile() || !in.exists()) {
             return new EncryptionResult(
-                    new FileCouldNotBeEncryptedException(StringProcessing.format(
+                    new EncryptionAbortedException(StringProcessing.format(
                             "The file '{0}' does not exist and can thus not be encrypted.",
                             (in != null) ? in.getAbsolutePath() : "null"
-                    ))
+                    ), null)
             );
         }
 
@@ -169,7 +171,7 @@ public class FileEncryptor {
 
             return new EncryptionResult(filename, encrypt(buffer.array(), pw));
         } catch (Exception e) {
-            return new EncryptionResult(e);
+            return new EncryptionResult(new EncryptionAbortedException("Ecryption has been aborted.", e));
         }
     }
 
@@ -187,10 +189,10 @@ public class FileEncryptor {
     public static EncryptionResult decryptFile(SecretKeySpec pw, File in) {
         if (in == null || !in.isFile() || !in.exists()) {
             return new EncryptionResult(
-                    new FileCouldNotBeEncryptedException(StringProcessing.format(
+                    new EncryptionAbortedException(StringProcessing.format(
                             "The file '{0}' does not exist and can thus not be decrypted.",
                             (in != null) ? in.getAbsolutePath() : "null"
-                    ))
+                    ), null)
             );
         }
 
@@ -215,7 +217,7 @@ public class FileEncryptor {
 
             return new EncryptionResult(fileName, encodedData);
         } catch (Exception e) {
-            return new EncryptionResult(e);
+            return new EncryptionResult(new EncryptionAbortedException("Decryption has been aborted.", e));
         }
     }
 
