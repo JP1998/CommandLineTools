@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  *     Copyright 2018 Jean-Pierre Hotz
  *
@@ -19,6 +18,7 @@ package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
 import de.hotzjeanpierre.commandlinetools.command.testutilities.ByteArrayProcessor;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.io.*;
@@ -324,4 +324,5 @@ public class FileEncryptorTest {
                 is(TESTENCRYPTFILE_EXPECTED)
         );
     }
+
 }

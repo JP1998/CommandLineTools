@@ -20,8 +20,11 @@ import static org.hamcrest.core.Is.*;
 import static org.junit.Assert.*;
 
 import de.hotzjeanpierre.commandlinetools.command.exceptions.*;
+import de.hotzjeanpierre.commandlinetools.command.testutilities.CommandTestingStream;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeClass;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeSubClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.PrintStream;
@@ -325,6 +328,23 @@ public class CommandTest {
     }
 
     @Test
+    public void testHelpOutput() {
+        CommandTestingStream stream = new CommandTestingStream();
+        Command.parseCommand("help command help").execute(new PrintStream(stream));
+
+        assertThat(
+                stream.evaluate(),
+                is(
+                        "Printing help for command 'help': \r\n" +
+                                "help: \n" +
+                                "    Prints the help you are currently reading.\n" +
+                                "  Parameters: \n" +
+                                "    - command (String|): The command to print the documentation for.\n\r\n"
+                )
+        );
+    }
+
+    @Test
     public void testHelpSpecificAvailableCommand() {
         Command.addSupportedCommand(
                 new SomeCustomCommand(
@@ -353,6 +373,16 @@ public class CommandTest {
         );
     }
 
+    @Test
+    public void testHelpSpecificUnavailableCommandOutput() {
+        CommandTestingStream stream = new CommandTestingStream();
+        Command.parseCommand("help command someunknowncommand").execute(new PrintStream(stream));
+
+        assertThat(
+                stream.evaluate(),
+                is("The command 'someunknowncommand' was not recognized.\r\n")
+        );
+    }
 
     @SuppressWarnings("unused")
     static class SomeUnloadedCommand extends Command {
