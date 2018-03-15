@@ -21,6 +21,7 @@ import de.hotzjeanpierre.commandlinetools.command.utils.files.FileNamingTemplate
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 /**
  * This class is used to convert values from their string representation
@@ -30,6 +31,8 @@ import java.io.File;
  * @see Converter#convert(String, Class)
  */
 public class Converter {
+
+    private static final Pattern sFileNamePattern = Pattern.compile("^([A-Z]:)?[^<>:\"|?*]*$");
 
     /**
      * <p>This method converts an object from its String representation into its
@@ -79,10 +82,7 @@ public class Converter {
         if (String.class.equals(toConvertTo)) {                     // String
             return representation;
         } else if (File.class.equals(toConvertTo)) {                // File
-            if(ArrayHelper.containsAny(
-                    ArrayHelper.cast(representation.toCharArray()),
-                    '<', '>', ':', '"', '|', '?', '*'
-            )) {
+            if(!sFileNamePattern.matcher(representation).matches()) {
                 return null;
             } else {
                 return new File(representation);
