@@ -21,8 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 
 /**
- * This interface is used to give a FilterMode an easy and uniform way
- * of determining whether a given file is valid or not.
+ *
  */
 public interface FilterModeApplication {
 
