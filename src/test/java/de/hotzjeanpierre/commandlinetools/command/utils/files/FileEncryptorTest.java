@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  *     Copyright 2018 Jean-Pierre Hotz
  *
