@@ -222,6 +222,9 @@ public class FileEncryptorTest {
         );
     }
 
+
+
+
     @Test
     public void testEncryptFileNull() {
         assertThat(
@@ -234,23 +237,11 @@ public class FileEncryptorTest {
         );
     }
 
-    // TODO: HERE
+    // TODO: HERE Here What?! ya dingus -.-
 
 
     @Test
     public void testEncryptionResultGetErrorMessageWithoutError() {
-        assertThat(
-                FileEncryptor.encryptFile(
-                        null,
-                        null,
-                        null
-                ).getErrorMessage(),
-                is("The file 'null' does not exist and can thus not be encrypted.")
-        );
-    }
-
-    @Test
-    public void testEncryptionResultGetErrorMessageWithError() {
         File toTestOn = new File(System.getProperty("user.home"), "somenewtextfile.txt");
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(toTestOn))) {
@@ -268,6 +259,18 @@ public class FileEncryptorTest {
                         toTestOn.getParentFile()
                 ).getError(),
                 nullValue()
+        );
+    }
+
+    @Test
+    public void testEncryptionResultGetErrorMessageWithError() {
+        assertThat(
+                FileEncryptor.encryptFile(
+                        null,
+                        null,
+                        null
+                ).getErrorMessage(),
+                is("The file 'null' does not exist and can thus not be encrypted.")
         );
     }
 
