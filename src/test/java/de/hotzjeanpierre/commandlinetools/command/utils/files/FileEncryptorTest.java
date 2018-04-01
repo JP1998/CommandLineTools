@@ -222,24 +222,6 @@ public class FileEncryptorTest {
         );
     }
 
-
-
-
-    @Test
-    public void testEncryptFileNull() {
-        assertThat(
-                FileEncryptor.encryptFile(
-                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
-                        null,
-                        new File(System.getProperty("user.home"))
-                ).isSuccess(),
-                is(false)
-        );
-    }
-
-    // TODO: HERE Here What?! ya dingus -.-
-
-
     @Test
     public void testEncryptionResultGetErrorMessageWithoutError() {
         File toTestOn = new File(System.getProperty("user.home"), "somenewtextfile.txt");
@@ -283,6 +265,55 @@ public class FileEncryptorTest {
                         null
                 ).getError(),
                 is(new EncryptionAbortedException("The file 'null' does not exist and can thus not be encrypted.", null))
+        );
+    }
+
+
+    private static final String TESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED = determineTESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED();
+
+    private static String determineTESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED() {
+        if(File.separatorChar == '/') {
+            return "/myDir/asdf.txt";
+        } else {
+            return "\\myDir\\asdf.txt";
+        }
+    }
+
+    @Test
+    public void testEncryptionResultGetOriginalName() {
+        File toTestOn = new File(System.getProperty("user.home"), "myDir/asdf.txt");
+
+        toTestOn.getParentFile().mkdirs();
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(toTestOn))) {
+            writer.write(TESTENCRYPTFILE_USEDDATATEXT);
+        } catch (IOException e) {
+            fail(StringProcessing.format(
+                    "The test failed due to restrictions on the file system:\n{0}", e.getMessage()
+            ));
+        }
+
+        assertThat(
+                FileEncryptor.encryptFile(
+                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                        toTestOn,
+                        new File(System.getProperty("user.home"))
+                ).getOriginalName(),
+                is(TESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED)
+        );
+
+        toTestOn.delete();
+        toTestOn.getParentFile().delete();
+    }
+
+    @Test
+    public void testEncryptFileNull() {
+        assertThat(
+                FileEncryptor.encryptFile(
+                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                        null,
+                        new File(System.getProperty("user.home"))
+                ).isSuccess(),
+                is(false)
         );
     }
 
@@ -409,23 +440,52 @@ public class FileEncryptorTest {
         toTestOn.delete();
     }
 
-    private static final String TESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED = determineTESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED();
 
-    private static String determineTESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED() {
-        if(File.separatorChar == '/') {
-            return "/myDir/asdf.txt";
-        } else {
-            return "\\myDir\\asdf.txt";
-        }
+
+
+
+    @Test
+    public void testDecryptFileNull() {
+        assertThat(
+                FileEncryptor.decryptFile(
+                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                        null
+                ).isSuccess(),
+                is(false)
+        );
     }
 
     @Test
-    public void testEncryptionResultGetOriginalName() {
-        File toTestOn = new File(System.getProperty("user.home"), "myDir/asdf.txt");
+    public void testDecryptFileNonExisting() {
+        assertThat(
+                FileEncryptor.decryptFile(
+                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                        new File(System.getProperty("user.home"), "somenonexistingfile.txt")
+                ).isSuccess(),
+                is(false)
+        );
+    }
 
-        toTestOn.getParentFile().mkdirs();
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(toTestOn))) {
-            writer.write(TESTENCRYPTFILE_USEDDATATEXT);
+    @Test
+    public void testDecryptFileNullKeySpec() throws IOException {
+        File toTestOn = new File(System.getProperty("user.home"), "sometextfile.txt");
+
+        toTestOn.createNewFile();
+
+        assertThat(
+                FileEncryptor.decryptFile(null, toTestOn).isSuccess(),
+                is(false)
+        );
+
+        toTestOn.delete();
+    }
+
+    @Test
+    public void testDecryptFile() {
+        File toTestOn = new File(System.getProperty("user.home"), "somenewtextfile.txt");
+
+        try(BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(toTestOn))) {
+            writer.write(TESTENCRYPTFILE_EXPECTED);
         } catch (IOException e) {
             fail(StringProcessing.format(
                     "The test failed due to restrictions on the file system:\n{0}", e.getMessage()
@@ -433,15 +493,14 @@ public class FileEncryptorTest {
         }
 
         assertThat(
-                FileEncryptor.encryptFile(
-                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
-                        toTestOn,
-                        new File(System.getProperty("user.home"))
-                ).getOriginalName(),
-                is(TESTENCRYPTIONRESULTGETORIGINALNAME_EXPECTED)
+                new String(FileEncryptor.decryptFile(
+                        FileEncryptor.createPrivateKey(TESTENCRYPTFILE_USEDPASSWORD).getSecretKey(),
+                        toTestOn
+                ).getData()),
+                is(TESTENCRYPTFILE_USEDDATATEXT)
         );
 
         toTestOn.delete();
-        toTestOn.getParentFile().delete();
     }
+
 }
