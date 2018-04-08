@@ -177,12 +177,21 @@ public abstract class Command implements NamingValidator {
      *                                                                 */
 
     /**
-     * This Map contains all the currently supported commands. Commands may
+     * This Map contains all the currently supported custom commands. Commands may
      * be publicly added by using the method {@link Command#addSupportedCommand(Command)}.
      * Here it is crucial to note that a command with an already existing name
      * would actually delete the old command, whereas we may not allow duplicate adding of names.
      */
     private static Map<String, Command> sSupportedCommands;
+    /**
+     * This Map contains all the default commands. Their support may be switched off or on
+     * by using {@link Command#setDefaultCommandsEnabled(boolean)}.
+     */
+    private static Map<String, Command> sDefaultCommands;
+    /**
+     * This variable determines whether the default commands are enabled or not.
+     */
+    private static boolean sDefaultCommandsEnabled;
     /**
      * The converter to use for conversion of the given parameters representation
      * as String, to the desired type. In case you use a custom type in your code
@@ -191,17 +200,43 @@ public abstract class Command implements NamingValidator {
      */
     private static Converter sUsedConverter;
 
+    /**
+     * This variable determines whether internally
+     * the default commands are currently being loaded.
+     */
+    private static boolean sDefaultCommandsAreLoading;
+
     static {
+
         sSupportedCommands = new HashMap<>();
+        sDefaultCommands = new HashMap<>();
+        sDefaultCommandsEnabled = true;
         setUsedConverter(new Converter());
 
+        // add all the "normal" default commands to the command list while sDefaultCommandsAreLoading is set to true
+        sDefaultCommandsAreLoading = true;
         assureLoadingOfCommands(
-                "de.hotzjeanpierre.commandlinetools.command.Command$HelpCommand",
                 "de.hotzjeanpierre.commandlinetools.command.impl.encryption.EncryptCommand",
                 "de.hotzjeanpierre.commandlinetools.command.impl.encryption.DecryptCommand",
                 "de.hotzjeanpierre.commandlinetools.command.impl.files.ListFilesCommand"
         );
+
+        // add the help command to the command list after sDefaultCommandsAreLoading is set back to false
+        // since it is not supposed to be treated as a usual default command but should be available
+        // regardless of sDefaultCommandsEnabled
+        sDefaultCommandsAreLoading = false;
+        assureLoadingOfCommands(
+                "de.hotzjeanpierre.commandlinetools.command.Command$HelpCommand"
+        );
     }
+
+    /*                                                                 *
+     * =============================================================== *
+     *                                                                 *
+     *                         Object members                          *
+     *                                                                 *
+     * =============================================================== *
+     *                                                                 */
 
     /**
      * This is the name of the command. It determines how the command is to be called, whereas it
@@ -276,6 +311,14 @@ public abstract class Command implements NamingValidator {
         this.deleteInput = deleteInput;
     }
 
+    /*                                                                 *
+     * =============================================================== *
+     *                                                                 *
+     *                         Static methods                          *
+     *                                                                 *
+     * =============================================================== *
+     *                                                                 */
+
     /**
      * This method makes sure that the classes whose <b>fully qualified</b> names
      * have been given are loaded. Any errors are ignored. This ensures that, in
@@ -293,14 +336,21 @@ public abstract class Command implements NamingValidator {
     /**
      * This method adds your given command object to the pool of supported commands.
      * A call to this method will be ignored if the given command is {@code null},
-     * or if the name of the given command already exists. This prevents anyone from overriding
-     * already existing (maybe even crucial default-) commands.
+     * or if the name of the given command already exists, which also applies to
+     * the names of default commands that have been disabled. This prevents anyone
+     * from overriding already existing (maybe even crucial default-) commands.
      *
      * @param cmd the command to add to the supported command pool
      */
     public static void addSupportedCommand(Command cmd) {
-        if (cmd != null && !sSupportedCommands.keySet().contains(cmd.getName().trim())) {
-            sSupportedCommands.put(cmd.getName(), cmd);
+        if(cmd == null) return;
+
+        if(!sDefaultCommands.keySet().contains(cmd.getName()) && !sSupportedCommands.keySet().contains(cmd.getName())) {
+            if(sDefaultCommandsAreLoading) {
+                sDefaultCommands.put(cmd.getName(), cmd);
+            } else {
+                sSupportedCommands.put(cmd.getName(), cmd);
+            }
         }
     }
 
@@ -316,14 +366,27 @@ public abstract class Command implements NamingValidator {
         }
     }
 
+    /**
+     * This method lets you en- or disable the default commands.
+     * You'll have to note that the names of the default commands are still reserved,
+     * whereas any call to {@link Command#addSupportedCommand(Command)} with a command
+     * with the name of a default command will be simply ignored.
+     * Also default commands will not be shown or recognized by the help command.
+     *
+     * @param enabled whether default commands should be enabled or not
+     */
+    public static void setDefaultCommandsEnabled(boolean enabled) {
+        sDefaultCommandsEnabled = enabled;
+    }
 
-    /*                                                                 *
-     * =============================================================== *
-     *                                                                 *
-     *                         Object members                          *
-     *                                                                 *
-     * =============================================================== *
-     *                                                                 */
+    /**
+     * This method returns whether default commands are enabled or not.
+     *
+     * @return whether default commands are enabled or not
+     */
+    public static boolean areDefaultCommandsEnabled() {
+        return sDefaultCommandsEnabled;
+    }
 
     /**
      * This method parses the an ExecutableCommand from the given String. The format hereby always
@@ -404,13 +467,25 @@ public abstract class Command implements NamingValidator {
     /**
      * This method finds a command template from its name. If the command with
      * given name is not supported this method will return {@code null}.
+     * This method will also return {@code null} in case that default commands
+     * are disabled and the given command name is not a custom command.
      *
      * @param cmdName the name of the command to retrieve
      * @return the template of the command with given name
      */
     @Nullable
     /* package-protected */ static Command findTemplateFromName(String cmdName) {
-        return sSupportedCommands.get(cmdName);
+        if(sDefaultCommandsEnabled) {
+            if(!sDefaultCommands.containsKey(cmdName) && !sSupportedCommands.containsKey(cmdName)) {
+                return null;
+            } else if(sDefaultCommands.containsKey(cmdName)) {
+                return sDefaultCommands.get(cmdName);
+            } else {
+                return sSupportedCommands.get(cmdName);
+            }
+        } else {
+            return sSupportedCommands.get(cmdName);
+        }
     }
 
     /**
@@ -439,7 +514,7 @@ public abstract class Command implements NamingValidator {
      * @return the parameter names mapped to their respective value
      * @throws DuplicateParameterException if a parameter has a value assigned twice or more
      * @throws MissingParameterException   if a parameter without default value has no value assigned
-     */ // TODO: Test explicitly
+     */
     private static Map<String, Parameter.Value> filterSupplementAndConvertList(@NotNull Command template, List<Parameter.Value> values)
             throws DuplicateParameterException, MissingParameterException {
 
@@ -490,6 +565,14 @@ public abstract class Command implements NamingValidator {
         // we'll return the result.
         return result;
     }
+
+    /*                                                                 *
+     * =============================================================== *
+     *                                                                 *
+     *                         Object methods                          *
+     *                                                                 *
+     * =============================================================== *
+     *                                                                 */
 
     /**
      * This method returns the name of the command.
@@ -676,6 +759,12 @@ public abstract class Command implements NamingValidator {
             if(command.isEmpty()) {
                 outputStream.println("Documentation of all recognized commands: ");
                 outputStream.println();
+
+                if(sDefaultCommandsEnabled) {
+                    for (String key : sDefaultCommands.keySet()) {
+                        outputStream.println(sDefaultCommands.get(key).getDocumentation());
+                    }
+                }
 
                 for (String key : sSupportedCommands.keySet()) {
                     outputStream.println(sSupportedCommands.get(key).getDocumentation());

@@ -384,6 +384,22 @@ public class CommandTest {
         );
     }
 
+    @Test(expected = CommandNotSupportedException.class)
+    public void testDisableDefaultCommands() {
+        Command.setDefaultCommandsEnabled(false);
+
+        Command.parseCommand("list folder /somefolder/");
+    }
+
+    @Test(expected = CommandNotSupportedException.class)
+    public void testDisableDefaultCommandsStillAvoidsDuplicateNames() {
+        Command.setDefaultCommandsEnabled(false);
+
+        Command.addSupportedCommand(new SomeCustomCommand("list", "some description", new Parameter[0]));
+
+        Command.parseCommand("list");
+    }
+
     @SuppressWarnings("unused")
     static class SomeUnloadedCommand extends Command {
 
