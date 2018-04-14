@@ -1,0 +1,56 @@
+
+
+- refactoring:
+  - FileEncryptor:
+    - take its responsibility to load from and write to files (should be within CommonFileUtilities)
+    - rename FileEncryptor to a more general EncryptionService since it does not need to be used with files
+    - rename EncryptionResult to FileEncryptionResult
+    - make encrypt and decrypt public, and make it return a new type EncryptionResult
+  - FilterMode:
+    - create lambdas from the anonymous classes within the enum-values
+  - FilterModeApplication:
+    - extract the default methods
+
+- implement some kind of lightweight pattern matching for Filtering files
+
+- some default command such as:
+
+  - bulk renaming files within a directory
+    - having an option for the folder to rename the contained files of
+    - having an option to filter files
+    - having an option to rename everything but matches to a pattern
+    - having an option to recursively rename within subdirectories
+    - having an option to format the result name
+
+  - password generator
+  - interpreter for brainfuck
+  - interpreter for false
+
+- a GUI that is more comfortable to use than the cli of Win7
+  - text-based but created with a window
+  - using streams to read / write (so System.out and Scanner may still be used)
+
+// - bulk de- and encrypting of files
+//   - having an option for the folder to de- / encrypt the contained files
+//   - having an option to filter files
+//   - having an option to de- / encrypt everything but matches to a pattern
+//   - having an option to recursively de- / encrypt within subdirectories
+//   - having an option of where to save the output
+//   - having an option to format the output files file names
+//   - having an option for the used password
+//   - deleting folders that may be eventually empty
+
+//   - listing files within a directory
+//     - having an option for the folder to list the contained files of
+//     - having an option to format as a tree
+//     - having an option to filter files
+//     - having an option to list everything but matches to a pattern
+//     - having an option to list folders
+//     - having an option to recursively search within subdirectories
+//     - having an option of how to format the output
+
+// - make a command return a CommandExecutionResult (or similar object variable)
+//   - makes it easier to extend commands later on
+//   - makes it easier to implement an easy CLI in other environments (like a Swing- or JavaFX-window)
+
+// - Change filenamingtemplates extension to include the point!

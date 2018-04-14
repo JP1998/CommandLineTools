@@ -109,7 +109,7 @@ public class FileNamingTemplate {
      * @param data the data to insert into the wildcards
      * @return the file name that has been produced
      */
-    public String produceFileNane(FileNamingData data) {
+    public String produceFileName(FileNamingData data) {
         StringBuilder result = new StringBuilder();
 
         for (Token currrentToken : template) {

@@ -169,7 +169,7 @@ public class DecryptCommand extends Command {
             if (result.isSuccess()) {
                 // build the new files name
                 FileNamingData data = FileNamingData.Builder.build(result, index++);
-                File outFile = new File(output, format.produceFileNane(data));
+                File outFile = new File(output, format.produceFileName(data));
 
                 // create the files parent directories in case they don't already exist
                 if (!outFile.getParentFile().exists()) {

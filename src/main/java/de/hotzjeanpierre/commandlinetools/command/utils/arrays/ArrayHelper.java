@@ -37,6 +37,7 @@ public class ArrayHelper {
      * @param <T> An arbitrary type that the array is declared with.
      * @return Whether any of the given elements are contained within the array.
      */
+    @SafeVarargs
     @Contract("null, _ -> false")
     public static <T> boolean containsAny(T[] arr, T... elements) {
         if(arr == null || arr.length == 0) {
@@ -86,19 +87,19 @@ public class ArrayHelper {
 
         boolean[] usedElements = new boolean[arr2.length];
 
-        for(int i = 0; i < arr1.length; i++) {
+        for (T elementToCheck : arr1) {
             boolean found = false;
 
-            for(int j = 0; j < arr2.length && !found; j++) {
+            for (int j = 0; j < arr2.length && !found; j++) {
 
-                if(!usedElements[j] && elementsEqual(arr1[i], arr2[j])) {
+                if (!usedElements[j] && elementsEqual(elementToCheck, arr2[j])) {
                     found = true;
                     usedElements[j] = true;
                 }
 
             }
 
-            if(!found) {
+            if (!found) {
                 return false;
             }
         }
@@ -123,9 +124,12 @@ public class ArrayHelper {
     }
 
     /**
-     * This method casts a
-     * @param characters
-     * @return
+     * This method casts an array with the primitive type {@code char} as elements to an
+     * array with the wrapper class {@code Character} as elements, where the content
+     * of the array will not essentially be changed.
+     *
+     * @param characters the array of the primitive typr to cast to its wrapper class
+     * @return the given array cast to an array with its types wrapper class as type
      */
     @Contract(pure = true)
     public static Character[] cast(@NotNull char[] characters) {

@@ -159,8 +159,6 @@ public class FileEncryptor {
                     in.getAbsolutePath().length()
             );
 
-            System.out.println(filename);
-
             byte[] filenameBytes = filename.getBytes();
 
             ByteBuffer buffer = ByteBuffer.allocate(4 + filenameBytes.length + data.length);

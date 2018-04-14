@@ -36,8 +36,8 @@ public class Converter {
 
     /**
      * <p>This method converts an object from its String representation into its
-     * actual type. Though it only supports a limited (though extensive enough
-     * to be working for mostbasic programs) amount of types. Those types are {@code String}, {@code File}
+     * actual type. It only supports a limited (though extensive enough
+     * to be working for most basic programs) amount of types. Those types are {@code String}, {@code File}
      * {@code boolean}, {@code byte}, {@code short}, {@code char}, {@code int}, {@code long},
      * {@code float}, {@code double} and any kind of {@code enum}.</p>
      * <p>To support any kind of type that may not be mentioned above, you'll have to
@@ -45,7 +45,7 @@ public class Converter {
      * a few limitations.
      * <ul>
      * <li>you should never throw any kind of exception from this method</li>
-     * <li>in case any error occurs you should retunrn {@code null}</li>
+     * <li>in case any error occurs you should return {@code null}</li>
      * <li>you should only parse the custom types you are trying to support,
      * and if the given type is not one of those you should call the super-method accordingly</li>
      * <li>To keep this method better organized you should make an own method for each possible

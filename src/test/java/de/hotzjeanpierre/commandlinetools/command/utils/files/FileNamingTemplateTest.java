@@ -18,8 +18,6 @@ package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -70,7 +68,7 @@ public class FileNamingTemplateTest {
     public void testProduceFileName() {
         assertThat(
                 FileNamingTemplate.parse("{originallocation}{index} - {originalname}{extension}")
-                        .produceFileNane(new FileNamingData.Builder()
+                        .produceFileName(new FileNamingData.Builder()
                                 .setExtension(".ext")
                                 .setOriginalLocation("/some/location/")
                                 .setOriginalName("filename")

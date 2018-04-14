@@ -47,7 +47,6 @@ public class StringProcessing {
      */
     private static final Pattern sCommandValidator =
             Pattern.compile("^\\s*([_a-zA-Z][_a-zA-Z0-9]*)(\\s+((\"(?:[^\"\\\\]|\\\\[tbnrf'\"\\\\])*\")|([^\\s]+)))*\\s*$");
-    // ^\s*([_a-zA-Z][_a-zA-Z0-9]*)(\s+([_a-zA-Z][_a-zA-Z0-9]*)\s+(("(?:[^"\\]|\\[tbnrf'"\\])*")|([^\s]+)))*\s*$
     /**
      * The pattern to extract the name of a command with.
      */
@@ -143,10 +142,8 @@ public class StringProcessing {
      */
     private static String parseWildcard(@NotNull String wildcard, Object[] replacements) {
         switch (wildcard) {
-            case "{{":
-                return "{";
-            case "}}":
-                return "}";
+            case "{{": return "{";
+            case "}}": return "}";
             default:
                 int replacementIndex = Integer.parseInt(wildcard.substring(1, wildcard.length() - 1).trim());
 

@@ -18,8 +18,13 @@ package de.hotzjeanpierre.commandlinetools.command.development;
 
 import java.lang.annotation.*;
 
+/**
+ * This annotation can be used for methods or constructors that are only to be used
+ * for debugging purposes. This means it may be used in your code, but should be avoided
+ * or even prevented to be executed in production.
+ */
 @Documented
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.SOURCE)
 public @interface DebuggingPurpose {
 }

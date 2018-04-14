@@ -33,11 +33,9 @@ public class EmptyFolderDeleter {
      * @param folder the folder to delete
      */
     public static void deleteIfEmpty(@NotNull File folder) {
-        if(isFolderNotEmpty(folder)) {
-            return;
+        if(!isFolderNotEmpty(folder)) {
+            deleteWithChildren(folder);
         }
-
-        deleteWithChildren(folder);
     }
 
     /**
