@@ -185,7 +185,7 @@ public class DecryptCommand extends Command {
 
                 // try to write the (decrypted) data to the file
                 try {
-                    FileEncryptor.writeFile(outFile, result.getData());
+                    CommonFileUtilities.writeFile(outFile, result.getData());
                 } catch (IOException e) {
                     outputStream.println(StringProcessing.format(
                             "Couldn't write decrypted data to file '{0}'. Will abort execution of command.\nThere might already be files processed by the command.",

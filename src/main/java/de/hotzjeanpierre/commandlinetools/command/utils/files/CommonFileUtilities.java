@@ -20,12 +20,39 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * This class contains several methods that can help you on
  * processing files and / or abstract path names used for files.
  */
 public class CommonFileUtilities {
+
+    /**
+     * This method reads all the byte-data from the given file.
+     *
+     * @param file the file to read from.
+     * @return the data contained in the given file.
+     * @throws IOException in case an error occurs during reading (e.g. the file doesn't exist)
+     */
+    @NotNull
+    public static byte[] readFile(@NotNull File file) throws IOException {
+        return Files.readAllBytes(file.toPath());
+    }
+
+    /**
+     * This method writes the given data to the given file.
+     * Any missing parent folders of the file will not be created, whereas this method
+     * will throw an exception in case there are any folders missing.
+     *
+     * @param file the path to the file to which the data is to be saved
+     * @param data the data that is to be saved to the given file
+     * @throws IOException in case an error occurs during writing (e.g. the folder this file lies in does not exist)
+     */
+    public static void writeFile(@NotNull File file, @NotNull byte[] data) throws IOException {
+        Files.write(file.toPath(), data);
+    }
 
     /**
      * This method extracts the file extension of the given file.

@@ -18,13 +18,65 @@ package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
 import org.junit.Test;
 
-import java.io.File;
+import java.io.*;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class CommonFileUtilitiesTest {
+
+    private static final String TESTREADFILE_TOWRITE = "This is some weird kind of text.\nIt is used to test whether the class FileEncryptor actually correctly reads data from files.";
+    private static final byte[] TESTREADFILE_EXPECTED = TESTREADFILE_TOWRITE.getBytes();
+
+    @Test
+    public void testReadFile() throws IOException {
+        File toRead = new File(System.getProperty("user.home"), "sometestfile.txt");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(toRead))) {
+            writer.write(TESTREADFILE_TOWRITE);
+        } catch (IOException e) {
+            throw new AssertionError(
+                    "Couldn't test since there was an error setting up the test environment.", e
+            );
+        }
+
+        assertThat(
+                CommonFileUtilities.readFile(toRead),
+                is(TESTREADFILE_EXPECTED)
+        );
+
+        toRead.delete();
+    }
+
+    private static final String TESTWRITEFILE_TOWRITE = "This is some different but also weird kind of text.\nIt is used to test whether the class FileEncryptor actually correctly writes data to files.";
+    private static final byte[] TESTWRITEFILE_EXPECTED = TESTWRITEFILE_TOWRITE.getBytes();
+
+    @Test
+    public void testWriteFile() throws IOException {
+        File toWrite = new File(System.getProperty("user.home"), "sometestfile.txt");
+
+        CommonFileUtilities.writeFile(toWrite, TESTWRITEFILE_EXPECTED);
+
+        byte[] readData = new byte[(int) toWrite.length()];
+
+        try (FileInputStream stream = new FileInputStream(toWrite)) {
+            if(stream.read(readData) != readData.length) {
+                throw new IOException("Length of file does not match the detected data.");
+            }
+        } catch (IOException e) {
+            throw new AssertionError(
+                    "Couldn't test since there was an error setting up the test environment.", e
+            );
+        }
+
+        assertThat(
+                readData,
+                is(TESTWRITEFILE_EXPECTED)
+        );
+
+        toWrite.delete();
+    }
 
     @Test
     public void testExtractFileExtensionFileOnDirectory() {

@@ -45,31 +45,6 @@ import java.util.Arrays;
 public class FileEncryptor {
 
     /**
-     * This method reads all the byte-data from the given file.
-     *
-     * @param file the file to read from.
-     * @return the data contained in the given file.
-     * @throws IOException in case an error occurs during reading (e.g. the file doesn't exist)
-     */
-    @NotNull
-    public static byte[] readFile(@NotNull File file) throws IOException {
-        return Files.readAllBytes(file.toPath());
-    }
-
-    /**
-     * This method writes the given data to the given file.
-     * Any missing parent folders of the file will not be created, whereas this method
-     * will throw an exception in case there are any folders missing.
-     *
-     * @param file the path to the file to which the data is to be saved
-     * @param data the data that is to be saved to the given file
-     * @throws IOException in case an error occurs during writing (e.g. the folder this file lies in does not exist)
-     */
-    public static void writeFile(@NotNull File file, @NotNull byte[] data) throws IOException {
-        Files.write(file.toPath(), data);
-    }
-
-    /**
      * This method creates a private key from the given password. The returned {@link HashingResult}
      * will contain whether the Hashing-process was successful, if so it will also contain a
      * {@link SecretKeySpec}, otherwise an error message (and for debugging purposes the stacktrace)
@@ -134,8 +109,7 @@ public class FileEncryptor {
      * This method encrypts the data from the given file with the given secret key.
      * The returned {@link EncryptionResult} contains whether the encryption process was successful,
      * if so the encrypted data, otherwise an error message (and for debugging purposes the stacktrace).
-     * You can then (in case the encryption was successful) save the data to another file
-     * by calling {@link FileEncryptor#writeFile(File, byte[])}.
+     * You can then (in case the encryption was successful) save the data to another file.
      *
      * @param pw the secret key used for encryption
      * @param in the file that is to be encrypted
@@ -152,7 +126,7 @@ public class FileEncryptor {
         }
 
         try {
-            byte[] data = readFile(in);
+            byte[] data = CommonFileUtilities.readFile(in);
 
             String filename = in.getAbsolutePath().substring(
                     relativeTo.getAbsolutePath().length(),
@@ -177,8 +151,7 @@ public class FileEncryptor {
      * This method decrypts the data from the given file with the given secret key.
      * The returned {@link EncryptionResult} contains whether the decryption process was successful,
      * if so the decrypted data, otherwise an error message (and for debugging purposes the stacktrace).
-     * You can then (in case the encryption was successful) save the data to another file
-     * by calling {@link FileEncryptor#writeFile(File, byte[])}.
+     * You can then (in case the encryption was successful) save the data to another file.
      *
      * @param pw the secret key used for decryption
      * @param in the file that is to be decrypted
@@ -195,7 +168,7 @@ public class FileEncryptor {
         }
 
         try {
-            byte[] data = readFile(in);
+            byte[] data = CommonFileUtilities.readFile(in);
 
             data = decrypt(data, pw);
 

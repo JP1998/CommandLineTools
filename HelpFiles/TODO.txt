@@ -2,7 +2,7 @@
 
 - refactoring:
   - FileEncryptor:
-    - take its responsibility to load from and write to files (should be within CommonFileUtilities)
+//    - take its responsibility to load from and write to files (should be within CommonFileUtilities)
     - rename FileEncryptor to a more general EncryptionService since it does not need to be used with files
     - rename EncryptionResult to FileEncryptionResult
     - make encrypt and decrypt public, and make it return a new type EncryptionResult
