@@ -133,7 +133,7 @@ public class EncryptCommand extends Command {
         CommandExecutionResult.Builder syso = new CommandExecutionResult.Builder();
 
         // create a secret key spec from the given password to use for decryption
-        FileEncryptor.HashingResult secretkeyresult = FileEncryptor.createPrivateKey(password);
+        EncryptionService.HashingResult secretkeyresult = EncryptionService.createPrivateKey(password);
 
         if (!secretkeyresult.isSuccess()) {
             outputStream.println(secretkeyresult.getErrorMessage());
@@ -162,7 +162,7 @@ public class EncryptCommand extends Command {
 
         for (File f : toEncrypt) {
             // read from the file and encrypt it
-            FileEncryptor.EncryptionResult result = FileEncryptor.encryptFile(
+            EncryptionService.EncryptionResult result = EncryptionService.encryptFile(
                     secretkeyresult.getSecretKey(), f, src
             );
 

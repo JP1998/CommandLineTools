@@ -31,10 +31,10 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.*;
 
-public class FileEncryptorTest {
+public class EncryptionServiceTest {
 
     /*
-     * The password we're using to determine the integrity of the method FileEncryptor#createPrivateKey(String).
+     * The password we're using to determine the integrity of the method EncryptionService#createPrivateKey(String).
      */
     public static String TESTCREATEPRIVATEKEYVALID_USEDPASSWORD = "asdf1234";
     /*
@@ -53,7 +53,7 @@ public class FileEncryptorTest {
     @Test
     public void testCreatePrivateKeyValid() {
         assertThat(
-                FileEncryptor.createPrivateKey(TESTCREATEPRIVATEKEYVALID_USEDPASSWORD).getSecretKey().getEncoded(),
+                EncryptionService.createPrivateKey(TESTCREATEPRIVATEKEYVALID_USEDPASSWORD).getSecretKey().getEncoded(),
                 is(TESTCREATEPRIVATEKEYVALID_EXPECTED)
         );
     }
@@ -61,7 +61,7 @@ public class FileEncryptorTest {
     @Test
     public void testCreatePrivateKeyInvalid() {
         assertThat(
-                FileEncryptor.createPrivateKey(null).isSuccess(),
+                EncryptionService.createPrivateKey(null).isSuccess(),
                 is(false)
         );
     }
@@ -69,7 +69,7 @@ public class FileEncryptorTest {
     @Test
     public void testHashingResultGetErrorMessageWithoutError() {
         assertThat(
-                FileEncryptor.createPrivateKey("").getErrorMessage(),
+                EncryptionService.createPrivateKey("").getErrorMessage(),
                 nullValue()
         );
     }
@@ -77,7 +77,7 @@ public class FileEncryptorTest {
     @Test
     public void testHashingResultGetErrorMessageWithError() {
         assertThat(
-                FileEncryptor.createPrivateKey(null).getErrorMessage(),
+                EncryptionService.createPrivateKey(null).getErrorMessage(),
                 is("Hashing has been aborted.")
         );
     }
@@ -85,7 +85,7 @@ public class FileEncryptorTest {
     @Test
     public void testHashingResultGetError() {
         assertThat(
-                FileEncryptor.createPrivateKey(null).getError(),
+                EncryptionService.createPrivateKey(null).getError(),
                 is(new HashingAbortedException(
                         "Hashing has been aborted.",
                         new NullPointerException()
@@ -151,9 +151,9 @@ public class FileEncryptorTest {
     @Test
     public void testEncrypt() throws GeneralSecurityException {
         assertThat(
-                FileEncryptor.encrypt(
+                EncryptionService.encrypt(
                         TESTENCRYPT_USEDDATA,
-                        FileEncryptor.createPrivateKey(TESTENCRYPT_USEDPASSWORD).getSecretKey()
+                        EncryptionService.createPrivateKey(TESTENCRYPT_USEDPASSWORD).getSecretKey()
                 ),
                 is(TESTENCRYPT_EXPECTED)
         );
@@ -162,9 +162,9 @@ public class FileEncryptorTest {
     @Test
     public void testDecrypt() throws GeneralSecurityException {
         assertThat(
-                new String(FileEncryptor.decrypt(
+                new String(EncryptionService.decrypt(
                         TESTENCRYPT_EXPECTED,
-                        FileEncryptor.createPrivateKey(TESTENCRYPT_USEDPASSWORD).getSecretKey()
+                        EncryptionService.createPrivateKey(TESTENCRYPT_USEDPASSWORD).getSecretKey()
                 )),
                 is(TESTENCRYPT_USEDDATATEXT)
         );
@@ -183,8 +183,8 @@ public class FileEncryptorTest {
         }
 
         assertThat(
-                FileEncryptor.encryptFile(
-                        FileEncryptor.createPrivateKey(TESTENCRYPTFILE_USEDPASSWORD).getSecretKey(),
+                EncryptionService.encryptFile(
+                        EncryptionService.createPrivateKey(TESTENCRYPTFILE_USEDPASSWORD).getSecretKey(),
                         toTestOn,
                         toTestOn.getParentFile()
                 ).getError(),
@@ -195,7 +195,7 @@ public class FileEncryptorTest {
     @Test
     public void testEncryptionResultGetErrorMessageWithError() {
         assertThat(
-                FileEncryptor.encryptFile(
+                EncryptionService.encryptFile(
                         null,
                         null,
                         null
@@ -207,7 +207,7 @@ public class FileEncryptorTest {
     @Test
     public void testEncryptionResultGetError() {
         assertThat(
-                FileEncryptor.encryptFile(
+                EncryptionService.encryptFile(
                         null,
                         null,
                         null
@@ -241,8 +241,8 @@ public class FileEncryptorTest {
         }
 
         assertThat(
-                FileEncryptor.encryptFile(
-                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                EncryptionService.encryptFile(
+                        EncryptionService.createPrivateKey("asdf1234").getSecretKey(),
                         toTestOn,
                         new File(System.getProperty("user.home"))
                 ).getOriginalName(),
@@ -256,8 +256,8 @@ public class FileEncryptorTest {
     @Test
     public void testEncryptFileNull() {
         assertThat(
-                FileEncryptor.encryptFile(
-                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                EncryptionService.encryptFile(
+                        EncryptionService.createPrivateKey("asdf1234").getSecretKey(),
                         null,
                         new File(System.getProperty("user.home"))
                 ).isSuccess(),
@@ -268,8 +268,8 @@ public class FileEncryptorTest {
     @Test
     public void testEncryptFileNonExisting() {
         assertThat(
-                FileEncryptor.encryptFile(
-                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                EncryptionService.encryptFile(
+                        EncryptionService.createPrivateKey("asdf1234").getSecretKey(),
                         new File(System.getProperty("user.home"), "somenonexistingfile.txt"),
                         new File(System.getProperty("user.home"))
                 ).isSuccess(),
@@ -284,7 +284,7 @@ public class FileEncryptorTest {
         toTestOn.createNewFile();
 
         assertThat(
-                FileEncryptor.encryptFile(null, toTestOn, toTestOn.getParentFile()).isSuccess(),
+                EncryptionService.encryptFile(null, toTestOn, toTestOn.getParentFile()).isSuccess(),
                 is(false)
         );
 
@@ -377,8 +377,8 @@ public class FileEncryptorTest {
         }
 
         assertThat(
-                FileEncryptor.encryptFile(
-                        FileEncryptor.createPrivateKey(TESTENCRYPTFILE_USEDPASSWORD).getSecretKey(),
+                EncryptionService.encryptFile(
+                        EncryptionService.createPrivateKey(TESTENCRYPTFILE_USEDPASSWORD).getSecretKey(),
                         toTestOn,
                         toTestOn.getParentFile()
                 ).getData(),
@@ -395,8 +395,8 @@ public class FileEncryptorTest {
     @Test
     public void testDecryptFileNull() {
         assertThat(
-                FileEncryptor.decryptFile(
-                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                EncryptionService.decryptFile(
+                        EncryptionService.createPrivateKey("asdf1234").getSecretKey(),
                         null
                 ).isSuccess(),
                 is(false)
@@ -406,8 +406,8 @@ public class FileEncryptorTest {
     @Test
     public void testDecryptFileNonExisting() {
         assertThat(
-                FileEncryptor.decryptFile(
-                        FileEncryptor.createPrivateKey("asdf1234").getSecretKey(),
+                EncryptionService.decryptFile(
+                        EncryptionService.createPrivateKey("asdf1234").getSecretKey(),
                         new File(System.getProperty("user.home"), "somenonexistingfile.txt")
                 ).isSuccess(),
                 is(false)
@@ -421,7 +421,7 @@ public class FileEncryptorTest {
         toTestOn.createNewFile();
 
         assertThat(
-                FileEncryptor.decryptFile(null, toTestOn).isSuccess(),
+                EncryptionService.decryptFile(null, toTestOn).isSuccess(),
                 is(false)
         );
 
@@ -441,8 +441,8 @@ public class FileEncryptorTest {
         }
 
         assertThat(
-                new String(FileEncryptor.decryptFile(
-                        FileEncryptor.createPrivateKey(TESTENCRYPTFILE_USEDPASSWORD).getSecretKey(),
+                new String(EncryptionService.decryptFile(
+                        EncryptionService.createPrivateKey(TESTENCRYPTFILE_USEDPASSWORD).getSecretKey(),
                         toTestOn
                 ).getData()),
                 is(TESTENCRYPTFILE_USEDDATATEXT)

@@ -42,7 +42,7 @@ import java.util.Arrays;
  * is also saved within the encrypted data, whereas the name is restored
  * as soon as its decrypted again.
  */
-public class FileEncryptor {
+public class EncryptionService {
 
     /**
      * This method creates a private key from the given password. The returned {@link HashingResult}
