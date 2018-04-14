@@ -17,7 +17,6 @@
 package de.hotzjeanpierre.commandlinetools.command.utils.files;
 
 import de.hotzjeanpierre.commandlinetools.command.development.DebuggingPurpose;
-import de.hotzjeanpierre.commandlinetools.command.impl.exceptions.FileCouldNotBeEncryptedException;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import de.hotzjeanpierre.commandlinetools.command.utils.files.exceptions.EncryptionAbortedException;
 import de.hotzjeanpierre.commandlinetools.command.utils.files.exceptions.HashingAbortedException;
@@ -27,13 +26,10 @@ import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 /**
@@ -107,7 +103,7 @@ public class EncryptionService {
 
     /**
      * This method encrypts the data from the given file with the given secret key.
-     * The returned {@link EncryptionResult} contains whether the encryption process was successful,
+     * The returned {@link FileEncryptionResult} contains whether the encryption process was successful,
      * if so the encrypted data, otherwise an error message (and for debugging purposes the stacktrace).
      * You can then (in case the encryption was successful) save the data to another file.
      *
@@ -115,9 +111,9 @@ public class EncryptionService {
      * @param in the file that is to be encrypted
      */
     @NotNull
-    public static EncryptionResult encryptFile(SecretKeySpec pw, File in, File relativeTo) {
+    public static FileEncryptionResult encryptFile(SecretKeySpec pw, File in, File relativeTo) {
         if (in == null || !in.isFile() || !in.exists()) {
-            return new EncryptionResult(
+            return new FileEncryptionResult(
                     new EncryptionAbortedException(StringProcessing.format(
                             "The file '{0}' does not exist and can thus not be encrypted.",
                             (in != null) ? in.getAbsolutePath() : "null"
@@ -141,15 +137,15 @@ public class EncryptionService {
             buffer.put(filenameBytes);
             buffer.put(data);
 
-            return new EncryptionResult(filename, encrypt(buffer.array(), pw));
+            return new FileEncryptionResult(filename, encrypt(buffer.array(), pw));
         } catch (Exception e) {
-            return new EncryptionResult(new EncryptionAbortedException("Ecryption has been aborted.", e));
+            return new FileEncryptionResult(new EncryptionAbortedException("Ecryption has been aborted.", e));
         }
     }
 
     /**
      * This method decrypts the data from the given file with the given secret key.
-     * The returned {@link EncryptionResult} contains whether the decryption process was successful,
+     * The returned {@link FileEncryptionResult} contains whether the decryption process was successful,
      * if so the decrypted data, otherwise an error message (and for debugging purposes the stacktrace).
      * You can then (in case the encryption was successful) save the data to another file.
      *
@@ -157,9 +153,9 @@ public class EncryptionService {
      * @param in the file that is to be decrypted
      */
     @NotNull
-    public static EncryptionResult decryptFile(SecretKeySpec pw, File in) {
+    public static FileEncryptionResult decryptFile(SecretKeySpec pw, File in) {
         if (in == null || !in.isFile() || !in.exists()) {
-            return new EncryptionResult(
+            return new FileEncryptionResult(
                     new EncryptionAbortedException(StringProcessing.format(
                             "The file '{0}' does not exist and can thus not be decrypted.",
                             (in != null) ? in.getAbsolutePath() : "null"
@@ -186,9 +182,9 @@ public class EncryptionService {
             byte[] encodedData = new byte[buffer.remaining()];
             buffer.get(encodedData);
 
-            return new EncryptionResult(fileName, encodedData);
+            return new FileEncryptionResult(fileName, encodedData);
         } catch (Exception e) {
-            return new EncryptionResult(new EncryptionAbortedException("Decryption has been aborted.", e));
+            return new FileEncryptionResult(new EncryptionAbortedException("Decryption has been aborted.", e));
         }
     }
 
@@ -271,11 +267,11 @@ public class EncryptionService {
     /**
      * The encryption result is the result of trying to en- or decrypt a file.
      */
-    public static class EncryptionResult {
+    public static class FileEncryptionResult {
 
         /**
          * The name of the original file which is used for the FileNamingData
-         * that can be built from an EncryptionResult-object
+         * that can be built from an FileEncryptionResult-object
          */
         private String originalName;
         /**
@@ -292,11 +288,11 @@ public class EncryptionService {
         private Exception error;
 
         /**
-         * Creates an EncryptionResult which was unsuccessful due to the gien Exception.
+         * Creates an FileEncryptionResult which was unsuccessful due to the gien Exception.
          *
          * @param error the Exception which aborted the de- or encryption
          */
-        /* package-protected */ EncryptionResult(Exception error) {
+        /* package-protected */ FileEncryptionResult(Exception error) {
             this.originalName = null;
             this.data = null;
             this.success = false;
@@ -304,13 +300,13 @@ public class EncryptionService {
         }
 
         /**
-         * Creates an EncryptionResult which represents the successful en or decryption
+         * Creates an FileEncryptionResult which represents the successful en or decryption
          * of the given data, which was originally stored in the file with given name.
          *
          * @param originalName the name of the original file
          * @param data         the data that was originally stored in the file with given name
          */
-        /* package-protected */ EncryptionResult(String originalName, byte[] data) {
+        /* package-protected */ FileEncryptionResult(String originalName, byte[] data) {
             this.originalName = originalName;
             this.data = data;
             this.success = true;

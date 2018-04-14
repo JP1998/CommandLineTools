@@ -245,14 +245,14 @@ public class FileNamingData {
         }
 
         /**
-         * This method creates an instance of FileNamingData with regard of the given {@link EncryptionService.EncryptionResult},
+         * This method creates an instance of FileNamingData with regard of the given {@link EncryptionService.FileEncryptionResult},
          * and the given index.
          *
          * @param result the result to evaluate
          * @param index  the index to give the FileNamingData
          * @return the FileNamingData with the extracted information
          */
-        public static FileNamingData build(@NotNull EncryptionService.EncryptionResult result, int index) {
+        public static FileNamingData build(@NotNull EncryptionService.FileEncryptionResult result, int index) {
             return new Builder()
                     .setOriginalName(CommonFileUtilities.extractFileName(result.getOriginalName()))
                     .setExtension(CommonFileUtilities.extractFileExtension(result.getOriginalName()))

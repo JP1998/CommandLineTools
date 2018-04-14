@@ -141,7 +141,7 @@ public class FileNamingDataTest {
     public void testCreationOfFileNamingDataFromEncryptionResult() {
         assertThat(
                 FileNamingData.Builder.build(
-                        new EncryptionService.EncryptionResult(
+                        new EncryptionService.FileEncryptionResult(
                                 File.separator + "some" + File.separator + "goddamn folder" + File.separator + "somefile.someextension",
                                 new byte[0]
                         ),
