@@ -39,26 +39,16 @@ public enum FilterMode {
      * Thus any file with an extension that is contained in the list of
      * extensions to filter will not be contained
      */
-    Filter(new FilterModeApplication() {
-        @Override
-        public boolean allow(@NotNull File f, String filter, boolean lf) {
-            return (!f.isDirectory() && !fileExtensionContained(extractFileExtension(f), filter)) ||
-                    (f.isDirectory() && lf);
-        }
-    }),
+    Filter((f, filter, lf) -> (!f.isDirectory() && !fileExtensionContained(extractFileExtension(f), filter)) ||
+            (f.isDirectory() && lf)),
 
     /**
      * Filters all the files with an extension that is not given.
      * Thus any file with an extension that is contained in the list of
      * extensions to filter will be contained.
      */
-    AllowOnly(new FilterModeApplication() {
-        @Override
-        public boolean allow(@NotNull File f, String filter, boolean lf) {
-            return (!f.isDirectory() && fileExtensionContained(extractFileExtension(f), filter)) ||
-                    (f.isDirectory() && lf);
-        }
-    });
+    AllowOnly((f, filter, lf) -> (!f.isDirectory() && fileExtensionContained(extractFileExtension(f), filter)) ||
+            (f.isDirectory() && lf));
 
     FilterMode(FilterModeApplication appl) {
         this.application = appl;
