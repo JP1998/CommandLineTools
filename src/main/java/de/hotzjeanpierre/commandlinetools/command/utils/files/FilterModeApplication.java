@@ -35,35 +35,4 @@ public interface FilterModeApplication {
      * @return whether or not the given file is supposed to be listed
      */
     boolean allow(@NotNull File f, String filter, boolean lf);
-
-    /**
-     * This method gives you the extension of the given file.
-     *
-     * @param f the file to determine the extension of
-     * @return the extension of the given file
-     */
-    @NotNull
-    default String findExtension(@NotNull File f) {
-        int dot = f.getAbsolutePath().lastIndexOf('.');
-        return dot == -1 ? "" : f.getAbsolutePath().substring(dot + 1);
-    }
-
-    /**
-     * This method determines whether a specific extension is to be filtered.
-     *
-     * @param extension         the extension to check
-     * @param extensionsToCheck the list of extensions to filter
-     * @return whether or not the given extension is within the list
-     */
-    default boolean fileExtensionContained(String extension, @NotNull String extensionsToCheck) {
-        String[] extensions = extensionsToCheck.split(";");
-
-        for (String ext : extensions) {
-            if (extension.trim().equalsIgnoreCase(ext.trim())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

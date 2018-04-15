@@ -55,22 +55,24 @@ public class CommonFileUtilities {
     }
 
     /**
-     * This method extracts the file extension of the given file.
+     * This method extracts the file extension of the given file while the point
+     * of the extension will be included in the returned value.
      * In case the given file is a directory this method will return {@code null}.
      *
      * @param f the file to extract the file extension of
      * @return the files extension
      */
     @Nullable
-    public static String extractFileExtension(@NotNull File f) {
+    public static String extractFileExtensionContainingPoint(@NotNull File f) {
         if(f.isDirectory()) {
             return null;
         }
-        return extractFileExtension(f.getAbsolutePath());
+        return extractFileExtensionContainingPoint(f.getAbsolutePath());
     }
 
     /**
-     * This method extracts the file extension of the given path.
+     * This method extracts the file extension of the given path while the point
+     * of the extension will be included in the returned value.
      * Since the given path cannot be checked on whether it is a directory,
      * or not this method will return an empty string regardless of whether it
      * is a file without extension or a directory.
@@ -79,9 +81,28 @@ public class CommonFileUtilities {
      * @return the paths extension
      */
     @NotNull
-    public static String extractFileExtension(@NotNull String f) {
+    public static String extractFileExtensionContainingPoint(@NotNull String f) {
         int index = getExtensionPointIndex(f);
         return index != -1 ? f.substring(index, f.length()) : "";
+    }
+
+    /**
+     * This method extracts the file extension of the given file while the point
+     * of the extension will not be included in the returned value.
+     * In case the given file is a directory this method will return {@code null}.
+     *
+     * @param f the file to extract the file extension of
+     * @return the files extension
+     */
+    @Nullable
+    public static String extractFileExtension(File f) {
+        if(f.isDirectory()) {
+            return null;
+        }
+        String absPath = f.getAbsolutePath();
+        int index = getExtensionPointIndex(absPath);
+
+        return index != -1 ? absPath.substring(index + 1, absPath.length()) : "";
     }
 
     /**
@@ -160,5 +181,24 @@ public class CommonFileUtilities {
         } else {
             return -1;
         }
+    }
+
+    /**
+     * This method determines whether a specific extension is to be filtered.
+     *
+     * @param extension         the extension to check
+     * @param extensionsToCheck the list of extensions to filter
+     * @return whether or not the given extension is within the list
+     */
+    public static boolean fileExtensionContained(String extension, @NotNull String extensionsToCheck) {
+        String[] extensions = extensionsToCheck.split(";");
+
+        for (String ext : extensions) {
+            if (extension.trim().equalsIgnoreCase(ext.trim())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

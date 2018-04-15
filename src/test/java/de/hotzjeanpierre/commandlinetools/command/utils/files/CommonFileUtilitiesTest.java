@@ -79,6 +79,68 @@ public class CommonFileUtilitiesTest {
     }
 
     @Test
+    public void testExtractFileExtensionContainingPointFileOnDirectory() {
+        assertThat(
+                CommonFileUtilities.extractFileExtensionContainingPoint(
+                        new File(System.getProperty("user.home"))
+                ),
+                nullValue()
+        );
+    }
+
+    @Test
+    public void testExtractFileExtensionContainingPointFileOnFileWithExtension() {
+        assertThat(
+                CommonFileUtilities.extractFileExtensionContainingPoint(
+                        new File(
+                                System.getProperty("user.home"),
+                                "somefile.someextension"
+                        )
+                ),
+                is(".someextension")
+        );
+    }
+
+    @Test
+    public void testExtractFileExtensionContainingPointFileOnFileWithoutExtension() {
+        assertThat(
+                CommonFileUtilities.extractFileExtensionContainingPoint(
+                        new File(
+                                System.getProperty("user.home"),
+                                "somefilewithoutextension"
+                        )
+                ),
+                is("")
+        );
+    }
+
+    @Test
+    public void testExtractFileExtensionContainingPointFileOnFileWithExtensionInGitlikeFolder() {
+        assertThat(
+                CommonFileUtilities.extractFileExtensionContainingPoint(
+                        new File(
+                                System.getProperty("user.home"),
+                                ".someweirdfolder/somefile.someextension"
+                        )
+                ),
+                is(".someextension")
+        );
+    }
+
+    @Test
+    public void testExtractFileExtensionContainingPointFileOnFileWithoutExtensionInGitlikeFolder() {
+        assertThat(
+                CommonFileUtilities.extractFileExtensionContainingPoint(
+                        new File(
+                                System.getProperty("user.home"),
+                                ".someweirdfolder/somefilewithoutextension"
+                        )
+                ),
+                is("")
+        );
+    }
+
+    @Test
     public void testExtractFileExtensionFileOnDirectory() {
         assertThat(
                 CommonFileUtilities.extractFileExtension(
@@ -97,7 +159,7 @@ public class CommonFileUtilitiesTest {
                                 "somefile.someextension"
                         )
                 ),
-                is(".someextension")
+                is("someextension")
         );
     }
 
@@ -123,7 +185,7 @@ public class CommonFileUtilitiesTest {
                                 ".someweirdfolder/somefile.someextension"
                         )
                 ),
-                is(".someextension")
+                is("someextension")
         );
     }
 
@@ -141,9 +203,9 @@ public class CommonFileUtilitiesTest {
     }
 
     @Test
-    public void testExtractFileExtensionStringOnDirectory() {
+    public void testExtractFileExtensionContainingPointStringOnDirectory() {
         assertThat(
-                CommonFileUtilities.extractFileExtension(
+                CommonFileUtilities.extractFileExtensionContainingPoint(
                         System.getProperty("user.home")
                 ),
                 is("")
@@ -151,9 +213,9 @@ public class CommonFileUtilitiesTest {
     }
 
     @Test
-    public void testExtractFileExtensionStringOnFileWithExtension() {
+    public void testExtractFileExtensionContainingPointStringOnFileWithExtension() {
         assertThat(
-                CommonFileUtilities.extractFileExtension(
+                CommonFileUtilities.extractFileExtensionContainingPoint(
                         System.getProperty("user.home") + File.separator + "somefile.someextension"
                 ),
                 is(".someextension")
@@ -161,9 +223,9 @@ public class CommonFileUtilitiesTest {
     }
 
     @Test
-    public void testExtractFileExtensionStringOnFileWithoutExtension() {
+    public void testExtractFileExtensionContainingPointStringOnFileWithoutExtension() {
         assertThat(
-                CommonFileUtilities.extractFileExtension(
+                CommonFileUtilities.extractFileExtensionContainingPoint(
                         System.getProperty("user.home") + File.separator + "somefilewithoutextension"
                 ),
                 is("")
@@ -171,9 +233,9 @@ public class CommonFileUtilitiesTest {
     }
 
     @Test
-    public void testExtractFileExtensionStringOnFileWithExtensionInGitlikeFolder() {
+    public void testExtractFileExtensionContainingPointStringOnFileWithExtensionInGitlikeFolder() {
         assertThat(
-                CommonFileUtilities.extractFileExtension(
+                CommonFileUtilities.extractFileExtensionContainingPoint(
                         System.getProperty("user.home") + File.separator + ".someweirdfolder" + File.separator + "somefile.someextension"
                 ),
                 is(".someextension")
@@ -181,9 +243,9 @@ public class CommonFileUtilitiesTest {
     }
 
     @Test
-    public void testExtractFileExtensionStringOnFileWithoutExtensionInGitlikeFolder() {
+    public void testExtractFileExtensionContainingPointStringOnFileWithoutExtensionInGitlikeFolder() {
         assertThat(
-                CommonFileUtilities.extractFileExtension(
+                CommonFileUtilities.extractFileExtensionContainingPoint(
                         System.getProperty("user.home") + File.separator + ".someweirdfolder" + File.separator + "somefilewithoutextension"
                 ),
                 is("")

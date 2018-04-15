@@ -3,8 +3,8 @@
 - refactoring:
   - FilterMode:
     - create lambdas from the anonymous classes within the enum-values
-  - FilterModeApplication:
-    - extract the default methods
+//  - FilterModeApplication:
+//    - extract the default methods
 //  - FileEncryptor:
 //    - take its responsibility to load from and write to files (should be within CommonFileUtilities)
 //    - rename FileEncryptor to a more general EncryptionService since it does not need to be used with files

@@ -255,7 +255,7 @@ public class FileNamingData {
         public static FileNamingData build(@NotNull EncryptionService.FileEncryptionResult result, int index) {
             return new Builder()
                     .setOriginalName(CommonFileUtilities.extractFileName(result.getOriginalName()))
-                    .setExtension(CommonFileUtilities.extractFileExtension(result.getOriginalName()))
+                    .setExtension(CommonFileUtilities.extractFileExtensionContainingPoint(result.getOriginalName()))
                     .setIndex(index)
                     .setOriginalLocation(CommonFileUtilities.extractFolderPath(result.getOriginalName()))
                     .build();

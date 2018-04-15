@@ -32,6 +32,7 @@ public class FileListerTest {
     public static void setupFiles() throws IOException {
         for(int i = 0; i < filesToTestOn.length; i++) {
             if(i < 8) {
+                System.out.println(filesToTestOn[i].exists());
                 if(!filesToTestOn[i].mkdir()) {
                     throw new IOException("Couldn't create folder required for testing.");
                 }

@@ -20,6 +20,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+import static de.hotzjeanpierre.commandlinetools.command.utils.files.CommonFileUtilities.extractFileExtension;
+import static de.hotzjeanpierre.commandlinetools.command.utils.files.CommonFileUtilities.fileExtensionContained;
+
 /**
  * This enum defines the single modes in which a filter can perform.
  */
@@ -39,7 +42,7 @@ public enum FilterMode {
     Filter(new FilterModeApplication() {
         @Override
         public boolean allow(@NotNull File f, String filter, boolean lf) {
-            return (!f.isDirectory() && !fileExtensionContained(findExtension(f), filter)) ||
+            return (!f.isDirectory() && !fileExtensionContained(extractFileExtension(f), filter)) ||
                     (f.isDirectory() && lf);
         }
     }),
@@ -52,7 +55,7 @@ public enum FilterMode {
     AllowOnly(new FilterModeApplication() {
         @Override
         public boolean allow(@NotNull File f, String filter, boolean lf) {
-            return (!f.isDirectory() && fileExtensionContained(findExtension(f), filter)) ||
+            return (!f.isDirectory() && fileExtensionContained(extractFileExtension(f), filter)) ||
                     (f.isDirectory() && lf);
         }
     });
