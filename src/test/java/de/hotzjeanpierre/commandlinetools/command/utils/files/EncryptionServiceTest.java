@@ -149,12 +149,12 @@ public class EncryptionServiceTest {
             );
 
     @Test
-    public void testEncrypt() throws GeneralSecurityException {
+    public void testEncrypt() {
         assertThat(
                 EncryptionService.encrypt(
                         TESTENCRYPT_USEDDATA,
                         EncryptionService.createPrivateKey(TESTENCRYPT_USEDPASSWORD).getSecretKey()
-                ),
+                ).getData(),
                 is(TESTENCRYPT_EXPECTED)
         );
     }
@@ -165,7 +165,7 @@ public class EncryptionServiceTest {
                 new String(EncryptionService.decrypt(
                         TESTENCRYPT_EXPECTED,
                         EncryptionService.createPrivateKey(TESTENCRYPT_USEDPASSWORD).getSecretKey()
-                )),
+                ).getData()),
                 is(TESTENCRYPT_USEDDATATEXT)
         );
     }

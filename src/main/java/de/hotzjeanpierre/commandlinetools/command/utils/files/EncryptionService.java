@@ -70,17 +70,17 @@ public class EncryptionService {
      *
      * @param data the data to encrypt
      * @param pw   the secret key to use for encryption
-     * @return the encrypted data
-     * @throws NoSuchPaddingException in case there is an error while encrypting
+     * @return the result of the encryption
      */
     @NotNull
-    /* package-protected */ static byte[] encrypt(byte[] data, SecretKeySpec pw)
-            throws GeneralSecurityException {
-
-        Cipher aes = Cipher.getInstance("AES");
-        aes.init(Cipher.ENCRYPT_MODE, pw);
-
-        return aes.doFinal(data);
+    public static EncryptionResult encrypt(byte[] data, SecretKeySpec pw) {
+        try {
+            Cipher aes = Cipher.getInstance("AES");
+            aes.init(Cipher.ENCRYPT_MODE, pw);
+            return new EncryptionResult(aes.doFinal(data));
+        } catch (Exception exc) {
+            return new EncryptionResult(exc);
+        }
     }
 
     /**
@@ -89,16 +89,16 @@ public class EncryptionService {
      * @param data the data to decrypt
      * @param pw   the secret key to use for decryption
      * @return the decrypted data
-     * @throws GeneralSecurityException in case there is an error while decrypting; most likely due to a wrong password
      */
     @NotNull
-    /* package-protected */ static byte[] decrypt(byte[] data, SecretKeySpec pw)
-            throws GeneralSecurityException {
-
-        Cipher aes = Cipher.getInstance("AES");
-        aes.init(Cipher.DECRYPT_MODE, pw);
-
-        return aes.doFinal(data);
+    public static EncryptionResult decrypt(byte[] data, SecretKeySpec pw) {
+        try {
+            Cipher aes = Cipher.getInstance("AES");
+            aes.init(Cipher.DECRYPT_MODE, pw);
+            return new EncryptionResult(aes.doFinal(data));
+        } catch (Exception exc) {
+            return new EncryptionResult(exc);
+        }
     }
 
     /**
@@ -137,7 +137,13 @@ public class EncryptionService {
             buffer.put(filenameBytes);
             buffer.put(data);
 
-            return new FileEncryptionResult(filename, encrypt(buffer.array(), pw));
+            EncryptionResult encryptionResult = encrypt(buffer.array(), pw);
+
+            if(!encryptionResult.isSuccess()) {
+                return new FileEncryptionResult(encryptionResult);
+            }
+
+            return new FileEncryptionResult(filename, encryptionResult.getData());
         } catch (Exception e) {
             return new FileEncryptionResult(new EncryptionAbortedException("Ecryption has been aborted.", e));
         }
@@ -166,7 +172,13 @@ public class EncryptionService {
         try {
             byte[] data = CommonFileUtilities.readFile(in);
 
-            data = decrypt(data, pw);
+            EncryptionResult decryptionResult = decrypt(data, pw);
+
+            if(!decryptionResult.isSuccess()) {
+                return new FileEncryptionResult(decryptionResult);
+            }
+
+            data = decryptionResult.getData();
 
             ByteBuffer buffer = ByteBuffer.allocate(data.length);
             buffer.put(data);
@@ -265,15 +277,10 @@ public class EncryptionService {
     }
 
     /**
-     * The encryption result is the result of trying to en- or decrypt a file.
+     * EncryptionResult is a general result of trying to en- or decrypt data.
      */
-    public static class FileEncryptionResult {
+    public static class EncryptionResult {
 
-        /**
-         * The name of the original file which is used for the FileNamingData
-         * that can be built from an FileEncryptionResult-object
-         */
-        private String originalName;
         /**
          * The byte data that resulted from the en- or decryption
          */
@@ -288,12 +295,11 @@ public class EncryptionService {
         private Exception error;
 
         /**
-         * Creates an FileEncryptionResult which was unsuccessful due to the gien Exception.
+         * Creates an EncryptionResult which was unsuccessful due to the given Exception.
          *
-         * @param error the Exception which aborted the de- or encryption
+         * @param error the Exception which aborted the de- or encryption-process
          */
-        /* package-protected */ FileEncryptionResult(Exception error) {
-            this.originalName = null;
+        /* package-protected */ EncryptionResult(Exception error) {
             this.data = null;
             this.success = false;
             this.error = error;
@@ -303,21 +309,12 @@ public class EncryptionService {
          * Creates an FileEncryptionResult which represents the successful en or decryption
          * of the given data, which was originally stored in the file with given name.
          *
-         * @param originalName the name of the original file
          * @param data         the data that was originally stored in the file with given name
          */
-        /* package-protected */ FileEncryptionResult(String originalName, byte[] data) {
-            this.originalName = originalName;
+        /* package-protected */ EncryptionResult(byte[] data) {
             this.data = data;
             this.success = true;
             this.error = null;
-        }
-
-        /**
-         * @return The name of the original file which
-         */
-        public String getOriginalName() {
-            return originalName;
         }
 
         /**
@@ -351,6 +348,51 @@ public class EncryptionService {
         @SuppressWarnings("unused")
         public Exception getError() {
             return error;
+        }
+    }
+
+    /**
+     * FileEncryptionResult is the result of trying to en- or decrypt a file.
+     */
+    public static class FileEncryptionResult extends EncryptionResult {
+
+        /**
+         * The name of the original file which is used for the FileNamingData
+         * that can be built from an FileEncryptionResult-object
+         */
+        private String originalName;
+
+        /* package-protected */ FileEncryptionResult(EncryptionResult result) {
+            this(result.error);
+        }
+
+        /**
+         * Creates an FileEncryptionResult which was unsuccessful due to the given Exception.
+         *
+         * @param error the Exception which aborted the de- or encryption-process
+         */
+        /* package-protected */ FileEncryptionResult(Exception error) {
+            super(error);
+            this.originalName = null;
+        }
+
+        /**
+         * Creates an FileEncryptionResult which represents the successful en or decryption
+         * of the given data, which was originally stored in the file with given name.
+         *
+         * @param originalName the name of the original file
+         * @param data         the data that was originally stored in the file with given name
+         */
+        /* package-protected */ FileEncryptionResult(String originalName, byte[] data) {
+            super(data);
+            this.originalName = originalName;
+        }
+
+        /**
+         * @return The name of the original file which
+         */
+        public String getOriginalName() {
+            return originalName;
         }
     }
 }
