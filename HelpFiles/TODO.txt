@@ -1,16 +1,4 @@
 
-
-- refactoring:
-  - FilterMode:
-    - create lambdas from the anonymous classes within the enum-values
-//  - FilterModeApplication:
-//    - extract the default methods
-//  - FileEncryptor:
-//    - take its responsibility to load from and write to files (should be within CommonFileUtilities)
-//    - rename FileEncryptor to a more general EncryptionService since it does not need to be used with files
-//    - rename EncryptionResult to FileEncryptionResult
-//    - make encrypt and decrypt public, and make it return a new type EncryptionResult
-
 - implement some kind of lightweight pattern matching for Filtering files
 
 - some default command such as:
@@ -22,13 +10,24 @@
     - having an option to recursively rename within subdirectories
     - having an option to format the result name
 
-  - password generator
+  - password generator / manager
   - interpreter for brainfuck
   - interpreter for false
 
 - a GUI that is more comfortable to use than the cli of Win7
   - text-based but created with a window
   - using streams to read / write (so System.out and Scanner may still be used)
+
+// - refactoring:
+//   - FilterMode:
+//     - create lambdas from the anonymous classes within the enum-values
+//   - FilterModeApplication:
+//     - extract the default methods
+//   - FileEncryptor:
+//     - take its responsibility to load from and write to files (should be within CommonFileUtilities)
+//     - rename FileEncryptor to a more general EncryptionService since it does not need to be used with files
+//     - rename EncryptionResult to FileEncryptionResult
+//     - make encrypt and decrypt public, and make it return a new type EncryptionResult
 
 // - bulk de- and encrypting of files
 //   - having an option for the folder to de- / encrypt the contained files
