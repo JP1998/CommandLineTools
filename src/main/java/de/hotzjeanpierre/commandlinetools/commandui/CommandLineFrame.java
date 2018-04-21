@@ -16,6 +16,8 @@
 
 package de.hotzjeanpierre.commandlinetools.commandui;
 
+import de.hotzjeanpierre.commandlinetools.ICommandLine;
+import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import de.hotzjeanpierre.commandlinetools.commandui.streams.TextComponentInputStream;
 import de.hotzjeanpierre.commandlinetools.commandui.streams.TextComponentOutputStream;
 
@@ -29,7 +31,7 @@ import java.io.PrintStream;
 /**
  * Created by Jonny on 16.04.2018.
  */
-public class CommandLineFrame extends JFrame {
+public class CommandLineFrame extends JFrame implements ICommandLine {
 
     private static final String DEFAULT_TITLE = "CommandLineTools v1.0.0-SNAPSHOT";
 
@@ -132,4 +134,26 @@ public class CommandLineFrame extends JFrame {
         }
     }
 
+    @Override
+    public void setupCLI() {}
+
+    @Override
+    public void onStartExecution(String cmd) {
+        setTitle(StringProcessing.format("Executing \"{0}\"", cmd));
+    }
+
+    @Override
+    public void onEndExecution() {
+        setTitle(DEFAULT_TITLE);
+    }
+
+    @Override
+    public void clearCLI() {
+        this.cliTextArea.setText("");
+    }
+
+    @Override
+    public void disposeCLI() {
+        this.dispose();
+    }
 }

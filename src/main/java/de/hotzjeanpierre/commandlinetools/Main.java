@@ -20,6 +20,8 @@ import de.hotzjeanpierre.commandlinetools.command.Command;
 import de.hotzjeanpierre.commandlinetools.command.CommandExecutionResult;
 import de.hotzjeanpierre.commandlinetools.command.Parameter;
 import de.hotzjeanpierre.commandlinetools.command.ParameterValuesList;
+import de.hotzjeanpierre.commandlinetools.command.utils.arrays.ArrayHelper;
+import de.hotzjeanpierre.commandlinetools.commandui.CommandLineFrame;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -27,9 +29,39 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static final ICommandLine DEFAULT_CLI = new ICommandLine() {
+        @Override
+        public void setupCLI() { }
+
+        @Override
+        public void clearCLI() {
+            String lowerOSName = System.getProperty("os.name").toLowerCase();
+
+            if(lowerOSName.contains("window")) {
+                try {
+                    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        }
+
+        @Override
+        public void disposeCLI() { }
+    };
+
+    private static ICommandLine cli;
+
     private static boolean running;
 
     public static void main(String[] args) {
+        cli = determineCLI(args);
+
+        cli.setupCLI();
+
         Command.assureLoadingOfCommands(
                 "de.hotzjeanpierre.commandlinetools.Main$ExitCommand",
                 "de.hotzjeanpierre.commandlinetools.Main$ClearCommand"
@@ -40,13 +72,15 @@ public class Main {
         Scanner reader = new Scanner(System.in);
 
         while (running) {
-            System.out.print(">");
+            System.out.print(System.getProperty("user.name") + ">");
 
+            String input = null;
             Command.ExecutableCommand cmd = null;
             boolean error;
 
             try {
-                cmd = Command.parseCommand(reader.nextLine());
+                input = reader.nextLine();
+                cmd = Command.parseCommand(input);
                 error = false;
             } catch (Exception exc) {
                 System.out.println("Seems like your instruction included mistakes. Here's the error message:");
@@ -56,9 +90,11 @@ public class Main {
 
             if (!error) {
 
+                cli.onStartExecution(input);
+
                 if(cmd.isDeleteInput()) {
                     // Delete the input made before writing the output that results from the command
-                    clear();
+                    cli.clearCLI();
                 }
 
                 CommandExecutionResult result = cmd.execute();
@@ -66,26 +102,19 @@ public class Main {
                 if (!result.isSuccess()) {
                     System.out.println("Command finished without success.");
                 }
+
+                cli.onEndExecution();
             }
         }
+
+        cli.disposeCLI();
     }
 
-    /**
-     * This method is supposed to clear the console independent on which platform this application runs on.
-     * Will not work in emulated command line interfaces.
-     */
-    private static void clear() {
-        String lowerOSName = System.getProperty("os.name").toLowerCase();
-
-        if(lowerOSName.contains("window")) {
-            try {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
+    private static ICommandLine determineCLI(String[] args) {
+        if(ArrayHelper.containsAny(args, "ui", "-ui", "/ui")) {
+            return new CommandLineFrame();
         } else {
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
+            return DEFAULT_CLI;
         }
     }
 
@@ -130,7 +159,7 @@ public class Main {
 
         @Override
         protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
-            clear();
+            Main.cli.clearCLI();
             return new CommandExecutionResult.Builder()
                     .setSuccess(true)
                     .build();
