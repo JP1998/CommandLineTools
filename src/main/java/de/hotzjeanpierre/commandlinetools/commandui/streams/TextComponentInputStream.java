@@ -22,6 +22,7 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class may be used to create an InputStream using a {@link JTextComponent}.<br>
@@ -44,6 +45,11 @@ public class TextComponentInputStream extends InputStream {
     private boolean closed;
 
     /**
+     * The current amount of captured characters in the buffer.
+     */
+    private int amountCapturedCharacters = 0;
+
+    /**
      * This constructor creates an InputStream using the given JTextComponent
      * @param console the JTextComponent to use for this InputStream
      */
@@ -52,15 +58,24 @@ public class TextComponentInputStream extends InputStream {
         console.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if(!e.isControlDown() && !e.isAltDown() && !e.isAltGraphDown()) {
+                if(!e.isControlDown() && !e.isAltDown() && !e.isAltGraphDown() && console.getText().length() == console.getCaretPosition()) {
                     blockingQueue.offer(e.getKeyChar());
                     console.setCaretPosition(console.getDocument().getLength());
+                } else {
+                    e.consume();
+                    console.setCaretPosition(console.getText().length());
                 }
             }
 
             @Override
             public void keyPressed(KeyEvent e){
-                if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE || e.getKeyCode() == KeyEvent.VK_DELETE){
+                if(console.getCaretPosition() != console.getText().length()) {
+                    e.consume();
+                }
+
+                if(e.getKeyCode() == KeyEvent.VK_DELETE){
+                    e.consume();
+                } else if(e.getKeyChar() == KeyEvent.VK_BACK_SPACE && amountCapturedCharacters == 0) {
                     e.consume();
                 }
             }
@@ -73,11 +88,15 @@ public class TextComponentInputStream extends InputStream {
     }
 
     @Override
-    public int read() throws IOException {
+    public int read() {
         int c = -1;
 
         try {
-            c = blockingQueue.take();
+            Character c_temp = blockingQueue.poll(100, TimeUnit.MILLISECONDS);
+
+            if(c_temp != null) {
+                c = c_temp;
+            }
         }catch (InterruptedException exc){
             exc.printStackTrace();
         }
@@ -86,7 +105,7 @@ public class TextComponentInputStream extends InputStream {
     }
 
     @Override
-    public int read(byte[] bytes, int off, int len) throws IOException {
+    public int read(byte[] bytes, int off, int len) {
         if(bytes == null){
             throw new NullPointerException();
         }
@@ -97,20 +116,25 @@ public class TextComponentInputStream extends InputStream {
             return 0;
         }
 
-        int i = 0;
         byte currentItem;
 
         do{
             currentItem = (byte) read();
 
-            if(currentItem == -1){
-                break;
+            if(currentItem == 8) {
+                if(amountCapturedCharacters > 0) {
+                    bytes[off + --amountCapturedCharacters] = 0;
+                }
+            } else if(currentItem != -1){
+                bytes[off + amountCapturedCharacters++] = currentItem;
             }
 
-            bytes[off + i++] = currentItem;
-        } while(i < len && currentItem != '\n' && !closed);
+        } while(!closed && amountCapturedCharacters < len && currentItem != '\n');
 
-        return i;
+        int n = amountCapturedCharacters;
+        amountCapturedCharacters = 0;
+
+        return n;
     }
 
     @Override

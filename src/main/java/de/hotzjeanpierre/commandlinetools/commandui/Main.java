@@ -16,13 +16,30 @@
 
 package de.hotzjeanpierre.commandlinetools.commandui;
 
+import java.util.Scanner;
+
 /**
  * Created by Jonny on 16.04.2018.
  */
 public class Main {
 
     public static void main(String[] args) {
-        new CommandLineFrame();
+        CommandLineFrame cli = new CommandLineFrame();
+
+        Scanner inputScanner = new Scanner(System.in);
+
+        System.out.println("Please give us your name.");
+        System.out.print("Jonny@10.0.0.5>");
+        String input = inputScanner.nextLine();
+        System.out.println("Hello " + input + "!");
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        cli.dispose();
     }
 
 }

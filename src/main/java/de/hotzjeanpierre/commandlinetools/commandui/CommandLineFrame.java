@@ -16,8 +16,15 @@
 
 package de.hotzjeanpierre.commandlinetools.commandui;
 
+import de.hotzjeanpierre.commandlinetools.commandui.streams.TextComponentInputStream;
+import de.hotzjeanpierre.commandlinetools.commandui.streams.TextComponentOutputStream;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.PrintStream;
 
 /**
  * Created by Jonny on 16.04.2018.
@@ -31,7 +38,49 @@ public class CommandLineFrame extends JFrame {
     private JScrollPane scrollPane;
 
     public CommandLineFrame() {
+        new Thread(this::init).start();
 
+        try {
+            synchronized (this) {
+                this.wait();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void init() {
+        this.initView();
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                CommandLineFrame.this.onDispose();
+            }
+        });
+
+        TextComponentOutputStream newStdOut = new TextComponentOutputStream(cliTextArea);
+        TextComponentInputStream newStdIn = new TextComponentInputStream(cliTextArea);
+
+        System.setErr(new PrintStream(newStdOut));
+        System.setOut(new PrintStream(newStdOut));
+        System.setIn(newStdIn);
+
+        this.pack();
+
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        this.setVisible(true);
+        this.setSize(600, 400);
+
+        this.setTitle(DEFAULT_TITLE);
+
+        synchronized (this) {
+            this.notify();
+        }
+    }
+
+    private void initView() {
         rootPanel = new JPanel(new BorderLayout(0, 0));
         rootPanel.setBackground(Color.BLACK);
 
@@ -46,7 +95,6 @@ public class CommandLineFrame extends JFrame {
 
         scrollPane = new JScrollPane(cliTextArea);
         rootPanel.add(scrollPane, BorderLayout.CENTER);
-
 
         JPanel westPanel = new JPanel();
         westPanel.setMinimumSize(new Dimension(0, 0));
@@ -72,15 +120,16 @@ public class CommandLineFrame extends JFrame {
         southPanel.setBackground(Color.BLACK);
         rootPanel.add(southPanel, BorderLayout.SOUTH);
 
-
         this.add(rootPanel);
-        this.pack();
+    }
 
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-        this.setVisible(true);
-        this.setSize(600, 400);
-
+    private void onDispose() {
+        try {
+            System.out.close();
+            System.in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
