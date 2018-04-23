@@ -775,13 +775,22 @@ public abstract class Command implements NamingValidator {
                         .build();
             } else {
                 if(!sSupportedCommands.containsKey(command)) {
-                    outputStream.println(StringProcessing.format(
-                            "The command '{0}' was not recognized.",
-                            command
-                    ));
-                    return new CommandExecutionResult.Builder()
-                            .setSuccess(false)
-                            .build();
+                    if(!sDefaultCommandsEnabled || !sDefaultCommands.containsKey(command)) {
+                        outputStream.println(StringProcessing.format(
+                                "The command '{0}' was not recognized.",
+                                command
+                        ));
+                        return new CommandExecutionResult.Builder()
+                                .setSuccess(false)
+                                .build();
+                    } else {
+                        outputStream.println(StringProcessing.format("Printing help for command '{0}': ", command));
+                        outputStream.println(sDefaultCommands.get(command).getDocumentation());
+
+                        return new CommandExecutionResult.Builder()
+                                .setSuccess(true)
+                                .build();
+                    }
                 } else {
                     outputStream.println(StringProcessing.format("Printing help for command '{0}': ", command));
                     outputStream.println(sSupportedCommands.get(command).getDocumentation());
