@@ -345,11 +345,13 @@ public abstract class Command implements NamingValidator {
     public static void addSupportedCommand(Command cmd) {
         if(cmd == null) return;
 
-        if(!sDefaultCommands.keySet().contains(cmd.getName()) && !sSupportedCommands.keySet().contains(cmd.getName())) {
+        String cmdName = cmd.getName().toLowerCase();
+
+        if(!sDefaultCommands.keySet().contains(cmdName) && !sSupportedCommands.keySet().contains(cmdName)) {
             if(sDefaultCommandsAreLoading) {
-                sDefaultCommands.put(cmd.getName(), cmd);
+                sDefaultCommands.put(cmdName, cmd);
             } else {
-                sSupportedCommands.put(cmd.getName(), cmd);
+                sSupportedCommands.put(cmdName, cmd);
             }
         }
     }
@@ -418,7 +420,7 @@ public abstract class Command implements NamingValidator {
         }
 
         // retrieve the command template and assure that it is supported
-        Command template = Command.findTemplateFromName(tokens[0].trim());
+        Command template = Command.findTemplateFromName(tokens[0].trim().toLowerCase());
         if (template == null) {
             throw new CommandNotSupportedException(StringProcessing.format(
                     "Command '{0}' is not supported.", tokens[0]
@@ -429,7 +431,7 @@ public abstract class Command implements NamingValidator {
         List<Parameter.Value> valueList = new ArrayList<>();
         for (int i = 1; i < tokens.length; i += 2) {
             // retrieve the parameter and assure it exists for the given command
-            Parameter param = findParameterByName(template, tokens[i]);
+            Parameter param = findParameterByName(template, tokens[i].toLowerCase());
             if (param == null) {
                 throw new ParameterNotFoundException(StringProcessing.format(
                         "Parameter '{0}' has not been found for command '{1}'.",
@@ -754,7 +756,7 @@ public abstract class Command implements NamingValidator {
 
         @Override
         protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
-            String command = (String) params.getValue("command");
+            String command = ((String) params.getValue("command")).toLowerCase();
 
             if(command.isEmpty()) {
                 outputStream.println("Documentation of all recognized commands: ");
