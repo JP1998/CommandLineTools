@@ -16,7 +16,7 @@
 
 package de.hotzjeanpierre.commandlinetools.commandui;
 
-import de.hotzjeanpierre.commandlinetools.ICommandLine;
+import de.hotzjeanpierre.commandlinetools.command.ICommandLine;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import de.hotzjeanpierre.commandlinetools.commandui.streams.TextComponentInputStream;
 import de.hotzjeanpierre.commandlinetools.commandui.streams.TextComponentOutputStream;

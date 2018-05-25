@@ -620,11 +620,11 @@ public abstract class Command implements NamingValidator {
         //     <line 2 of the description>
         //     ...
         //     <line n of the description>
-        result.append(StringProcessing.format("{0}: \n", name));
+        result.append(StringProcessing.format("{0}: {1}", name, System.lineSeparator()));
 
         String[] descriptionLines = description.split("\\r?\\n");
         for (String line : descriptionLines) {
-            result.append(StringProcessing.format("    {0}\n", line));
+            result.append(StringProcessing.format("    {0}{1}", line, System.lineSeparator()));
         }
 
         if (parameterList.size() != 0) {
@@ -635,7 +635,8 @@ public abstract class Command implements NamingValidator {
             //               <line 3 of the description>
             //               ...
             //               <line n of the description>
-            result.append("  Parameters: \n");
+            result.append("  Parameters: ");
+            result.append(System.lineSeparator());
             for (String paramKey : parameterList.keySet()) {
                 Parameter param = parameterList.get(paramKey);
 
@@ -643,25 +644,28 @@ public abstract class Command implements NamingValidator {
 
                 if (param.getDefaultValue() == null) {
                     result.append(StringProcessing.format(
-                            "    - {0} ({1}): {2}\n",
+                            "    - {0} ({1}): {2}{3}",
                             param.getName(),
                             param.getType().getSimpleName(),
-                            paramDescrLines[0]
+                            paramDescrLines[0],
+                            System.lineSeparator()
                     ));
                 } else {
                     result.append(StringProcessing.format(
-                            "    - {0} ({1}|{2}): {3}\n",
+                            "    - {0} ({1}|{2}): {3}{4}",
                             param.getName(),
                             param.getType().getSimpleName(),
                             param.getDefaultValue(),
-                            paramDescrLines[0]
+                            paramDescrLines[0],
+                            System.lineSeparator()
                     ));
                 }
 
                 for (int i = 1; i < paramDescrLines.length; i++) {
                     result.append(StringProcessing.format(
-                            "              {0}\n",
-                            paramDescrLines[i]
+                            "              {0}{1}",
+                            paramDescrLines[i],
+                            System.lineSeparator()
                     ));
                 }
             }

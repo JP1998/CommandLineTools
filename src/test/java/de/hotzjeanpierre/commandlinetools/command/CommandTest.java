@@ -17,6 +17,7 @@
 package de.hotzjeanpierre.commandlinetools.command;
 
 import static org.hamcrest.core.Is.*;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 
 import de.hotzjeanpierre.commandlinetools.command.exceptions.*;
@@ -162,6 +163,26 @@ public class CommandTest {
         );
     }
 
+    @Test
+    public void testFindTemplateFromNameDefaultCommand() {
+        Command.setDefaultCommandsEnabled(true);
+
+        assertThat(
+                Command.findTemplateFromName("list").getDescription(),
+                is("This command lets you look at the files contained within a folder.\nIt supports listing them as a tree, and also not as a tree (although the tree view is highly recommended).\nAlso it supports filtering files, and a format for how to print the file name.")
+        );
+    }
+
+    @Test
+    public void testFindTemplateFromNameNonexistentCommand() {
+        Command.setDefaultCommandsEnabled(true);
+
+        assertThat(
+                Command.findTemplateFromName("nonexistingCommand"),
+                nullValue()
+        );
+    }
+
     @Test(expected = CommandArgumentNumberMismatchException.class)
     public void testParsingInvalidNumberOfParameters() {
         Command.parseCommand("somecommand somparameter");
@@ -289,15 +310,15 @@ public class CommandTest {
         assertThat(
                 toTestFor.getDocumentation(),
                 is(
-                        "command_testgetdocumentationformatting: \n" +
-                        "    this is some kind of description of the command.\n" +
-                        "    It is split across several lines and should be\n" +
-                        "    displayed very neatly.\n" +
-                        "  Parameters: \n" +
-                        "    - supportedparam1 (String|Hello World): This is the description of the parameter.\n" +
-                        "              Its default value will do this and that.\n" +
-                        "    - supportedparam2 (String): This is the description of another parameter.\n" +
-                        "              Its has no default value.\n"
+                        "command_testgetdocumentationformatting: " + System.lineSeparator() +
+                        "    this is some kind of description of the command." + System.lineSeparator() +
+                        "    It is split across several lines and should be" + System.lineSeparator() +
+                        "    displayed very neatly." + System.lineSeparator() +
+                        "  Parameters: " + System.lineSeparator() +
+                        "    - supportedparam1 (String|Hello World): This is the description of the parameter." + System.lineSeparator() +
+                        "              Its default value will do this and that." + System.lineSeparator() +
+                        "    - supportedparam2 (String): This is the description of another parameter." + System.lineSeparator() +
+                        "              Its has no default value." + System.lineSeparator()
                 )
         );
     }
@@ -320,7 +341,17 @@ public class CommandTest {
     }
 
     @Test
-    public void testHelpAll() {
+    public void testHelpAllWithoutDefaultCommands() {
+        Command.setDefaultCommandsEnabled(false);
+        assertThat(
+                Command.parseCommand("help").execute().isSuccess(),
+                is(true)
+        );
+    }
+
+    @Test
+    public void testHelpAllWithDefaultCommands() {
+        Command.setDefaultCommandsEnabled(true);
         assertThat(
                 Command.parseCommand("help").execute().isSuccess(),
                 is(true)
@@ -336,10 +367,10 @@ public class CommandTest {
                 stream.evaluate(),
                 is(
                         "Printing help for command 'help': " + System.lineSeparator() +
-                                "help: \n" +
-                                "    Prints the help you are currently reading.\n" +
-                                "  Parameters: \n" +
-                                "    - command (String|): The command to print the documentation for.\n" + System.lineSeparator()
+                                "help: " + System.lineSeparator() +
+                                "    Prints the help you are currently reading." + System.lineSeparator() +
+                                "  Parameters: " + System.lineSeparator() +
+                                "    - command (String|): The command to print the documentation for." + System.lineSeparator() + System.lineSeparator()
                 )
         );
     }
@@ -359,6 +390,18 @@ public class CommandTest {
                         .parseCommand(
                                 "help command command_testhelpspecificavailablecommand"
                         )
+                        .execute()
+                        .isSuccess(),
+                is(true)
+        );
+    }
+
+    @Test
+    public void testHelpSpecificDefaultCommand() {
+        Command.setDefaultCommandsEnabled(true);
+
+        assertThat(
+                Command.parseCommand("help command list")
                         .execute()
                         .isSuccess(),
                 is(true)
@@ -398,6 +441,15 @@ public class CommandTest {
         Command.addSupportedCommand(new SomeCustomCommand("list", "some description", new Parameter[0]));
 
         Command.parseCommand("list");
+    }
+
+    @Test
+    public void testAreDefaultCommandsEnabled() {
+        Command.setDefaultCommandsEnabled(true);
+        assertThat(Command.areDefaultCommandsEnabled(), is(true));
+
+        Command.setDefaultCommandsEnabled(false);
+        assertThat(Command.areDefaultCommandsEnabled(), is(false));
     }
 
     @SuppressWarnings("unused")

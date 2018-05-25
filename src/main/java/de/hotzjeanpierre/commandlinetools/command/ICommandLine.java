@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.hotzjeanpierre.commandlinetools;
+package de.hotzjeanpierre.commandlinetools.command;
 
 /**
  * Created by Jonny on 21.04.2018.
