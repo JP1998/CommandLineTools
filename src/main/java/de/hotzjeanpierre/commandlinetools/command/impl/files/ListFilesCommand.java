@@ -47,7 +47,7 @@ public class ListFilesCommand extends Command {
     private static final String PARAMETER_DESCRIPTION_FILTER = "The filter to apply to the search of files.";
 
     private static final String PARAMETER_NAME_FILTERMODE = "filtermode";
-    private static final String PARAMETER_DESCRIPTION_FILTERMODE = "[None, Filter, AllowOnly]; the filter mode to apply.";
+    private static final String PARAMETER_DESCRIPTION_FILTERMODE = "athe filter mode to apply.";
 
     private static final String PARAMETER_NAME_LISTFOLDERS = "listfolders";
     private static final String PARAMETER_DESCRIPTION_LISTFOLDERS = "Whether to list folders or not";

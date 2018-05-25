@@ -15,8 +15,9 @@
   - interpreter for false
 
 - a GUI that is more comfortable to use than the cli of Win7
-  - text-based but created with a window
-  - using streams to read / write (so System.out and Scanner may still be used)
+  - giving the possibility of viewing / recalling history with arrow keys
+//   - text-based but created with a window
+//   - using streams to read / write (so System.out and Scanner may still be used)
 
 // - refactoring:
 //   - FilterMode:

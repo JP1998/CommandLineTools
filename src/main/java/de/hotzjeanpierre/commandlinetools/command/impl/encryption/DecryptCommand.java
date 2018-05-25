@@ -44,7 +44,7 @@ public class DecryptCommand extends Command {
     private static final String PARAMETER_DESCRIPTION_FILTER = "The filter to apply to the search of files.";
 
     private static final String PARAMETER_NAME_FILTERMODE = "filtermode";
-    private static final String PARAMETER_DESCRIPTION_FILTERMODE = "[None, Filter, AllowOnly]; the filter mode to apply.";
+    private static final String PARAMETER_DESCRIPTION_FILTERMODE = "the filter mode to apply.";
 
     private static final String PARAMETER_NAME_SUBDIRECTORIES = "subdir";
     private static final String PARAMETER_DESCRIPTION_SUBDIRECTORIES = "Whether to also search within sub directories for files to decrypt.";

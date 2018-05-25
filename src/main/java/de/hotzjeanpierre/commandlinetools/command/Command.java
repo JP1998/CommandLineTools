@@ -17,6 +17,7 @@
 package de.hotzjeanpierre.commandlinetools.command;
 
 import de.hotzjeanpierre.commandlinetools.command.exceptions.*;
+import de.hotzjeanpierre.commandlinetools.command.impl.programming.ProgrammingLanguage;
 import de.hotzjeanpierre.commandlinetools.command.utils.Assurance;
 import de.hotzjeanpierre.commandlinetools.command.utils.Converter;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
@@ -218,7 +219,8 @@ public abstract class Command implements NamingValidator {
         assureLoadingOfCommands(
                 "de.hotzjeanpierre.commandlinetools.command.impl.encryption.EncryptCommand",
                 "de.hotzjeanpierre.commandlinetools.command.impl.encryption.DecryptCommand",
-                "de.hotzjeanpierre.commandlinetools.command.impl.files.ListFilesCommand"
+                "de.hotzjeanpierre.commandlinetools.command.impl.files.ListFilesCommand",
+                "de.hotzjeanpierre.commandlinetools.command.impl.programming.InterpretCommand"
         );
 
         // add the help command to the command list after sDefaultCommandsAreLoading is set back to false
@@ -642,24 +644,20 @@ public abstract class Command implements NamingValidator {
 
                 String[] paramDescrLines = param.getDescription().split("\\r?\\n");
 
-                if (param.getDefaultValue() == null) {
-                    result.append(StringProcessing.format(
-                            "    - {0} ({1}): {2}{3}",
-                            param.getName(),
-                            param.getType().getSimpleName(),
-                            paramDescrLines[0],
-                            System.lineSeparator()
-                    ));
-                } else {
-                    result.append(StringProcessing.format(
-                            "    - {0} ({1}|{2}): {3}{4}",
-                            param.getName(),
-                            param.getType().getSimpleName(),
-                            param.getDefaultValue(),
-                            paramDescrLines[0],
-                            System.lineSeparator()
-                    ));
-                }
+                result.append(
+                        StringProcessing.format(
+                                buildParameterLine(
+                                        param.getDefaultValue() != null,
+                                        param.getType().isEnum()
+                                ),
+                                param.getName(),
+                                param.getType().getSimpleName(),
+                                param.getDefaultValue(),
+                                (param.getType().isEnum())? buildEnumListing(param.getType()) : null,
+                                paramDescrLines[0],
+                                System.lineSeparator()
+                        )
+                );
 
                 for (int i = 1; i < paramDescrLines.length; i++) {
                     result.append(StringProcessing.format(
@@ -671,6 +669,52 @@ public abstract class Command implements NamingValidator {
             }
         }
 
+        return result.toString();
+    }
+
+    /**
+     * This method builds the format for the first line of the
+     * description of a parameter in the documentation of a command.
+     *
+     * @param hasDefaultValue whether the parameter has a default value
+     * @param isEnum whether the type of the given parameter is an enumeration
+     * @return the format to use for the first line of the description of the parameter
+     */
+    private static String buildParameterLine(boolean hasDefaultValue, boolean isEnum) {
+        StringBuilder result = new StringBuilder("    - {0} ({1}");
+
+        if(hasDefaultValue) {
+            result.append("|{2}");
+        }
+
+        result.append("): ");
+
+        if(isEnum) {
+            result.append("[{3}]; ");
+        }
+
+        result.append("{4}{5}");
+
+        return result.toString();
+    }
+
+    /**
+     * This method builds the listing of the valid values of the
+     * given enumeration-type.
+     *
+     * @param type the type whose enum-values are to be listed
+     * @return the listing of the valid values for the given enum-type
+     */
+    private static String buildEnumListing(Class type) {
+        StringBuilder result = new StringBuilder();
+
+        Object[] values = type.getEnumConstants();
+        for(int i = 0; i < values.length; i++) {
+            if(i != 0) {
+                result.append(", ");
+            }
+            result.append(values[i].toString());
+        }
         return result.toString();
     }
 
