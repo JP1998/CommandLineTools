@@ -42,7 +42,7 @@ public class TextComponentInputStream extends InputStream {
     /**
      * Whether this stream has been closed or not
      */
-    private boolean closed;
+    private volatile boolean closed;
 
     /**
      * The current amount of captured characters in the buffer.
@@ -97,7 +97,7 @@ public class TextComponentInputStream extends InputStream {
             if(c_temp != null) {
                 c = c_temp;
             }
-        }catch (InterruptedException exc){
+        } catch (InterruptedException exc) {
             exc.printStackTrace();
         }
 

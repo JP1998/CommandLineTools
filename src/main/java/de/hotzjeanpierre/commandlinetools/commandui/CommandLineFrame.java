@@ -17,6 +17,7 @@
 package de.hotzjeanpierre.commandlinetools.commandui;
 
 import de.hotzjeanpierre.commandlinetools.command.ICommandLine;
+import de.hotzjeanpierre.commandlinetools.command.ICommandLineApplication;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import de.hotzjeanpierre.commandlinetools.commandui.streams.TextComponentInputStream;
 import de.hotzjeanpierre.commandlinetools.commandui.streams.TextComponentOutputStream;
@@ -54,12 +55,6 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
     private void init() {
         this.initView();
 
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                CommandLineFrame.this.onDispose();
-            }
-        });
 
         TextComponentOutputStream newStdOut = new TextComponentOutputStream(cliTextArea);
         TextComponentInputStream newStdIn = new TextComponentInputStream(cliTextArea);
@@ -70,7 +65,19 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
 
         this.pack();
 
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+//                CommandLineFrame.this.onDispose();
+//                dispose();
+
+                associatedApplication.onCLITermination();
+                onDispose();
+                dispose();
+            }
+        });
 
         this.setVisible(true);
         this.setSize(600, 400);
@@ -134,8 +141,12 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
         }
     }
 
+    private ICommandLineApplication associatedApplication;
+
     @Override
-    public void setupCLI() {}
+    public void setupCLI(ICommandLineApplication associatedApplication) {
+        this.associatedApplication = associatedApplication;
+    }
 
     @Override
     public void onStartExecution(String cmd) {

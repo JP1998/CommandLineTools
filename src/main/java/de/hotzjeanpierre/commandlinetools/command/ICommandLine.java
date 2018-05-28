@@ -24,7 +24,7 @@ public interface ICommandLine {
     /**
      * This method is supposed to setup the command line.
      */
-    void setupCLI();
+    void setupCLI(ICommandLineApplication associatedApplication);
 
     /**
      * This method is called whenever the execution of a command starts.

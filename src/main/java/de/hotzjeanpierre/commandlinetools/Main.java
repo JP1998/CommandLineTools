@@ -24,11 +24,13 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-public class Main {
+public class Main implements ICommandLineApplication {
+
+    private static final Main APPLICATION = new Main();
 
     private static final ICommandLine DEFAULT_CLI = new ICommandLine() {
         @Override
-        public void setupCLI() { }
+        public void setupCLI(ICommandLineApplication associatedApplication) { }
 
         @Override
         public void clearCLI() {
@@ -50,14 +52,21 @@ public class Main {
         public void disposeCLI() { }
     };
 
-    private static ICommandLine cli;
-
-    private static boolean running;
-
     public static void main(String[] args) {
+        APPLICATION.execute(args);
+    }
+
+
+
+
+    private ICommandLine cli;
+
+    private boolean running;
+
+    public void execute(String[] args) {
         cli = determineCLI(args);
 
-        cli.setupCLI();
+        cli.setupCLI(this);
 
         Command.assureLoadingOfCommands(
                 "de.hotzjeanpierre.commandlinetools.Main$ExitCommand",
@@ -107,6 +116,11 @@ public class Main {
         cli.disposeCLI();
     }
 
+    @Override
+    public void onCLITermination() {
+        this.running = false;
+    }
+
     private static ICommandLine determineCLI(String[] args) {
         if(ArrayHelper.containsAny(args, "ui", "-ui", "/ui")) {
             return new CommandLineFrame();
@@ -132,7 +146,7 @@ public class Main {
 
         @Override
         protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
-            Main.running = false;
+            APPLICATION.running = false;
             return new CommandExecutionResult.Builder()
                     .setSuccess(true)
                     .build();
@@ -156,7 +170,7 @@ public class Main {
 
         @Override
         protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
-            Main.cli.clearCLI();
+            APPLICATION.cli.clearCLI();
             return new CommandExecutionResult.Builder()
                     .setSuccess(true)
                     .build();
