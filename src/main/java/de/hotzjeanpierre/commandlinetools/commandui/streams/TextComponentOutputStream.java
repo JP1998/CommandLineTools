@@ -16,8 +16,9 @@
 
 package de.hotzjeanpierre.commandlinetools.commandui.streams;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.text.JTextComponent;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -45,7 +46,7 @@ public class TextComponentOutputStream extends OutputStream {
     }
 
     @Override
-    public void write(int b) throws IOException {
+    public void write(int b) {
         if(b != 13) {
             console.setText(console.getText() + ((char) b));
         }
@@ -54,10 +55,8 @@ public class TextComponentOutputStream extends OutputStream {
     }
 
     @Override
-    public void write(byte[] bytes, int off, int len) throws IOException {
-        if(bytes == null){
-            throw new NullPointerException();
-        } else if((off < 0) || (off > bytes.length) || (len < 0) || ((off + len) > bytes.length) || ((off + len) < 0)) {
+    public void write(@NotNull byte[] bytes, int off, int len) {
+        if((off < 0) || (off > bytes.length) || (len < 0) || ((off + len) > bytes.length) || ((off + len) < 0)) {
             throw new IndexOutOfBoundsException();
         } else if(len == 0){
             return;

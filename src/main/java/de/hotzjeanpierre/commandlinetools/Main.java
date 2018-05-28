@@ -56,9 +56,6 @@ public class Main implements ICommandLineApplication {
         APPLICATION.execute(args);
     }
 
-
-
-
     private ICommandLine cli;
 
     private boolean running;

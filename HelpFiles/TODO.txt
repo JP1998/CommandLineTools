@@ -16,6 +16,8 @@
 
 - a GUI that is more comfortable to use than the cli of Win7
   - giving the possibility of viewing / recalling history with arrow keys
+    - maybe adding a cap of the amount of records that are being captured
+    - maybe adding a possibility of clearing the record history (for improved security with passwords)
 //   - text-based but created with a window
 //   - using streams to read / write (so System.out and Scanner may still be used)
 
