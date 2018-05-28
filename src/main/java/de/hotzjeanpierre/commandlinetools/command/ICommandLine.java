@@ -17,7 +17,9 @@
 package de.hotzjeanpierre.commandlinetools.command;
 
 /**
- * Created by Jonny on 21.04.2018.
+ * This interface gives some base methods that should give
+ * some framework for an application that enables one to
+ * execute commands.
  */
 public interface ICommandLine {
 
