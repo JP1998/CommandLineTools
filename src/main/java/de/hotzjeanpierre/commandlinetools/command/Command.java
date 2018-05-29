@@ -412,14 +412,8 @@ public abstract class Command implements NamingValidator {
             ParameterNotFoundException, ParameterTypeMismatchException,
             DuplicateParameterException, MissingParameterException {
 
-        // tokenize the String and make sure the number of key-value pairs for the parameters is valid.
+        // tokenize the String so the single tokens can be parsed
         String[] tokens = StringProcessing.tokenizeCommand(toParse);
-        if (tokens.length % 2 != 1) {
-            throw new CommandArgumentNumberMismatchException(StringProcessing.format(
-                    "Command may not have odd number of parameters; Given:{0};\nPlease use the format '<commandname> [<parameterkey> <parametervalue>]+'",
-                    tokens.length - 1
-            ));
-        }
 
         // retrieve the command template and assure that it is supported
         Command template = Command.findTemplateFromName(tokens[0].trim().toLowerCase());
@@ -431,19 +425,34 @@ public abstract class Command implements NamingValidator {
 
         // parse the single *given* key-value pairs into parameter-values
         List<Parameter.Value> valueList = new ArrayList<>();
-        for (int i = 1; i < tokens.length; i += 2) {
-            // retrieve the parameter and assure it exists for the given command
-            Parameter param = findParameterByName(template, tokens[i].toLowerCase());
-            if (param == null) {
-                throw new ParameterNotFoundException(StringProcessing.format(
-                        "Parameter '{0}' has not been found for command '{1}'.",
-                        tokens[i], template.name
-                ));
-            }
+        for (int i = 1; i < tokens.length; ) {
+            // variables for the amount of tokens used for the parameter,
+            // the parameter that get a value assigned and the value that will be assigned
+            int jump;
+            Parameter param;
+            Object value;
 
-            // parse the value from the string and the type of the parameter
-            // assure that the value has been correctly parsed into the given type6
-            Object value = sUsedConverter.convert(tokens[i + 1], param.getType());
+            if(tokens[i].startsWith("--")) {
+                // handle a boolean parameter with implicit value
+                int stripLength;
+                if(tokens[i].startsWith("--not-")) {
+                    stripLength = 6;
+                    value = false;
+                } else {
+                    stripLength = 2;
+                    value = true;
+                }
+
+                param = findParameterByName(template, tokens[i].substring(stripLength).toLowerCase());
+                checkNullParam(param, tokens[i].substring(stripLength), template.name);
+                jump = 1;
+            } else {
+                // handle any parameter with explicit value given
+                param = findParameterByName(template, tokens[i].toLowerCase());
+                checkNullParam(param, tokens[i], template.name);
+                value = sUsedConverter.convert(tokens[i + 1], param.getType());
+                jump = 2;
+            }
 
             if (value == null) {
                 throw new ParameterTypeMismatchException(StringProcessing.format(
@@ -457,6 +466,7 @@ public abstract class Command implements NamingValidator {
 
             // add the parsed value to the list of values
             valueList.add(param.createValue(value));
+            i += jump;
         }
 
         // now we filter the list, in case it has duplicate values of a parameter key,
@@ -466,6 +476,15 @@ public abstract class Command implements NamingValidator {
 
         // finally create the actually executable command
         return template.new ExecutableCommand(arguments);
+    }
+
+    private static void checkNullParam(Parameter paramToCheck, String paramName, String commandName) {
+        if (paramToCheck == null) {
+            throw new ParameterNotFoundException(StringProcessing.format(
+                    "Parameter '{0}' has not been found for command '{1}'.",
+                    paramName, commandName
+            ));
+        }
     }
 
     /**
@@ -680,6 +699,7 @@ public abstract class Command implements NamingValidator {
      * @param isEnum whether the type of the given parameter is an enumeration
      * @return the format to use for the first line of the description of the parameter
      */
+    @NotNull
     private static String buildParameterLine(boolean hasDefaultValue, boolean isEnum) {
         StringBuilder result = new StringBuilder("    - {0} ({1}");
 
@@ -705,7 +725,8 @@ public abstract class Command implements NamingValidator {
      * @param type the type whose enum-values are to be listed
      * @return the listing of the valid values for the given enum-type
      */
-    private static String buildEnumListing(Class type) {
+    @NotNull
+    private static String buildEnumListing(@NotNull Class type) {
         StringBuilder result = new StringBuilder();
 
         Object[] values = type.getEnumConstants();

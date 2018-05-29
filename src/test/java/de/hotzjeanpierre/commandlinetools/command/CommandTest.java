@@ -183,9 +183,34 @@ public class CommandTest {
         );
     }
 
-    @Test(expected = CommandArgumentNumberMismatchException.class)
-    public void testParsingInvalidNumberOfParameters() {
-        Command.parseCommand("somecommand somparameter");
+//    @Test(expected = CommandNotSupportedException.class)
+//    public void testParsingInvalidNumberOfParameters() {
+//        Command.parseCommand("somecommand somparameter");
+//    }
+
+    @Test
+    public void testBooleanShortcut() {
+        Command.addSupportedCommand(new SomeBooleanTestCommand());
+
+        Command.parseCommand("somebooltest --bool1 --not-bool2").execute();
+        assertThat(
+                SomeBooleanTestCommand.last_bool1_value,
+                is(true)
+        );
+        assertThat(
+                SomeBooleanTestCommand.last_bool2_value,
+                is(false)
+        );
+
+        Command.parseCommand("somebooltest --not-bool1 --bool2").execute();
+        assertThat(
+                SomeBooleanTestCommand.last_bool1_value,
+                is(false)
+        );
+        assertThat(
+                SomeBooleanTestCommand.last_bool2_value,
+                is(true)
+        );
     }
 
     @Test(expected = CommandNotSupportedException.class)
@@ -490,6 +515,42 @@ public class CommandTest {
                     getName().equals(((SomeCustomCommand) obj).getName()) &&
                     getDescription().equals(((SomeCustomCommand) obj).getDescription()) &&
                     isDeleteInput() == ((SomeCustomCommand) obj).isDeleteInput();
+        }
+    }
+
+    static class SomeBooleanTestCommand extends Command {
+
+        public SomeBooleanTestCommand() {
+            super(
+                    "somebooltest",
+                    "A quick description",
+                    new Parameter[]{
+                            new Parameter(
+                                    "bool1",
+                                    Boolean.class,
+                                    "some boolean parameter"
+                            ),
+                            new Parameter(
+                                    "bool2",
+                                    Boolean.class,
+                                    "some other boolean parameter",
+                                    true
+                            )
+                    }
+            );
+        }
+
+        public static boolean last_bool1_value;
+        public static boolean last_bool2_value;
+
+        @Override
+        protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
+            last_bool1_value = (boolean) params.getValue("bool1");
+            last_bool2_value = (boolean) params.getValue("bool2");
+
+            return new CommandExecutionResult.Builder()
+                    .setSuccess(true)
+                    .build();
         }
     }
 

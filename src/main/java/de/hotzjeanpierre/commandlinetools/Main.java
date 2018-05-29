@@ -108,6 +108,7 @@ public class Main implements ICommandLineApplication {
 
                 cli.onEndExecution();
             }
+            System.out.println();
         }
 
         cli.disposeCLI();
