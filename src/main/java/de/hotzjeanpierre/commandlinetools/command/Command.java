@@ -25,10 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>This class is used to easily implement functionality with commands read from console.
@@ -310,7 +307,23 @@ public abstract class Command implements NamingValidator {
         }
 
         this.deleteInput = deleteInput;
+
+        orderedParameterList = new ArrayList<>();
+        for(String parameterName : parameterList.keySet()) {
+            Parameter paramToCheck = parameterList.get(parameterName);
+            if(paramToCheck.getOrdinal() >= 0) {
+                orderedParameterList.add(paramToCheck);
+            }
+        }
+        orderedParameterList.sort(Comparator.comparing(Parameter::getOrdinal));
     }
+
+    /**
+     * This list contains the ordered version of all the parameters
+     * given a significant ordinal, in the order determined by the
+     * assigned ordinal.
+     */
+    private List<Parameter> orderedParameterList;
 
     /*                                                                 *
      * =============================================================== *
@@ -398,7 +411,6 @@ public abstract class Command implements NamingValidator {
      *
      * @param toParse the string to parse an ExecutableCommand from
      * @return the ExecutableCommand that has been represented by the given String
-     * @throws CommandArgumentNumberMismatchException if the one of the parameters is not a key-value pair
      * @throws CommandNotSupportedException           if the command is not found in the supported command pool
      * @throws ParameterNotFoundException             if a given parameter-key is not found for the given command
      * @throws ParameterTypeMismatchException         if one of the parameter-values cannot be converted to the desired type
@@ -407,7 +419,7 @@ public abstract class Command implements NamingValidator {
      */
     @NotNull
     public static ExecutableCommand parseCommand(String toParse)
-            throws CommandArgumentNumberMismatchException, CommandNotSupportedException,
+            throws CommandNotSupportedException,
             ParameterNotFoundException, ParameterTypeMismatchException,
             DuplicateParameterException, MissingParameterException {
 
@@ -422,6 +434,12 @@ public abstract class Command implements NamingValidator {
             ));
         }
 
+        boolean[] usedListParameters = new boolean[template.orderedParameterList.size()];
+        int currentListParameter = 0;
+        for(int i = 0; i < usedListParameters.length; i++) {
+            usedListParameters[i] = false;
+        }
+
         // parse the single *given* key-value pairs into parameter-values
         List<Parameter.Value> valueList = new ArrayList<>();
         for (int i = 1; i < tokens.length; ) {
@@ -433,6 +451,7 @@ public abstract class Command implements NamingValidator {
 
             if(tokens[i].startsWith("--")) {
                 // handle a boolean parameter with implicit value
+                // first determine the length of the prefix and the value to assign
                 int stripLength;
                 if(tokens[i].startsWith("--not-")) {
                     stripLength = 6;
@@ -442,15 +461,56 @@ public abstract class Command implements NamingValidator {
                     value = true;
                 }
 
+                // determine the parameter to assign the value to and check it for being null
                 param = findParameterByName(template, tokens[i].substring(stripLength).toLowerCase());
                 checkNullParam(param, tokens[i].substring(stripLength), template.name);
                 jump = 1;
             } else {
-                // handle any parameter with explicit value given
+
                 param = findParameterByName(template, tokens[i].toLowerCase());
-                checkNullParam(param, tokens[i], template.name);
-                value = sUsedConverter.convert(tokens[i + 1], param.getType());
-                jump = 2;
+                if(param == null) {
+                    // try to parse the given token as value for the next list parameter
+
+                    // search for the next parameter that has not yet been used
+                    while (currentListParameter < template.orderedParameterList.size()
+                            && usedListParameters[currentListParameter]) {
+                        currentListParameter++;
+                    }
+
+                    // if the end of the parameter list is reached we know that the command we need to parse is faulty
+                    if(currentListParameter == template.orderedParameterList.size()) {
+                        throw new ParameterNotFoundException(StringProcessing.format(
+                                "\"{0}\" was not found as parameter name and could also not be implicitly assigned to a parameter.",
+                                tokens[i]
+                        ));
+                    }
+
+                    // get the parameter from the list, flag it as used and parse the value for the parameter
+                    param = template.orderedParameterList.get(currentListParameter);
+                    usedListParameters[currentListParameter++] = true;
+                    value = sUsedConverter.convert(tokens[i], param.getType());
+
+                    if (value == null) {
+                        throw new ParameterTypeMismatchException(StringProcessing.format(
+                                "Tried to implicitly assign the value '{0}' to the parameter '{1}' of command '{2}'.{3}This parameter though, needs a value of type {4}, which '{0}' could not be parsed to.",
+                                tokens[i],
+                                param.getName(),
+                                template.getName(),
+                                System.lineSeparator(),
+                                param.getType().getSimpleName()
+                        ));
+                    }
+
+                    jump = 1;
+
+                } else {
+                    // handle any parameter with explicit value given
+                    int index = template.orderedParameterList.indexOf(param);
+                    usedListParameters[index] = true;
+
+                    value = sUsedConverter.convert(tokens[i + 1], param.getType());
+                    jump = 2;
+                }
             }
 
             if (value == null) {
@@ -816,7 +876,8 @@ public abstract class Command implements NamingValidator {
                                     "command",
                                     String.class,
                                     "The command to print the documentation for.",
-                                    ""
+                                    "",
+                                    0
                             )
                     }
             );

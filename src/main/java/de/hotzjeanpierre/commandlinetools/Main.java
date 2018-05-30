@@ -88,6 +88,7 @@ public class Main implements ICommandLineApplication {
             } catch (Exception exc) {
                 System.out.println("Seems like your instruction included mistakes. Here's the error message:");
                 System.out.println(exc.getMessage());
+                System.out.println();
                 error = true;
             }
 
@@ -108,7 +109,6 @@ public class Main implements ICommandLineApplication {
 
                 cli.onEndExecution();
             }
-            System.out.println();
         }
 
         cli.disposeCLI();

@@ -23,7 +23,12 @@ import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
  * This class represents a parameter that can be taken by a command.
  * It consists of a name (which is used to identify a parameter),
  * a description (which will be displayed to the user in the help-command,
- * or in general in the documentation of a command) and a type of the parameter.
+ * or in general in the documentation of a command) a type of the parameter
+ * and an ordinal. This ordinal can be used to give parameters in the list-form
+ * to a command. The ordinal in this case will determine which parameter will
+ * receive which value. This means the parameter with the lowest non-negative
+ * ordinal will receive the first value without an explicit parameter name,
+ * after which the parameter with the next higher ordinal will follow.
  * A parameter will only allow values being produced with a value that
  * is of the type the parameter requires.
  * Also a parameter may have a default value, which will be assigned to
@@ -56,23 +61,31 @@ public class Parameter implements NamingValidator {
     private Object defaultValue;
 
     /**
-     * This constructor creates a parameter with given name, description and type.
-     * The parameter will have no default value.
+     * The ordinal that has been assigned to the parameter.
+     */
+    private int ordinal;
+
+    /**
+     * This constructor creates a parameter with given name, description, type and ordinal.
+     * A negative ordinal will make the parameter not be able to be used in the list-form of
+     * a command. The parameter will have no default value.
      *
      * @param name        The name the parameter should have
      * @param type        The type the parameters values should have
      * @param description The description of the parameter
+     * @param order       The weight to be used for the index / ordinal;
      * @throws NullPointerException     in case the name, type or description is {@code null}
      * @throws IllegalArgumentException in case the name or description is empty
      */
-    public Parameter(String name, Class type, String description)
+    public Parameter(String name, Class type, String description, int order)
             throws NullPointerException, IllegalArgumentException {
-        this(name, type, description, null);
+        this(name, type, description, null, order);
     }
 
     /**
      * This constructor creates a parameter with given name, description, type
-     * and default value.
+     * and default value. It will have an ordinal of -1, whereas it will not be able
+     * to be used in the list-form.
      *
      * @param name         The name the parameter should have
      * @param type         The type the parameters values should have
@@ -81,7 +94,26 @@ public class Parameter implements NamingValidator {
      * @throws NullPointerException     in case the name, type or description is {@code null}
      * @throws IllegalArgumentException in case the name or description is empty
      */
-    public Parameter(String name, Class<?> type, String description, Object defaultValue) {
+    public Parameter(String name, Class<?> type, String description, Object defaultValue)
+            throws NullPointerException, IllegalArgumentException {
+        this(name, type, description, defaultValue, -1);
+    }
+
+    /**
+     * This constructor creates a parameter with given name, description, type, default value
+     * and ordinal. A negative ordinal will make the parameter not be able to be used in the
+     * list-form of a command. The parameter will have no default value.
+     *
+     * @param name         The name the parameter should have
+     * @param type         The type the parameters values should have
+     * @param description  The description of the parameter
+     * @param defaultValue The default value of the parameter
+     * @param order        The weight to be used for the index / ordinal;
+     * @throws NullPointerException     in case the name, type or description is {@code null}
+     * @throws IllegalArgumentException in case the name or description is empty
+     */
+    public Parameter(String name, Class<?> type, String description, Object defaultValue, int order)
+            throws NullPointerException, IllegalArgumentException {
         if (name == null) {
             throw new NullPointerException("Name of a parameter may not be null.");
         } else if (name.trim().length() == 0) {
@@ -114,6 +146,7 @@ public class Parameter implements NamingValidator {
         this.type = type;
         this.description = description;
         this.defaultValue = defaultValue;
+        this.ordinal = order;
     }
 
     /**
@@ -150,6 +183,15 @@ public class Parameter implements NamingValidator {
      */
     public Object getDefaultValue() {
         return defaultValue;
+    }
+
+    /**
+     * This method gives you the ordinal that has been assigned to the parameter.
+     *
+     * @return the ordinal of the parameter
+     */
+    public int getOrdinal() {
+        return ordinal;
     }
 
     /**

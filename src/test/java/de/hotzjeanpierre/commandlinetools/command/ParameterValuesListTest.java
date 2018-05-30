@@ -39,7 +39,8 @@ public class ParameterValuesListTest {
         Parameter parameter = new Parameter(
                 "someparameter",
                 SomeClass.class,
-                "this is some parameter"
+                "this is some parameter",
+                0
         );
 
         SomeClass value = new SomeSubClass(1, 2.3, true);

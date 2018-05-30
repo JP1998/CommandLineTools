@@ -1,4 +1,7 @@
 
+- maybe implement lazy conversion for parameter values?
+  -> could improve runtime for commands with parameters that are
+     not always used but have an expensive conversion
 - implement some kind of lightweight pattern matching for Filtering files
 
 - some default command such as:
@@ -16,7 +19,7 @@
 
 - a GUI that is more comfortable to use than the cli of Win7
   - giving the possibility of a implicit parameter passing through a defined order for the parameters without default values
-  - giving the possibility of viewing / recalling history with arrow keys
+  /- giving the possibility of viewing / recalling history with arrow keys
     - maybe adding a cap of the amount of records that are being captured
     - maybe adding a possibility of clearing the record history (for improved security with passwords)
 //   - giving the possibility of a short notation for boolean parameters ("--<name>" for true and "--not-<name>" for false)

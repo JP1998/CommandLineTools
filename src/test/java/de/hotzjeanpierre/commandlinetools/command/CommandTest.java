@@ -113,7 +113,8 @@ public class CommandTest {
         Parameter toRetrieve = new Parameter(
                 "someparameter2",
                 SomeClass.class,
-                "some description"
+                "some description",
+                0
         );
 
         assertThat(
@@ -121,7 +122,7 @@ public class CommandTest {
                         "somecommand",
                         "some description",
                         new Parameter[]{
-                                new Parameter("irrelevant", SomeSubClass.class, "some irrelevant description"),
+                                new Parameter("irrelevant", SomeSubClass.class, "some irrelevant description", 0),
                                 toRetrieve
                         },
                         false) {
@@ -259,7 +260,7 @@ public class CommandTest {
                         "command_testparametertypevalid",
                         "some description",
                         new Parameter[] {
-                                new Parameter("supportedparam1", String.class, "some description")
+                                new Parameter("supportedparam1", String.class, "some description", 0)
                         }
                 )
         );
@@ -274,7 +275,7 @@ public class CommandTest {
                         "command_testduplicateparameterfailing",
                         "some description",
                         new Parameter[] {
-                                new Parameter("supportedparam1", String.class, "some description")
+                                new Parameter("supportedparam1", String.class, "some description", 0)
                         }
                 )
         );
@@ -327,7 +328,8 @@ public class CommandTest {
                         new Parameter(
                                 "supportedparam2",
                                 String.class,
-                                "This is the description of another parameter.\nIts has no default value."
+                                "This is the description of another parameter.\nIts has no default value.",
+                                0
                         ),
                 }
         );
@@ -528,7 +530,8 @@ public class CommandTest {
                             new Parameter(
                                     "bool1",
                                     Boolean.class,
-                                    "some boolean parameter"
+                                    "some boolean parameter",
+                                    0
                             ),
                             new Parameter(
                                     "bool2",

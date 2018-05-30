@@ -99,7 +99,7 @@ public class ParameterTest {
 
     @Test
     public void testParameterNameForValueCorrect() {
-        Parameter testedParameter = new Parameter("somename", SomeClass.class, "some description");
+        Parameter testedParameter = new Parameter("somename", SomeClass.class, "some description", 0);
 
         assertThat(
                 testedParameter.createValue(new SomeClass(1, 2.3)).getParameterName(),
@@ -109,7 +109,7 @@ public class ParameterTest {
 
     @Test
     public void testParameterCreatesValueWithGivenValue() {
-        Parameter testedParameter = new Parameter("somename", SomeClass.class, "some description");
+        Parameter testedParameter = new Parameter("somename", SomeClass.class, "some description", 0);
 
         assertThat(
                 testedParameter.createValue(new SomeClass(1, 2.3)).getValue(),
@@ -125,7 +125,8 @@ public class ParameterTest {
                 new Parameter(
                         "someparameter",
                         type,
-                        "some description"
+                        "some description",
+                        0
                 ).getType(),
                 is((Object) type)
         );
@@ -163,7 +164,8 @@ public class ParameterTest {
                 new Parameter(
                         "someparameter",
                         SomeClass.class,
-                        "This is some extended description which we want to test."
+                        "This is some extended description which we want to test.",
+                        0
                 ).getDescription(),
                 is("This is some extended description which we want to test.")
         );

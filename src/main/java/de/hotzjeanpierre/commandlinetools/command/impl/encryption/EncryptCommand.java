@@ -72,7 +72,8 @@ public class EncryptCommand extends Command {
                         new Parameter(
                                 PARAMETER_NAME_SOURCE,
                                 File.class,
-                                PARAMETER_DESCRIPTION_SOURCE
+                                PARAMETER_DESCRIPTION_SOURCE,
+                                0
                         ),
                         new Parameter(
                                 PARAMETER_NAME_DELETESOURCE,
@@ -101,7 +102,8 @@ public class EncryptCommand extends Command {
                         new Parameter(
                                 PARAMETER_NAME_OUTPUTPATH,
                                 File.class,
-                                PARAMETER_DESCRIPTION_OUTPUTPATH
+                                PARAMETER_DESCRIPTION_OUTPUTPATH,
+                                1
                         ),
                         new Parameter(
                                 PARAMETER_NAME_FORMAT,
@@ -112,7 +114,8 @@ public class EncryptCommand extends Command {
                         new Parameter(
                                 PARAMETER_NAME_PASSWORD,
                                 String.class,
-                                PARAMETER_DESCRIPTION_PASSWORD
+                                PARAMETER_DESCRIPTION_PASSWORD,
+                                2
                         )
                 },
                 true

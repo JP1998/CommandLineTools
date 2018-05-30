@@ -72,7 +72,8 @@ public class ListFilesCommand extends Command {
                         new Parameter(
                                 PARAMETER_NAME_SOURCE,
                                 File.class,
-                                PARAMETER_DESCRIPTION_SOURCE
+                                PARAMETER_DESCRIPTION_SOURCE,
+                                0
                         ),
                         new Parameter(
                                 PARAMETER_NAME_TREE,
