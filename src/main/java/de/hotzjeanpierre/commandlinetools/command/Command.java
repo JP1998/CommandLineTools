@@ -256,17 +256,40 @@ public abstract class Command implements NamingValidator {
      * Whether you are supposed to delete the input of the command before executing it, or not.
      */
     private boolean deleteInput;
+    /**
+     * This list contains the ordered version of all the parameters
+     * given a significant ordinal, in the order determined by the
+     * assigned ordinal.
+     */
+    private List<Parameter> orderedParameterList;
 
+    /**
+     * This constructor creates a Command with given name, description, parameters.
+     * It will not clear the console after execution.
+     * The name is used to identify a call of a command, and thus may neither be null nor empty.
+     * Same goes for the description except that this is because we want to give the user a
+     * pleasant experience. Thus the default command "help" prints the description of a
+     * command along with further information about the command.
+     * The list of parameters may be null, but may not contain any null items.
+     *
+     * @param name        the name of the command to construct
+     * @param description the description of what the constructed command does
+     * @param paramList   the list of parameters wo use for the command (may be null)
+     * @throws NullPointerException     if the name, description or one of the items of the given parameter list is null
+     * @throws IllegalArgumentException if the name or the description is empty
+     */
     protected Command(String name, String description, Parameter[] paramList)
             throws NullPointerException, IllegalArgumentException {
         this(name, description, paramList, false);
     }
 
     /**
-     * This constructor creates a Command with given name, description and parameters.
-     * The name is used to identify a call of a command, and thus may neitber be null nor empty.
+     * This constructor creates a Command with given name, description, parameters and
+     * the value that determines whether the console is to be cleared after
+     * execution of the command.
+     * The name is used to identify a call of a command, and thus may neither be null nor empty.
      * Same goes for the description except that this is because we want to give the user a
-     * pleasant expierence. Thus the default command "help" prints the description of a
+     * pleasant experience. Thus the default command "help" prints the description of a
      * command along with further information about the command.
      * The list of parameters may be null, but may not contain any null items.
      *
@@ -279,6 +302,7 @@ public abstract class Command implements NamingValidator {
      */
     protected Command(String name, String description, Parameter[] paramList, boolean deleteInput)
             throws NullPointerException, IllegalArgumentException {
+        // check name and description for validity
         if (name == null) {
             throw new NullPointerException("Name of a command may not be null.");
         } else if (name.trim().equals("")) {
@@ -299,31 +323,29 @@ public abstract class Command implements NamingValidator {
         this.name = name;
         this.description = description;
 
+        // transform the parameter list into a hashmap
         this.parameterList = new HashMap<>();
+        orderedParameterList = new ArrayList<>();
         if (paramList != null) {
             for (Parameter param : paramList) {
                 this.parameterList.put(param.getName(), param);
+                if(param.getOrdinal() >= 0) {
+                    orderedParameterList.add(param);
+                }
             }
         }
 
         this.deleteInput = deleteInput;
 
-        orderedParameterList = new ArrayList<>();
-        for(String parameterName : parameterList.keySet()) {
-            Parameter paramToCheck = parameterList.get(parameterName);
-            if(paramToCheck.getOrdinal() >= 0) {
-                orderedParameterList.add(paramToCheck);
-            }
-        }
+//        for(String parameterName : parameterList.keySet()) {
+//            Parameter param = parameterList.get(parameterName);
+//        }
         orderedParameterList.sort(Comparator.comparing(Parameter::getOrdinal));
+        for(int i = 0; i < orderedParameterList.size(); i++) {
+            orderedParameterList.get(i).setOrdinal(i + 1);
+        }
     }
 
-    /**
-     * This list contains the ordered version of all the parameters
-     * given a significant ordinal, in the order determined by the
-     * assigned ordinal.
-     */
-    private List<Parameter> orderedParameterList;
 
     /*                                                                 *
      * =============================================================== *
@@ -463,7 +485,13 @@ public abstract class Command implements NamingValidator {
 
                 // determine the parameter to assign the value to and check it for being null
                 param = findParameterByName(template, tokens[i].substring(stripLength).toLowerCase());
-                checkNullParam(param, tokens[i].substring(stripLength), template.name);
+
+                if (param == null) {
+                    throw new ParameterNotFoundException(StringProcessing.format(
+                            "Parameter '{0}' has not been found for command '{1}'.",
+                            tokens[i].substring(stripLength), template.name
+                    ));
+                }
                 jump = 1;
             } else {
 
@@ -506,7 +534,9 @@ public abstract class Command implements NamingValidator {
                 } else {
                     // handle any parameter with explicit value given
                     int index = template.orderedParameterList.indexOf(param);
-                    usedListParameters[index] = true;
+                    if(index != -1) {
+                        usedListParameters[index] = true;
+                    }
 
                     value = sUsedConverter.convert(tokens[i + 1], param.getType());
                     jump = 2;
@@ -535,15 +565,6 @@ public abstract class Command implements NamingValidator {
 
         // finally create the actually executable command
         return template.new ExecutableCommand(arguments);
-    }
-
-    private static void checkNullParam(Parameter paramToCheck, String paramName, String commandName) {
-        if (paramToCheck == null) {
-            throw new ParameterNotFoundException(StringProcessing.format(
-                    "Parameter '{0}' has not been found for command '{1}'.",
-                    paramName, commandName
-            ));
-        }
     }
 
     /**
@@ -724,16 +745,14 @@ public abstract class Command implements NamingValidator {
 
                 result.append(
                         StringProcessing.format(
-                                buildParameterLine(
-                                        param.getDefaultValue() != null,
-                                        param.getType().isEnum()
-                                ),
+                                buildParameterLine(param),
                                 param.getName(),
                                 param.getType().getSimpleName(),
                                 param.getDefaultValue(),
                                 (param.getType().isEnum())? buildEnumListing(param.getType()) : null,
                                 paramDescrLines[0],
-                                System.lineSeparator()
+                                System.lineSeparator(),
+                                generateOrdinalString(param)
                         )
                 );
 
@@ -754,27 +773,53 @@ public abstract class Command implements NamingValidator {
      * This method builds the format for the first line of the
      * description of a parameter in the documentation of a command.
      *
-     * @param hasDefaultValue whether the parameter has a default value
-     * @param isEnum whether the type of the given parameter is an enumeration
+     * @param param the parameter for which the line is to be built
      * @return the format to use for the first line of the description of the parameter
      */
     @NotNull
-    private static String buildParameterLine(boolean hasDefaultValue, boolean isEnum) {
-        StringBuilder result = new StringBuilder("    - {0} ({1}");
-
-        if(hasDefaultValue) {
+    private static String buildParameterLine(@NotNull Parameter param) {
+        StringBuilder result = new StringBuilder("    {6} {0} ({1}");
+        if(param.getDefaultValue() != null) {
             result.append("|{2}");
         }
 
         result.append("): ");
 
-        if(isEnum) {
+        if(param.getType().isEnum()) {
             result.append("[{3}]; ");
         }
 
         result.append("{4}{5}");
 
         return result.toString();
+    }
+
+    /**
+     * This method generates the string that is supposed
+     * to display the ordinal of a parameter.
+     *
+     * @param param the parameter whose ordinal is to be displayed
+     * @return the string showing the ordinal of the parameter
+     */
+    private String generateOrdinalString(@NotNull Parameter param) {
+        if(param.getOrdinal() < 0) {
+            return StringProcessing.stretch(
+                    "-",
+                    ' ',
+                    Integer.toString(orderedParameterList.size()).length() + 1,
+                    false
+            );
+        } else {
+            return StringProcessing.format(
+                    "{0}.",
+                    StringProcessing.stretch(
+                            param.getOrdinal() + "",
+                            ' ',
+                            Integer.toString(orderedParameterList.size()).length(),
+                            true
+                    )
+            );
+        }
     }
 
     /**

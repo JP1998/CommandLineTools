@@ -219,6 +219,7 @@ public class StringProcessing {
      * @param str the string containing escape sequences
      * @return the string with descaped escape-sequences
      */
+    @NotNull
     private static String descape(@NotNull String str) {
         return str.replace("\\t", "\t").replace("\\b", "\b").replace("\\n", "\n")
                 .replace("\\r", "\r").replace("\\f", "\f").replace("\\'", "\'")
@@ -236,10 +237,6 @@ public class StringProcessing {
      */
     @NotNull
     public static String zeroPadding(int number, int length) {
-        return zeroPadding(number, length, 10);
-    }
-
-    public static String zeroPadding(int number, int length, int radix) {
         boolean negative = number < 0;
 
         if (negative) {
@@ -247,7 +244,7 @@ public class StringProcessing {
         }
 
         StringBuilder result = new StringBuilder(
-                Integer.toString(Math.abs(number), radix)
+                Integer.toString(Math.abs(number))
         );
 
         while (result.length() < length) {
@@ -256,6 +253,33 @@ public class StringProcessing {
 
         if (negative) {
             result.insert(0, "-");
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * This method stretches the given string to the given length while using
+     * the given character as a filler. This character is appended or prefixed
+     * depending on the value of {@code insertBefore}.
+     *
+     * @param toStretch the String to stretch
+     * @param filler the character to use as filler
+     * @param length the length the string is supposed to have afterwards
+     * @param insertBefore whether to insert the filler character before
+     *                    or after the string
+     * @return the string brought to given length with given filler character
+     */
+    @NotNull
+    public static String stretch(String toStretch, char filler, int length, boolean insertBefore) {
+        StringBuilder result = new StringBuilder(toStretch);
+
+        while (result.length() < length) {
+            if(insertBefore) {
+                result.insert(0, filler);
+            } else {
+                result.append(filler);
+            }
         }
 
         return result.toString();

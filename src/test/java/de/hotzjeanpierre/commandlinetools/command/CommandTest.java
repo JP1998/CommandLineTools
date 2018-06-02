@@ -342,9 +342,9 @@ public class CommandTest {
                         "    It is split across several lines and should be" + System.lineSeparator() +
                         "    displayed very neatly." + System.lineSeparator() +
                         "  Parameters: " + System.lineSeparator() +
-                        "    - supportedparam1 (String|Hello World): This is the description of the parameter." + System.lineSeparator() +
+                        "    -  supportedparam1 (String|Hello World): This is the description of the parameter." + System.lineSeparator() +
                         "              Its default value will do this and that." + System.lineSeparator() +
-                        "    - supportedparam2 (String): This is the description of another parameter." + System.lineSeparator() +
+                        "    1. supportedparam2 (String): This is the description of another parameter." + System.lineSeparator() +
                         "              Its has no default value." + System.lineSeparator()
                 )
         );
@@ -397,7 +397,7 @@ public class CommandTest {
                                 "help: " + System.lineSeparator() +
                                 "    Prints the help you are currently reading." + System.lineSeparator() +
                                 "  Parameters: " + System.lineSeparator() +
-                                "    - command (String|): The command to print the documentation for." + System.lineSeparator() + System.lineSeparator()
+                                "    1. command (String|): The command to print the documentation for." + System.lineSeparator() + System.lineSeparator()
                 )
         );
     }

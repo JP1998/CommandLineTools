@@ -1,6 +1,14 @@
 *.iml
 target/
 .idea/workspace.xml
+.idea/misc.xml
+.idea/compiler.xml
+.idea/modules.xml
+.idea/uiDesigner.xml
+.idea/vcs.xml
+.idea/artifacts/
+.idea/libraries/
+.idea/inspectionProfiles/
 lib/
 src/main/java/de/hotzjeanpierre/commandlinetools/command/impl/utils/asdf.java
 src/main/java/de/hotzjeanpierre/commandlinetools/TestingMain.kt

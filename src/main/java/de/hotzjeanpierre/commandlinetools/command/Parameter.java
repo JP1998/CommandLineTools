@@ -194,6 +194,10 @@ public class Parameter implements NamingValidator {
         return ordinal;
     }
 
+    /* package-protected */ void setOrdinal(int ordinal) {
+        this.ordinal = ordinal;
+    }
+
     /**
      * This method creates a {@link Parameter.Value}-object with the given value,
      * while also making sure that the type of the parameter is correct.
