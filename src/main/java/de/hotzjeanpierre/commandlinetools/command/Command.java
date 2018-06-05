@@ -228,6 +228,11 @@ public abstract class Command implements NamingValidator {
         );
     }
 
+    public static boolean commandNameExists(String name) {
+        name = name.toLowerCase();
+        return sDefaultCommands.keySet().contains(name) || sSupportedCommands.keySet().contains(name);
+    }
+
     /*                                                                 *
      * =============================================================== *
      *                                                                 *
@@ -381,13 +386,11 @@ public abstract class Command implements NamingValidator {
     public static void addSupportedCommand(Command cmd) {
         if(cmd == null) return;
 
-        String cmdName = cmd.getName().toLowerCase();
-
-        if(!sDefaultCommands.keySet().contains(cmdName) && !sSupportedCommands.keySet().contains(cmdName)) {
+        if(!commandNameExists(cmd.getName())) {
             if(sDefaultCommandsAreLoading) {
-                sDefaultCommands.put(cmdName, cmd);
+                sDefaultCommands.put(cmd.getName().toLowerCase(), cmd);
             } else {
-                sSupportedCommands.put(cmdName, cmd);
+                sSupportedCommands.put(cmd.getName().toLowerCase(), cmd);
             }
         }
     }
@@ -579,7 +582,7 @@ public abstract class Command implements NamingValidator {
     @Nullable
     /* package-protected */ static Command findTemplateFromName(String cmdName) {
         if(sDefaultCommandsEnabled) {
-            if(!sDefaultCommands.containsKey(cmdName) && !sSupportedCommands.containsKey(cmdName)) {
+            if(!commandNameExists(cmdName)) {
                 return null;
             } else if(sDefaultCommands.containsKey(cmdName)) {
                 return sDefaultCommands.get(cmdName);
@@ -779,7 +782,8 @@ public abstract class Command implements NamingValidator {
     @NotNull
     private static String buildParameterLine(@NotNull Parameter param) {
         StringBuilder result = new StringBuilder("    {6} {0} ({1}");
-        if(param.getDefaultValue() != null) {
+
+        if(hasDefaultValue) {
             result.append("|{2}");
         }
 

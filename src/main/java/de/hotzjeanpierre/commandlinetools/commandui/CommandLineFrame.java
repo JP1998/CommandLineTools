@@ -26,6 +26,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -70,9 +71,6 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-//                CommandLineFrame.this.onDispose();
-//                dispose();
-
                 associatedApplication.onCLITermination();
                 onDispose();
                 dispose();
@@ -89,11 +87,26 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
         }
     }
 
+    private boolean surprise1;
+
+    public void setSurprise1(boolean b) {
+        this.surprise1 = b;
+    }
+
+    public boolean isSurprise1() {
+        return surprise1;
+    }
+
     private void initView() {
         rootPanel = new JPanel(new BorderLayout(0, 0));
         rootPanel.setBackground(Color.BLACK);
 
-        cliTextArea = new JTextArea();
+        cliTextArea = new JTextArea() {
+            protected Graphics getComponentGraphics(final Graphics g) {
+                return alter(super.getComponentGraphics(g), getWidth());
+            }
+        };
+
         cliTextArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         cliTextArea.setForeground(Color.WHITE);
         cliTextArea.setBackground(Color.BLACK);
@@ -131,6 +144,20 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
 
         this.add(rootPanel);
     }
+
+    private Graphics alter(final Graphics g, final int width) {
+        if(surprise1) {
+            final Graphics2D g2d = (Graphics2D) g;
+            final AffineTransform tx = g2d.getTransform();
+            tx.scale(-1.0, 1.0);
+            tx.translate(-width, 0);
+            g2d.setTransform(tx);
+            return g2d;
+        } else {
+            return g;
+        }
+    }
+
 
     private void onDispose() {
         try {

@@ -67,7 +67,8 @@ public class Main implements ICommandLineApplication {
 
         Command.assureLoadingOfCommands(
                 "de.hotzjeanpierre.commandlinetools.Main$ExitCommand",
-                "de.hotzjeanpierre.commandlinetools.Main$ClearCommand"
+                "de.hotzjeanpierre.commandlinetools.Main$ClearCommand",
+                "de.hotzjeanpierre.commandlinetools.Main$InfoCommand"
         );
 
         running = true;
@@ -169,6 +170,92 @@ public class Main implements ICommandLineApplication {
         @Override
         protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
             APPLICATION.cli.clearCLI();
+            return new CommandExecutionResult.Builder()
+                    .setSuccess(true)
+                    .build();
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static class InfoCommand extends Command {
+
+        static {
+            Command.addSupportedCommand(
+                    new InfoCommand(
+                            "info",
+                            "This command gives you some information about this application.",
+                            new Parameter[] {
+                                    new Parameter(
+                                            "surprise",
+                                            Integer.class,
+                                            "A little surprise.",
+                                            (Object) (-1)
+                                    )
+                            }
+                    )
+            );
+        }
+
+        protected InfoCommand(String name, String description, Parameter[] paramList)
+                throws NullPointerException, IllegalArgumentException {
+            super(name, description, paramList);
+        }
+
+        private static final String[] APPLICATION_INFORMATION = {
+                "",
+                "          CommandLineTools v1.0.0-SNAPSHOT",
+                "initial idea by Jean-Pierre Hotz (https://github.com/JP1998/)",
+                "",
+                "This work has been licensed under the Apache License version 2.0:",
+                "",
+                "    Copyright 2018 Jean-Pierre Hotz",
+                "",
+                "Licensed under the Apache License, Version 2.0 (the \"License\");",
+                "you may not use this file except in compliance with the License.",
+                "You may obtain a copy of the License at",
+                "",
+                "    http://www.apache.org/licenses/LICENSE-2.0",
+                "",
+                "Unless required by applicable law or agreed to in writing, software",
+                "distributed under the License is distributed on an \"AS IS\" BASIS,",
+                "WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.",
+                "See the License for the specific language governing permissions and",
+                "limitations under the License.",
+                "",
+                "This work is open source, whereas you can view the source code of /",
+                "contribute to this project at https://github.com/JP1998/CommandLineTools.",
+                "",
+                "Following there is a list of all contributors at time of compilation:",
+                "Jean-Pierre Hotz (https://github.com/JP1998)",
+                "Thor77 (https://github.com/Thor77)",
+                ""
+        };
+
+        @Override
+        protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
+            switch ((int) params.getValue("surprise")) {
+                case 1:
+                    if(APPLICATION.cli instanceof CommandLineFrame) {
+                        CommandLineFrame frame = ((CommandLineFrame) APPLICATION.cli);
+
+                        if(frame.isSurprise1()) {
+                            System.out.println("You've been unbamboozled!");
+                            System.out.println();
+                        } else {
+                            System.out.println("You've been bamboozled!");
+                            System.out.println();
+                        }
+
+                        frame.setSurprise1(!frame.isSurprise1());
+                    }
+                    break;
+                default:
+                    for(String line : APPLICATION_INFORMATION) {
+                        System.out.println(line);
+                    }
+
+            }
+
             return new CommandExecutionResult.Builder()
                     .setSuccess(true)
                     .build();
