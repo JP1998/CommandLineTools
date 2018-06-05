@@ -783,7 +783,7 @@ public abstract class Command implements NamingValidator {
     private static String buildParameterLine(@NotNull Parameter param) {
         StringBuilder result = new StringBuilder("    {6} {0} ({1}");
 
-        if(hasDefaultValue) {
+        if(param.getDefaultValue() != null) {
             result.append("|{2}");
         }
 
