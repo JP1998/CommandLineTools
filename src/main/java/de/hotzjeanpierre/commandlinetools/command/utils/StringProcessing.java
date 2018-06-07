@@ -16,6 +16,7 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils;
 
+import de.hotzjeanpierre.commandlinetools.command.utils.arrays.ArrayHelper;
 import de.hotzjeanpierre.commandlinetools.command.utils.exceptions.StringProcessingFormatException;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,27 +42,6 @@ public class StringProcessing {
      */
     private static final Pattern sWildcardExtractionPattern =
             Pattern.compile("(\\{\\{)|(}})|(\\{\\s*\\d+\\s*})");
-
-    /**
-     * The pattern to validate the syntax of commands with.
-     */
-    private static final Pattern sCommandValidator =
-            Pattern.compile("^\\s*([_a-zA-Z][_a-zA-Z0-9]*)(\\s+((\"(?:[^\"\\\\]|\\\\[tbnrf'\"\\\\])*\")|([^\\s]+)))*\\s*$");
-    /**
-     * The pattern to extract the name of a command with.
-     */
-    private static final Pattern sCommandNameExtractor =
-            Pattern.compile("[_a-zA-Z][_a-zA-Z0-9]*");
-    /**
-     * The Pattern that is used to extract a part of a parameter of a command.
-     */
-    private static final Pattern sCommandParameterPartExtractor =
-            Pattern.compile("((\"(?:[^\"\\\\]|\\\\[tbnrf'\"\\\\])*\")|([^\\s]+))");
-    /**
-     * The pattern that is used to determine whether the parameter is a string or not.
-     */
-    private static final Pattern sCommandParameterStringValidator =
-            Pattern.compile("\"(?:[^\"\\\\]|\\\\[tbnrf'\"\\\\])*\"");
 
     /**
      * This method makes it easy for you to insert values of variables into a string,
@@ -163,54 +143,143 @@ public class StringProcessing {
     /**
      * This method tokenizes a string into single tokens according to the syntax of a command.
      *
-     * @param toTokenize the string representing a command that is to be tokenized
+     * @param command the string representing a command that is to be tokenized
      * @return the single tokens in the string
      */
     @NotNull
-    public static String[] tokenizeCommand(String toTokenize) {
-        if (!sCommandValidator.matcher(toTokenize).matches()) {
+    public static String[] tokenizeCommand(String command) {
+        if (!validateCommand(command)) {
             throw new IllegalArgumentException(StringProcessing.format(
-                    "Command '{0}' does not conform to the syntax and can thus not be parsed.", toTokenize
+                    "Command '{0}' does not conform to the syntax and can thus not be parsed.", command
             ));
         }
 
         List<String> tokens = new ArrayList<>();
 
-        // apply the group extracting pattern onto the given String we're trying to tokenize
-        Matcher commandNameMatcher = sCommandNameExtractor.matcher(toTokenize);
+        int start = 0;
+        int end = 0;
 
-        if (!commandNameMatcher.find()) {
-            // usually unreachable statement, since the given String has been verified to
-            // at least have one match with the pattern for group extraction
-            // still checked for information in case something goes wrong during development.
-            throw new IllegalArgumentException(StringProcessing.format(
-                    "Command '{0}' cannot be parsed due to an error in the Regex of the tokenizer.", toTokenize
-            ));
-        }
+        boolean inString;
+        boolean commandNameChecked = false;
 
-        // extract the commands name
-        tokens.add(commandNameMatcher.group());
+        int i = 0;
 
-        // strip away the command name since we already processed it
-        toTokenize = toTokenize.substring(commandNameMatcher.end());
-
-        // extract the single pieces of the parameters
-        Matcher commandParameterMatcher = sCommandParameterPartExtractor.matcher(toTokenize);
-
-        while (commandParameterMatcher.find()) {
-            String token = commandParameterMatcher.group();
-
-            // descape and remove double quotes from quoted parameters strings
-            if (sCommandParameterStringValidator.matcher(token).matches()) {
-                token = descape(token.substring(1, token.length() - 1));
+        while (i < command.length()) {
+            while (i < command.length() && Character.isWhitespace(command.charAt(i))){
+                i++;
             }
+            // from here on the pointer (i) will be at the first non-whitespace character
+            if(i == command.length()) {
+                break;
+            }
+            start = i;
 
-            tokens.add(token);
+            if(!commandNameChecked) {
+                // we're now at the beginning of the commands name
+                i++;
+                while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
+                    i++;
+                }
+                commandNameChecked = true;
+                end = i;
+                tokens.add(command.substring(start, end));
+            } else if(command.charAt(i) == '"') {
+                // validate string (with escape sequences)
+                inString = true;
+                i++;
+                while (i < command.length() && inString) {
+                    if(command.charAt(i) == '\\') {
+                        i += 2;
+                    } else if(command.charAt(i) == '"') {
+                        inString = false;
+                        i++;
+                    } else {
+                        i++;
+                    }
+                }
+
+                end = i;
+                tokens.add(descape(command.substring(start + 1, end - 1)));
+            } else {
+                // "validate" any characters in a simple string
+                while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
+                    i++;
+                }
+                end = i;
+                tokens.add(command.substring(start, end));
+            }
         }
 
-        // copy the list into an array
         String[] tokensArray = new String[tokens.size()];
         return tokens.toArray(tokensArray);
+    }
+
+    private static boolean validateCommand(String command) {
+        if(command.trim().isEmpty()) {
+            return false;
+        }
+
+        boolean inString;
+        boolean commandNameChecked = false;
+
+        int i = 0;
+
+        while (i < command.length()) {
+            while (i < command.length() && Character.isWhitespace(command.charAt(i))){
+                i++;
+            }
+            // from here on the pointer (i) will be at the first non-whitespace character
+            if(i == command.length()) {
+                return true;
+            }
+
+            if(!commandNameChecked) {
+                // validate the name of the command which will always be the first word in the command
+                if(!Pattern.compile("[_a-zA-Z]").matcher("" + command.charAt(i)).matches()){
+                    return false;
+                }
+                i++;
+                while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
+                    if(!Pattern.compile("[_a-zA-Z0-9]").matcher("" + command.charAt(i)).matches()) {
+                        return false;
+                    }
+                    i++;
+                }
+                commandNameChecked = true;
+            } else if(command.charAt(i) == '"') {
+                // validate string (with escape sequences)
+                inString = true;
+                i++;
+                while (i < command.length() && inString) {
+                    if(command.charAt(i) == '\\') {
+                        if(i < command.length() - 1 && ArrayHelper.containsAny(
+                                new Character[] {'t', 'b', 'n', 'r', 'f', '\'', '\"', '\\'},
+                                command.charAt(i + 1)
+                        )) {
+                            i += 2;
+                        } else {
+                            return false;
+                        }
+                    } else if(command.charAt(i) == '"') {
+                        inString = false;
+                        i++;
+                    } else {
+                        i++;
+                    }
+                }
+
+                if(i == command.length() && inString) {
+                    return false;
+                }
+            } else {
+                // "validate" any characters in a simple string
+                while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
+                    i++;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
