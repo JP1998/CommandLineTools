@@ -1,22 +1,27 @@
 
+- creating the possibility to easily parse arrays of arbitrary (but parseable, as determined by the used Converter-object) type
+  - extend the regex used in StringProcessing#tokenize(String) to allow arrays with whitespace but without the string denominator
+  - handle nested arrays (maybe with recursion?)
+  - apparently we'll have to create a custom Array-type
+- adding the possibility to add a custom ICommandLine-type to the Main-class,
+    which should be able to be used with certain command-line arguments
+- making the execution of shell / console commands possible
 - maybe implement lazy conversion for parameter values?
   -> could improve runtime for commands with parameters that are
      not always used but have an expensive conversion
 - implement some kind of lightweight pattern matching for Filtering files
-
+- creating the possibility for smart auto-complete in the ui-client
+- allow nested command calls (like "list find asdf C:/Users/", which should list all the files in any directory containing the phrase "asdf" in "C:/Users/")?
 - some default command such as:
-
   - bulk renaming files within a directory
     - having an option for the folder to rename the contained files of
     - having an option to filter files
     - having an option to rename everything but matches to a pattern
     - having an option to recursively rename within subdirectories
     - having an option to format the result name
-
   - password generator / manager
   - interpreter for brainfuck
   - interpreter for false
-
 - a GUI that is more comfortable to use than the cli of Win7
   - giving the possibility of a implicit parameter passing through a defined order for the parameters without default values
   /- giving the possibility of viewing / recalling history with arrow keys
@@ -25,7 +30,6 @@
 //   - giving the possibility of a short notation for boolean parameters ("--<name>" for true and "--not-<name>" for false)
 //   - text-based but created with a window
 //   - using streams to read / write (so System.out and Scanner may still be used)
-
 // - refactoring:
 //   - FilterMode:
 //     - create lambdas from the anonymous classes within the enum-values
@@ -36,7 +40,6 @@
 //     - rename FileEncryptor to a more general EncryptionService since it does not need to be used with files
 //     - rename EncryptionResult to FileEncryptionResult
 //     - make encrypt and decrypt public, and make it return a new type EncryptionResult
-
 // - bulk de- and encrypting of files
 //   - having an option for the folder to de- / encrypt the contained files
 //   - having an option to filter files
@@ -46,7 +49,6 @@
 //   - having an option to format the output files file names
 //   - having an option for the used password
 //   - deleting folders that may be eventually empty
-
 //   - listing files within a directory
 //     - having an option for the folder to list the contained files of
 //     - having an option to format as a tree
@@ -55,9 +57,7 @@
 //     - having an option to list folders
 //     - having an option to recursively search within subdirectories
 //     - having an option of how to format the output
-
 // - make a command return a CommandExecutionResult (or similar object variable)
 //   - makes it easier to extend commands later on
 //   - makes it easier to implement an easy CLI in other environments (like a Swing- or JavaFX-window)
-
 // - Change filenamingtemplates extension to include the point!
