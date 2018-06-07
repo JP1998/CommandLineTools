@@ -93,7 +93,7 @@ public class Converter {
             } catch (Exception e) {
                 return null;
             }
-        } else if (Boolean.class.equals(toConvertTo)) {             // boolean
+        } else if (Boolean.class.equals(toConvertTo) || boolean.class.equals(toConvertTo)) {             // boolean
             if(representation.trim().equalsIgnoreCase("true")) {
                 return true;
             } else if(representation.trim().equalsIgnoreCase("false")) {
@@ -101,42 +101,42 @@ public class Converter {
             } else {
                 return null;
             }
-        } else if (Double.class.equals(toConvertTo)) {              // double
+        } else if (Double.class.equals(toConvertTo) || double.class.equals(toConvertTo)) {              // double
             try {
                 return Double.parseDouble(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (Float.class.equals(toConvertTo)) {               // float
+        } else if (Float.class.equals(toConvertTo) || float.class.equals(toConvertTo)) {               // float
             try {
                 return Float.parseFloat(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (Byte.class.equals(toConvertTo)) {                // byte
+        } else if (Byte.class.equals(toConvertTo) || byte.class.equals(toConvertTo)) {                // byte
             try {
                 return Byte.parseByte(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (Short.class.equals(toConvertTo)) {               // short
+        } else if (Short.class.equals(toConvertTo) || short.class.equals(toConvertTo)) {               // short
             try {
                 return Short.parseShort(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (Character.class.equals(toConvertTo)) {           // char
+        } else if (Character.class.equals(toConvertTo) || char.class.equals(toConvertTo)) {           // char
             if (representation.length() > 1) {
                 return null;
             }
             return representation.charAt(0);
-        } else if (Integer.class.equals(toConvertTo)) {             // int
+        } else if (Integer.class.equals(toConvertTo) || int.class.equals(toConvertTo)) {             // int
             try {
                 return Integer.parseInt(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (Long.class.equals(toConvertTo)) {                // long
+        } else if (Long.class.equals(toConvertTo) || long.class.equals(toConvertTo)) {                // long
             try {
                 return Long.parseLong(representation);
             } catch (Exception e) {
