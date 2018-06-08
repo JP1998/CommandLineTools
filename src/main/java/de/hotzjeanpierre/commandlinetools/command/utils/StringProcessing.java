@@ -147,61 +147,81 @@ public class StringProcessing {
      * @return the single tokens in the string
      */
     @NotNull
-    public static String[] tokenizeCommand(String command) {
+    public static String[] tokenizeCommand(@NotNull String command) {
+        // first off validate the given command so we don't have to do that *while* parsing / tokenizing
         if (!validateCommand(command)) {
             throw new IllegalArgumentException(StringProcessing.format(
                     "Command '{0}' does not conform to the syntax and can thus not be parsed.", command
             ));
         }
 
+        // the list that contains all the tokens
         List<String> tokens = new ArrayList<>();
 
+        // the start / end index of the next token in the given string
         int start = 0;
         int end = 0;
 
+        // some flags
         boolean inString;
         boolean commandNameChecked = false;
 
+        // the index of the character we're currently investigating
         int i = 0;
 
+        // while there are still characters to process
         while (i < command.length()) {
+            // we'll skip all the whitespace
             while (i < command.length() && Character.isWhitespace(command.charAt(i))){
                 i++;
             }
-            // from here on the pointer (i) will be at the first non-whitespace character
+            // and end the loop if there was only whitespace left
             if(i == command.length()) {
                 break;
             }
+            // set the start to be the first non-whitespace character
             start = i;
 
             if(!commandNameChecked) {
-                // we're now at the beginning of the commands name
+                // we'll have to parse the commands name at the beginning of the command
+                // the first character is definitely no whitespace and after that we'll skip
+                // all the non-whitespace characters
                 i++;
                 while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
                     i++;
                 }
+
+                // then we'll extract the command name and set the flag 'commandNameChecked'
                 commandNameChecked = true;
                 end = i;
                 tokens.add(command.substring(start, end));
             } else if(command.charAt(i) == '"') {
-                // validate string (with escape sequences)
+                // we'll have to parse a string that has been given, thus we'll show that we're
+                // now processing a string and advance the pointer, as the character at the current
+                // position is definitely a double-quote, whereas without advancing we'd immediately
+                // terminate the string again.
                 inString = true;
                 i++;
+                // we'll evaluate as long as we're in a string
                 while (i < command.length() && inString) {
                     if(command.charAt(i) == '\\') {
+                        // if there is a escape sequence we'll completely skip it
                         i += 2;
                     } else if(command.charAt(i) == '"') {
+                        // if the string is terminated we'll delete the flag and advance the pointer
                         inString = false;
                         i++;
                     } else {
+                        // any other character will simply be skipped
                         i++;
                     }
                 }
 
+                // then we'll extract the actual string and descape its contents
                 end = i;
                 tokens.add(descape(command.substring(start + 1, end - 1)));
             } else {
-                // "validate" any characters in a simple string
+                // parse any sequence of plain non-whitespace characters
                 while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
                     i++;
                 }
@@ -210,65 +230,58 @@ public class StringProcessing {
             }
         }
 
+        // convert the list of tokens into an array and return said array
         String[] tokensArray = new String[tokens.size()];
         return tokens.toArray(tokensArray);
     }
 
-    private static boolean validateCommand(String command) {
+    /**
+     * This method is supposed to validate a command that has been given.
+     * It will return the value {@code true} in case the value of the given string
+     * *could* be tokenized, and {@code false} otherwise.
+     * This does not mean though, that the command that has been given is definitely
+     * valid, since this method only checks syntax and not semantics.
+     *
+     * @param command the command that is to be validated
+     * @return whether the given command is valid or not
+     */
+    private static boolean validateCommand(@NotNull String command) {
+        // we need at least a command name whereas an empty string is not valid
         if(command.trim().isEmpty()) {
             return false;
         }
 
-        boolean inString;
+        // some flags we need to properly validate the command
         boolean commandNameChecked = false;
 
+        // the index of the character we currently process
         int i = 0;
 
+        // we have to process every character in the command
         while (i < command.length()) {
+            // we'll skip all the whitespace at the current selection
             while (i < command.length() && Character.isWhitespace(command.charAt(i))){
                 i++;
             }
-            // from here on the pointer (i) will be at the first non-whitespace character
+
+            // since we know that the command is not empty and we reached the end by
+            // skipping whitespace while there has not been any invalidation before
+            // we know that the given command is valid
             if(i == command.length()) {
                 return true;
             }
 
             if(!commandNameChecked) {
                 // validate the name of the command which will always be the first word in the command
-                if(!Pattern.compile("[_a-zA-Z]").matcher("" + command.charAt(i)).matches()){
+                i = validateCommandName(command, i);
+                if(i == -1) {
                     return false;
-                }
-                i++;
-                while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
-                    if(!Pattern.compile("[_a-zA-Z0-9]").matcher("" + command.charAt(i)).matches()) {
-                        return false;
-                    }
-                    i++;
                 }
                 commandNameChecked = true;
             } else if(command.charAt(i) == '"') {
                 // validate string (with escape sequences)
-                inString = true;
-                i++;
-                while (i < command.length() && inString) {
-                    if(command.charAt(i) == '\\') {
-                        if(i < command.length() - 1 && ArrayHelper.containsAny(
-                                new Character[] {'t', 'b', 'n', 'r', 'f', '\'', '\"', '\\'},
-                                command.charAt(i + 1)
-                        )) {
-                            i += 2;
-                        } else {
-                            return false;
-                        }
-                    } else if(command.charAt(i) == '"') {
-                        inString = false;
-                        i++;
-                    } else {
-                        i++;
-                    }
-                }
-
-                if(i == command.length() && inString) {
+                i = validateString(command, i);
+                if(i == -1) {
                     return false;
                 }
             } else {
@@ -280,6 +293,86 @@ public class StringProcessing {
         }
 
         return true;
+    }
+
+    /**
+     * This method will validate a command name which starts at the given index i.
+     * If the command name is valid this method will return the index of the first
+     * character that does not belong to the command name. In case it is invalid this
+     * method will return {code -1}.
+     *
+     * @param command the command that is to be validated
+     * @param i the index of the first character of the command name
+     * @return the new index i if the command name is valid; -1 if it is invalid
+     */
+    private static int validateCommandName(@NotNull String command, int i) {
+        final Pattern commandNameStartPattern = Pattern.compile("[_a-zA-Z]");
+        final Pattern commandNamePattern = Pattern.compile("[_a-zA-Z0-9]");
+
+        //  check the first character of the command name
+        if(!commandNameStartPattern.matcher(Character.toString(command.charAt(i))).matches()){
+            return -1;
+        }
+        // check for all the subsequent characters until we see whitespace
+        i++;
+        while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
+            if(!commandNamePattern.matcher(Character.toString(command.charAt(i))).matches()) {
+                return -1;
+            }
+            i++;
+        }
+
+        return i;
+    }
+
+    /**
+     * This method will validate a string which starts at the given index i.
+     * If the string is valid this method will return the index of the first
+     * character that does not belong to the string. In case it is invalid this
+     * method will return {code -1}.
+     *
+     * @param command the command that is to be validated
+     * @param i the index of the first character of the string
+     * @return the new index i if the string is valid; -1 if it is invalid
+     */
+    private static int validateString(@NotNull String command, int i) {
+        // all the characters that form a valid escape sequence
+        final Character[] validEscapeSequences = new Character[] {
+                't', 'b', 'n', 'r', 'f', '\'', '\"', '\\' };
+
+        // a flag to indicate whether we're still in the string
+        boolean inString = true;
+
+        // the first character is a double quote and needs to be skipped
+        i++;
+        // we need to process characters until we're not in the string anymore
+        // while we also have to make sure that there are characters left to process
+        while (i < command.length() && inString) {
+            if(command.charAt(i) == '\\') {
+                // in case there is a backslash we'll validate an escape sequence
+                if(i < command.length() - 1 &&
+                        ArrayHelper.containsAny(validEscapeSequences, command.charAt(i + 1))) {
+                    i += 2;
+                } else {
+                    return -1;
+                }
+            } else if(command.charAt(i) == '"') {
+                // in case there is a double quote we'll terminate the string
+                inString = false;
+                i++;
+            } else {
+                // any other character will be skipped
+                i++;
+            }
+        }
+
+        // if we reach the end of the command while still being inside a string
+        // we'll know that the string has not been terminated
+        if(i == command.length() && inString) {
+            return -1;
+        }
+
+        return i;
     }
 
     /**
