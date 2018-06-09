@@ -159,11 +159,10 @@ public class StringProcessing {
         List<String> tokens = new ArrayList<>();
 
         // the start / end index of the next token in the given string
-        int start = 0;
-        int end = 0;
+        int start;
+        int end;
 
         // some flags
-        boolean inString;
         boolean commandNameChecked = false;
 
         // the index of the character we're currently investigating
@@ -172,9 +171,7 @@ public class StringProcessing {
         // while there are still characters to process
         while (i < command.length()) {
             // we'll skip all the whitespace
-            while (i < command.length() && Character.isWhitespace(command.charAt(i))){
-                i++;
-            }
+            i = skipWhiteSpace(command, i);
             // and end the loop if there was only whitespace left
             if(i == command.length()) {
                 break;
@@ -183,48 +180,20 @@ public class StringProcessing {
             start = i;
 
             if(!commandNameChecked) {
-                // we'll have to parse the commands name at the beginning of the command
-                // the first character is definitely no whitespace and after that we'll skip
-                // all the non-whitespace characters
-                i++;
-                while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
-                    i++;
-                }
-
-                // then we'll extract the command name and set the flag 'commandNameChecked'
+                i = findEndOfCommandName(command, i);
                 commandNameChecked = true;
                 end = i;
                 tokens.add(command.substring(start, end));
             } else if(command.charAt(i) == '"') {
-                // we'll have to parse a string that has been given, thus we'll show that we're
-                // now processing a string and advance the pointer, as the character at the current
-                // position is definitely a double-quote, whereas without advancing we'd immediately
-                // terminate the string again.
-                inString = true;
-                i++;
-                // we'll evaluate as long as we're in a string
-                while (i < command.length() && inString) {
-                    if(command.charAt(i) == '\\') {
-                        // if there is a escape sequence we'll completely skip it
-                        i += 2;
-                    } else if(command.charAt(i) == '"') {
-                        // if the string is terminated we'll delete the flag and advance the pointer
-                        inString = false;
-                        i++;
-                    } else {
-                        // any other character will simply be skipped
-                        i++;
-                    }
-                }
-
-                // then we'll extract the actual string and descape its contents
+                i = findEndOfString(command, i);
                 end = i;
                 tokens.add(descape(command.substring(start + 1, end - 1)));
+            } else if(command.charAt(i) == '{') {
+                i = findEndOfArray(command, i);
+                end = i;
+                tokens.add(command.substring(start, end));
             } else {
-                // parse any sequence of plain non-whitespace characters
-                while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
-                    i++;
-                }
+                i = findEndOfSimpleParameter(command, i);
                 end = i;
                 tokens.add(command.substring(start, end));
             }
@@ -233,6 +202,79 @@ public class StringProcessing {
         // convert the list of tokens into an array and return said array
         String[] tokensArray = new String[tokens.size()];
         return tokens.toArray(tokensArray);
+    }
+
+    private static int skipWhiteSpace(@NotNull String command, int i) {
+        while (i < command.length() && Character.isWhitespace(command.charAt(i))){
+            i++;
+        }
+        return i;
+    }
+
+    private static int findEndOfArray(@NotNull String command, int i) {
+        i++;
+
+        int depth = 1;
+
+        while (i < command.length() && depth > 0) {
+            i = skipWhiteSpace(command, i);
+
+            if (command.charAt(i) == '{') {
+                depth++;
+            } else if(command.charAt(i) == '}') {
+                depth--;
+            } else if(command.charAt(i) == '"') {
+                // the minus one here is to be done since the findEndOfString-method
+                // will let i point to the first character outside of the string,
+                // which will make String#substring(int, int) include only the last double quote.
+                i = findEndOfString(command, i) - 1;
+            }
+            i++;
+        }
+
+        return i;
+    }
+
+    private static int findEndOfCommandName(@NotNull String command, int i) {
+        // we'll have to parse the commands name at the beginning of the command
+        // the first character is definitely no whitespace and after that we'll skip
+        // all the non-whitespace characters
+        i++;
+        while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
+            i++;
+        }
+        return i;
+    }
+
+    private static int findEndOfString(@NotNull String command, int i) {
+        // we'll have to parse a string that has been given, thus we'll show that we're
+        // now processing a string and advance the pointer, as the character at the current
+        // position is definitely a double-quote, whereas without advancing we'd immediately
+        // terminate the string again.
+        boolean inString = true;
+        i++;
+        // we'll evaluate as long as we're in a string
+        while (i < command.length() && inString) {
+            if(command.charAt(i) == '\\') {
+                // if there is a escape sequence we'll completely skip it
+                i += 2;
+            } else if(command.charAt(i) == '"') {
+                // if the string is terminated we'll delete the flag and advance the pointer
+                inString = false;
+                i++;
+            } else {
+                // any other character will simply be skipped
+                i++;
+            }
+        }
+        return i;
+    }
+
+    private static int findEndOfSimpleParameter(@NotNull String command, int i) {
+        while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
+            i++;
+        }
+        return i;
     }
 
     /**
@@ -283,19 +325,28 @@ public class StringProcessing {
                     return false;
                 }
             } else if (command.charAt(i) == '{') {
+                // validate an array
                 i = validateArray(command, i);
                 if(i == -1) {
                     return false;
                 }
             } else {
                 // "validate" any characters in a simple string
-                while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
-                    i++;
+                i =validateSimpleParameter(command, i);
+                if(i == -1) {
+                    return false;
                 }
             }
         }
 
         return true;
+    }
+
+    private static int validateSimpleParameter(@NotNull String command, int i) {
+        while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
+            i++;
+        }
+        return i;
     }
 
     /**
@@ -425,13 +476,6 @@ public class StringProcessing {
         }
 
         return i + 1;
-    }
-
-    private static int skipWhiteSpace(@NotNull String command, int i) {
-        while (i < command.length() && Character.isWhitespace(command.charAt(i))){
-            i++;
-        }
-        return i;
     }
 
     private static int validateArrayElement(@NotNull String command, int i) {
