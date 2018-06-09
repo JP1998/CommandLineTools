@@ -260,27 +260,30 @@ public class StringProcessing {
         // we have to process every character in the command
         while (i < command.length()) {
             // we'll skip all the whitespace at the current selection
-            while (i < command.length() && Character.isWhitespace(command.charAt(i))){
-                i++;
-            }
+            i = skipWhiteSpace(command, i);
 
             // since we know that the command is not empty and we reached the end by
             // skipping whitespace while there has not been any invalidation before
             // we know that the given command is valid
-            if(i == command.length()) {
+            if (i == command.length()) {
                 return true;
             }
 
-            if(!commandNameChecked) {
+            if (!commandNameChecked) {
                 // validate the name of the command which will always be the first word in the command
                 i = validateCommandName(command, i);
-                if(i == -1) {
+                if (i == -1) {
                     return false;
                 }
                 commandNameChecked = true;
-            } else if(command.charAt(i) == '"') {
+            } else if (command.charAt(i) == '"') {
                 // validate string (with escape sequences)
                 i = validateString(command, i);
+                if (i == -1) {
+                    return false;
+                }
+            } else if (command.charAt(i) == '{') {
+                i = validateArray(command, i);
                 if(i == -1) {
                     return false;
                 }
@@ -372,6 +375,70 @@ public class StringProcessing {
             return -1;
         }
 
+        return i;
+    }
+
+    private static int validateArray(@NotNull String command, int i) {
+        i++;
+
+        boolean firstElement = true;
+//        int depth = 1;
+        boolean inArray = true;
+
+        while (i < command.length() && inArray) {
+            i = skipWhiteSpace(command, i);
+
+            if(!firstElement) {
+                if(command.charAt(i) != ',' && command.charAt(i) != '}') {
+                    return -1;
+                } else if(command.charAt(i) == '}') {
+                    inArray = false;
+                } else {
+                    i++;
+                }
+            }
+
+            i = skipWhiteSpace(command, i);
+
+            if (command.charAt(i) == '{') {
+                i = validateArray(command, i);
+                if(i == -1) {
+                    return -1;
+                }
+            } else if(command.charAt(i) == '"') {
+                i = validateString(command, i);
+                if(i == -1) {
+                    return -1;
+                }
+            } else {
+                i = validateArrayElement(command, i);
+                if(i == -1) {
+                    return -1;
+                }
+            }
+
+            firstElement = false;
+        }
+
+        if(i == command.length() && inArray) {
+            return -1;
+        }
+
+        return i + 1;
+    }
+
+    private static int skipWhiteSpace(@NotNull String command, int i) {
+        while (i < command.length() && Character.isWhitespace(command.charAt(i))){
+            i++;
+        }
+        return i;
+    }
+
+    private static int validateArrayElement(@NotNull String command, int i) {
+        while (i < command.length() && !Character.isWhitespace(command.charAt(i)) &&
+                command.charAt(i) != '}' && command.charAt(i) != ',') {
+            i++;
+        }
         return i;
     }
 
