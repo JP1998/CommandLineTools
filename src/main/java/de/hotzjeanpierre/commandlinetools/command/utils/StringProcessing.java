@@ -204,6 +204,17 @@ public class StringProcessing {
         return tokens.toArray(tokensArray);
     }
 
+    /**
+     * This method returns the first index c at which the character in the given
+     * command is no whitespace, while it begins to search at the given index i.
+     * Thus you can consider the relation {@code i <= c <= command.length()}, whereas
+     * command.length() is returned when there is no whitespace contained in the
+     * string when beginning to search at the given index i.
+     *
+     * @param command The string to skip whitespace in
+     * @param i the index at which to search for whitespace
+     * @return the index of the first character (after i) that is no whitespace
+     */
     private static int skipWhiteSpace(@NotNull String command, int i) {
         while (i < command.length() && Character.isWhitespace(command.charAt(i))){
             i++;
