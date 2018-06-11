@@ -21,11 +21,11 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 
 import de.hotzjeanpierre.commandlinetools.command.exceptions.*;
+import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
+import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.CommandTestingStream;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeClass;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeSubClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.PrintStream;

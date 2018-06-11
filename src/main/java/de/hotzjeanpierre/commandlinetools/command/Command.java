@@ -17,6 +17,8 @@
 package de.hotzjeanpierre.commandlinetools.command;
 
 import de.hotzjeanpierre.commandlinetools.command.exceptions.*;
+import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
+import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
 import de.hotzjeanpierre.commandlinetools.command.utils.Assurance;
 import de.hotzjeanpierre.commandlinetools.command.utils.Converter;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
@@ -342,9 +344,6 @@ public abstract class Command implements NamingValidator {
 
         this.deleteInput = deleteInput;
 
-//        for(String parameterName : parameterList.keySet()) {
-//            Parameter param = parameterList.get(parameterName);
-//        }
         orderedParameterList.sort(Comparator.comparing(Parameter::getOrdinal));
         for(int i = 0; i < orderedParameterList.size(); i++) {
             orderedParameterList.get(i).setOrdinal(i + 1);

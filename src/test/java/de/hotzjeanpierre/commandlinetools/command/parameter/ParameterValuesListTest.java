@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package de.hotzjeanpierre.commandlinetools.command;
+package de.hotzjeanpierre.commandlinetools.command.parameter;
 
+import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
+import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeClass;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeSubClass;
 import org.junit.Test;

@@ -1,5 +1,5 @@
 /*
- *     Copyright 2017 Jean-Pierre Hotz
+ *     Copyright 2018 Jean-Pierre Hotz
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.hotzjeanpierre.commandlinetools.command;
+package de.hotzjeanpierre.commandlinetools.command.parameter;
 
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 

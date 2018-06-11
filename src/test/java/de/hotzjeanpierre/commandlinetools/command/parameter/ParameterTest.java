@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.hotzjeanpierre.commandlinetools.command;
+package de.hotzjeanpierre.commandlinetools.command.parameter;
 
 import de.hotzjeanpierre.commandlinetools.command.exceptions.ParameterTypeMismatchException;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.SomeClass;

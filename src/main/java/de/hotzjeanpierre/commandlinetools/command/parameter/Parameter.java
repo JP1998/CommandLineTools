@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package de.hotzjeanpierre.commandlinetools.command;
+package de.hotzjeanpierre.commandlinetools.command.parameter;
 
+import de.hotzjeanpierre.commandlinetools.command.NamingValidator;
 import de.hotzjeanpierre.commandlinetools.command.exceptions.ParameterTypeMismatchException;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 
@@ -194,7 +195,7 @@ public class Parameter implements NamingValidator {
         return ordinal;
     }
 
-    /* package-protected */ void setOrdinal(int ordinal) {
+    public void setOrdinal(int ordinal) {
         this.ordinal = ordinal;
     }
 

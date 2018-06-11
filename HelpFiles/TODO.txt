@@ -1,4 +1,10 @@
 
+
+
+- Updating README.md to have actually usable code examples lol
+  - the last section (creation of a new command) has ordinals to be added
+  - the code sample needs a cast to int in the second parameter and needs a ordinal in the first
+
 - creating the possibility to easily parse arrays of arbitrary (but parseable, as determined by the used Converter-object) type
   - extend the regex used in StringProcessing#tokenize(String) to allow arrays with whitespace but without the string denominator
   - handle nested arrays (maybe with recursion?)

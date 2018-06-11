@@ -55,14 +55,15 @@ public class StringProcessingTest {
     public void testTokenizingValid() {
         assertThat(
                 StringProcessing.tokenizeCommand(
-                        "asdf ghjk lmno pqrs \"\\\"Hello World!\\\"\""
+                        "asdf ghjk lmno pqrs \"\\\"Hello World!\\\"\"{{\"asdf\\n\"}, { 123,4567, 98765}  ,{asdf}}"
                 ),
                 is(new String[] {
                         "asdf",
                         "ghjk",
                         "lmno",
                         "pqrs",
-                        "\"Hello World!\""
+                        "\"Hello World!\"",
+                        "{{\"asdf\\n\"}, { 123,4567, 98765}  ,{asdf}}"
                 })
         );
     }
@@ -71,14 +72,6 @@ public class StringProcessingTest {
     public void testTokenizingInvalidFormat() {
         StringProcessing.tokenizeCommand("99asdf");
     }
-
-    // Tests exception that does not apply anymore!
-//    @Test(expected = IllegalArgumentException.class)
-//    public void testTokenizingInvalidArgumentNumber() {
-//        StringProcessing.tokenizeCommand(
-//                "asd fgh"
-//        );
-//    }
 
     @Test
     public void testZeroPaddingNegativeNumbers() {

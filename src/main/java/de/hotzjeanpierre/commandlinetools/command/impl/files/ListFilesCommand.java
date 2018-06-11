@@ -18,8 +18,8 @@ package de.hotzjeanpierre.commandlinetools.command.impl.files;
 
 import de.hotzjeanpierre.commandlinetools.command.Command;
 import de.hotzjeanpierre.commandlinetools.command.CommandExecutionResult;
-import de.hotzjeanpierre.commandlinetools.command.Parameter;
-import de.hotzjeanpierre.commandlinetools.command.ParameterValuesList;
+import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
+import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
 import de.hotzjeanpierre.commandlinetools.command.utils.arrays.ArrayHelper;
 import de.hotzjeanpierre.commandlinetools.command.utils.files.FileLister;
 import de.hotzjeanpierre.commandlinetools.command.utils.files.FilterMode;

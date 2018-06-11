@@ -17,6 +17,8 @@
 package de.hotzjeanpierre.commandlinetools;
 
 import de.hotzjeanpierre.commandlinetools.command.*;
+import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
+import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
 import de.hotzjeanpierre.commandlinetools.command.utils.arrays.ArrayHelper;
 import de.hotzjeanpierre.commandlinetools.commandui.CommandLineFrame;
 

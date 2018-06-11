@@ -18,8 +18,8 @@ package de.hotzjeanpierre.commandlinetools.command.impl.encryption;
 
 import de.hotzjeanpierre.commandlinetools.command.Command;
 import de.hotzjeanpierre.commandlinetools.command.CommandExecutionResult;
-import de.hotzjeanpierre.commandlinetools.command.Parameter;
-import de.hotzjeanpierre.commandlinetools.command.ParameterValuesList;
+import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
+import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
 import de.hotzjeanpierre.commandlinetools.command.utils.files.*;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 
