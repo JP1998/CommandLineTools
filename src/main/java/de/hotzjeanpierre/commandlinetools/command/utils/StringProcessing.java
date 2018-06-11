@@ -222,6 +222,18 @@ public class StringProcessing {
         return i;
     }
 
+    /**
+     * This method returns the index c of the first character at which the array
+     * starting at the given index i will have ended. This index is always the index
+     * of the character after the final closing bracket of the array (nested arrays
+     * will be handled by this method). In case you have validated the command beforehand
+     * you can consider the relation {@code i + 1 < c <= command.length()}, while the
+     * lower bound is exclusive since the opening bracket cannot be the closing bracket.
+     *
+     * @param command the command to find the end of the array in
+     * @param i the index at which the array starts (with an opening curly bracket)
+     * @return the index c of the first character after the final closing bracket
+     */
     private static int findEndOfArray(@NotNull String command, int i) {
         i++;
 
@@ -246,6 +258,15 @@ public class StringProcessing {
         return i;
     }
 
+    /**
+     * This method returns the index c of the first character at which the command name
+     * starting at the given index i will have ended. Since you are supposed to have
+     * the command validated, this is done by searching for the first whitespace character.
+     *
+     * @param command the command to find the end of the command name in
+     * @param i the index at which the command name starts
+     * @return the index c of the first character after the command name
+     */
     private static int findEndOfCommandName(@NotNull String command, int i) {
         // we'll have to parse the commands name at the beginning of the command
         // the first character is definitely no whitespace and after that we'll skip
@@ -257,6 +278,18 @@ public class StringProcessing {
         return i;
     }
 
+    /**
+     * This method returns the index c of the first character that is not included
+     * in the string starting at the given index i. The ending double quotes will
+     * be considered to be part of the string, whereas you can consider the relation
+     * {@code i + 1 < c <= command.length()}. The lower bound can be explained by
+     * {@code c} always being the index after the closing double quotes, whereas
+     * these have to be at least at the index {@code i + 1}.
+     *
+     * @param command the command to find the end of the string in
+     * @param i the index at which the string starts
+     * @return the index c of the first character after the string
+     */
     private static int findEndOfString(@NotNull String command, int i) {
         // we'll have to parse a string that has been given, thus we'll show that we're
         // now processing a string and advance the pointer, as the character at the current
@@ -281,6 +314,16 @@ public class StringProcessing {
         return i;
     }
 
+    /**
+     * This method returns the index c of the first character that is not included
+     * in the simple parameter starting at the given index i. Since the syntax of
+     * a simple parameter is defined as a string of characters not interrupted by whitespace
+     * this method will search for the first whitespace and return its index.
+     *
+     * @param command the command to find the end of the simple parameter in
+     * @param i the index at which the simple parameter starts
+     * @return the index c of the first character after the simple parameter
+     */
     private static int findEndOfSimpleParameter(@NotNull String command, int i) {
         while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
             i++;
@@ -353,6 +396,17 @@ public class StringProcessing {
         return true;
     }
 
+    /**
+     * This method is supposed to validate a simple parameter in the given command.
+     * It will return the value {@code -1} in case the simple parameter is not
+     * valid (which will never be the case since the simple parameter has no restrictions),
+     * and the first index after the simple command in case it is valid.
+     *
+     * @param command the command that is to be validated
+     * @param i the index at which the simple parameter starts
+     * @return -1 if the parameter is not valid;
+     *         the index of the first character after the parameter otherwise
+     */
     private static int validateSimpleParameter(@NotNull String command, int i) {
         while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
             i++;
@@ -440,11 +494,22 @@ public class StringProcessing {
         return i;
     }
 
+    /**
+     * This method will validate an array which starts at the given index i.
+     * If the array is valid this method will return the index of the first
+     * character that does not belong to the array. In case it is invalid this
+     * method will return {code -1}.
+     * Any nested arrays (i.e. arrays that contain arrays; may be with
+     * arbitrary depth) will also be handled by this method.
+     *
+     * @param command the command that is to be validated
+     * @param i the index of the first character of the array
+     * @return the new index i if the array is valid; -1 if it is invalid
+     */
     private static int validateArray(@NotNull String command, int i) {
         i++;
 
         boolean firstElement = true;
-//        int depth = 1;
         boolean inArray = true;
 
         while (i < command.length() && inArray) {
@@ -489,6 +554,20 @@ public class StringProcessing {
         return i + 1;
     }
 
+    /**
+     * This method is supposed to validate an element of an array in the given command.
+     * It will return the value {@code -1} in case the element is not
+     * valid (which will never be the case since the array elements have no restrictions),
+     * and the first index after the element in case it is valid.
+     * This method is similar to {@link #validateSimpleParameter(String, int)}, while
+     * this method reacts to any closing curly brackets and commas, aswell as
+     * any whitespace.
+     *
+     * @param command the command that is to be validated
+     * @param i the index at which the array element starts
+     * @return -1 if the element is not valid;
+     *         the index of the first character after the element otherwise
+     */
     private static int validateArrayElement(@NotNull String command, int i) {
         while (i < command.length() && !Character.isWhitespace(command.charAt(i)) &&
                 command.charAt(i) != '}' && command.charAt(i) != ',') {
