@@ -31,7 +31,7 @@ public class ParameterTest {
     public void testNullNameFailing() {
         new Parameter(
                 null,
-                ParameterTest.class,
+                new ObjectType(ParameterTest.class),
                 "some description",
                 null
         );
@@ -41,7 +41,7 @@ public class ParameterTest {
     public void testEmptyNameFailing() {
         new Parameter(
                 "   \t\n",
-                ParameterTest.class,
+                new ObjectType(ParameterTest.class),
                 "some description",
                 null
         );
@@ -61,7 +61,7 @@ public class ParameterTest {
     public void testNullDescriptionFailing() {
         new Parameter(
                 "somename",
-                ParameterTest.class,
+                new ObjectType(ParameterTest.class),
                 null,
                 null
         );
@@ -71,7 +71,7 @@ public class ParameterTest {
     public void testEmptyDescriptionFailing() {
         new Parameter(
                 "somename",
-                ParameterTest.class,
+                new ObjectType(ParameterTest.class),
                 "    \t \n",
                 null
         );
@@ -81,7 +81,7 @@ public class ParameterTest {
     public void testTypeMismatchForDefaultValue() {
         new Parameter(
                 "somename",
-                SomeSubClass.class,
+                new ObjectType(SomeSubClass.class),
                 "some description",
                 new SomeClass(1, 2.3)
         );
@@ -91,7 +91,7 @@ public class ParameterTest {
     public void testTypeMismatchForCreatingValue() {
         new Parameter(
                 "somename",
-                SomeClass.class,
+                new ObjectType(SomeClass.class),
                 "some description",
                 null
         ).createValue(new Object());
@@ -99,7 +99,7 @@ public class ParameterTest {
 
     @Test
     public void testParameterNameForValueCorrect() {
-        Parameter testedParameter = new Parameter("somename", SomeClass.class, "some description", 0);
+        Parameter testedParameter = new Parameter("somename", new ObjectType(SomeClass.class), "some description", 0);
 
         assertThat(
                 testedParameter.createValue(new SomeClass(1, 2.3)).getParameterName(),
@@ -109,7 +109,7 @@ public class ParameterTest {
 
     @Test
     public void testParameterCreatesValueWithGivenValue() {
-        Parameter testedParameter = new Parameter("somename", SomeClass.class, "some description", 0);
+        Parameter testedParameter = new Parameter("somename", new ObjectType(SomeClass.class), "some description", 0);
 
         assertThat(
                 testedParameter.createValue(new SomeClass(1, 2.3)).getValue(),
@@ -119,7 +119,7 @@ public class ParameterTest {
 
     @Test
     public void testParameterTypeValid() {
-        Class<?> type = SomeClass.class;
+        Type type = new ObjectType(SomeClass.class);
 
         assertThat(
                 new Parameter(
@@ -137,7 +137,7 @@ public class ParameterTest {
         assertThat(
                 new Parameter(
                         "someparameter",
-                        SomeClass.class,
+                        new ObjectType(SomeClass.class),
                         "some description",
                         null
                 ).getDefaultValue(),
@@ -150,7 +150,7 @@ public class ParameterTest {
         assertThat(
                 new Parameter(
                         "someparameter",
-                        SomeClass.class,
+                        new ObjectType(SomeClass.class),
                         "some description",
                         new SomeSubClass(14, 15.16, false)
                 ).getDefaultValue(),
@@ -163,7 +163,7 @@ public class ParameterTest {
         assertThat(
                 new Parameter(
                         "someparameter",
-                        SomeClass.class,
+                        new ObjectType(SomeClass.class),
                         "This is some extended description which we want to test.",
                         0
                 ).getDescription(),

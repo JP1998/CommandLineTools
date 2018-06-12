@@ -18,6 +18,7 @@ package de.hotzjeanpierre.commandlinetools.command.impl.files;
 
 import de.hotzjeanpierre.commandlinetools.command.Command;
 import de.hotzjeanpierre.commandlinetools.command.CommandExecutionResult;
+import de.hotzjeanpierre.commandlinetools.command.parameter.CommonTypes;
 import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
 import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
 import de.hotzjeanpierre.commandlinetools.command.utils.arrays.ArrayHelper;
@@ -71,43 +72,43 @@ public class ListFilesCommand extends Command {
                 new Parameter[] {
                         new Parameter(
                                 PARAMETER_NAME_SOURCE,
-                                File.class,
+                                CommonTypes.File,
                                 PARAMETER_DESCRIPTION_SOURCE,
                                 0
                         ),
                         new Parameter(
                                 PARAMETER_NAME_TREE,
-                                Boolean.class,
+                                CommonTypes.Primitives.Boolean,
                                 PARAMETER_DESCRIPTION_TREE,
                                 true
                         ),
                         new Parameter(
                                 PARAMETER_NAME_FILTER,
-                                String.class,
+                                CommonTypes.String,
                                 PARAMETER_DESCRIPTION_FILTER,
                                 ""
                         ),
                         new Parameter(
                                 PARAMETER_NAME_FILTERMODE,
-                                FilterMode.class,
+                                CommonTypes.FilterMode,
                                 PARAMETER_DESCRIPTION_FILTERMODE,
                                 FilterMode.None
                         ),
                         new Parameter(
                                 PARAMETER_NAME_LISTFOLDERS,
-                                Boolean.class,
+                                CommonTypes.Primitives.Boolean,
                                 PARAMETER_DESCRIPTION_LISTFOLDERS,
                                 true
                         ),
                         new Parameter(
                                 PARAMETER_NAME_SUBDIRECTORIES,
-                                Boolean.class,
+                                CommonTypes.Primitives.Boolean,
                                 PARAMETER_DESCRIPTION_SUBDIRECTORIES,
                                 false
                         ),
                         new Parameter(
                                 PARAMETER_NAME_FORMAT,
-                                String.class,
+                                CommonTypes.String,
                                 PARAMETER_DESCRIPTION_FORMAT,
                                 "- ${name}"
                         )

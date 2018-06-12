@@ -47,7 +47,7 @@ public class Parameter implements NamingValidator {
     /**
      * The type of the parameter; determines which values are allowed for the parameter
      */
-    private Class type;
+    private Type type;
 
     /**
      * The description of the parameter. Should actually contain well documented information
@@ -78,7 +78,7 @@ public class Parameter implements NamingValidator {
      * @throws NullPointerException     in case the name, type or description is {@code null}
      * @throws IllegalArgumentException in case the name or description is empty
      */
-    public Parameter(String name, Class type, String description, int order)
+    public Parameter(String name, Type type, String description, int order)
             throws NullPointerException, IllegalArgumentException {
         this(name, type, description, null, order);
     }
@@ -95,7 +95,7 @@ public class Parameter implements NamingValidator {
      * @throws NullPointerException     in case the name, type or description is {@code null}
      * @throws IllegalArgumentException in case the name or description is empty
      */
-    public Parameter(String name, Class<?> type, String description, Object defaultValue)
+    public Parameter(String name, Type type, String description, Object defaultValue)
             throws NullPointerException, IllegalArgumentException {
         this(name, type, description, defaultValue, -1);
     }
@@ -113,7 +113,7 @@ public class Parameter implements NamingValidator {
      * @throws NullPointerException     in case the name, type or description is {@code null}
      * @throws IllegalArgumentException in case the name or description is empty
      */
-    public Parameter(String name, Class<?> type, String description, Object defaultValue, int order)
+    public Parameter(String name, Type type, String description, Object defaultValue, int order)
             throws NullPointerException, IllegalArgumentException {
         if (name == null) {
             throw new NullPointerException("Name of a parameter may not be null.");
@@ -135,7 +135,7 @@ public class Parameter implements NamingValidator {
                 name
         );
 
-        if(defaultValue != null && !type.isInstance(defaultValue)) {
+        if(defaultValue != null && !type.isValidValue(defaultValue)) {
             throw new IllegalArgumentException(StringProcessing.format(
                     "The value '{0}' cannot be used as default value for type '{1}'.",
                     defaultValue,
@@ -164,7 +164,7 @@ public class Parameter implements NamingValidator {
      *
      * @return the type of the parameter
      */
-    public Class getType() {
+    public Type getType() {
         return type;
     }
 
@@ -210,7 +210,7 @@ public class Parameter implements NamingValidator {
      */
     public Value createValue(Object val)
             throws ParameterTypeMismatchException {
-        if (type.isInstance(val)) {
+        if (type.isValidValue(val)) {
             return new Value(val);
         }
         throw new ParameterTypeMismatchException(StringProcessing.format(

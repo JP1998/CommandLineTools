@@ -17,8 +17,7 @@
 package de.hotzjeanpierre.commandlinetools.command;
 
 import de.hotzjeanpierre.commandlinetools.command.exceptions.*;
-import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
-import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
+import de.hotzjeanpierre.commandlinetools.command.parameter.*;
 import de.hotzjeanpierre.commandlinetools.command.utils.Assurance;
 import de.hotzjeanpierre.commandlinetools.command.utils.Converter;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
@@ -40,7 +39,7 @@ import java.util.*;
  * <ul>
  * <li style="margin-bottom:10px;"><b>You'll have to make sure you're using the right {@link Converter}:</b> In case you are using
  * custom / complex types as parameter types (i.e. objects) you'll have to give a custom converter
- * (inheriting Converter) while overriding the {@link Converter#convert(String, Class)}-method
+ * (inheriting Converter) while overriding the {@link Converter#convert(String, Type)}-method
  * to support the type you need. Once created you'll have to give your custom Converter
  * using the {@link Command#setUsedConverter(Converter)}-method ideally before trying to parse
  * a command having a parameter with custom / complex type</li>
@@ -751,7 +750,7 @@ public abstract class Command implements NamingValidator {
                                 param.getName(),
                                 param.getType().getSimpleName(),
                                 param.getDefaultValue(),
-                                (param.getType().isEnum())? buildEnumListing(param.getType()) : null,
+                                (param.getType().isEnum())? buildEnumListing((EnumType) param.getType()) : null,
                                 paramDescrLines[0],
                                 System.lineSeparator(),
                                 generateOrdinalString(param)
@@ -833,10 +832,10 @@ public abstract class Command implements NamingValidator {
      * @return the listing of the valid values for the given enum-type
      */
     @NotNull
-    private static String buildEnumListing(@NotNull Class type) {
+    private static String buildEnumListing(@NotNull EnumType type) {
         StringBuilder result = new StringBuilder();
 
-        Object[] values = type.getEnumConstants();
+        Object[] values = type.getEnumType().getEnumConstants();
         for(int i = 0; i < values.length; i++) {
             if(i != 0) {
                 result.append(", ");
@@ -922,7 +921,7 @@ public abstract class Command implements NamingValidator {
                     new Parameter[] {
                             new Parameter(
                                     "command",
-                                    String.class,
+                                    CommonTypes.String,
                                     "The command to print the documentation for.",
                                     "",
                                     0

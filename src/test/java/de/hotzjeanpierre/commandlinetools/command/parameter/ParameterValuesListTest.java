@@ -40,7 +40,7 @@ public class ParameterValuesListTest {
         String valuename = "somevalue";
         Parameter parameter = new Parameter(
                 "someparameter",
-                SomeClass.class,
+                new ObjectType(SomeClass.class),
                 "this is some parameter",
                 0
         );

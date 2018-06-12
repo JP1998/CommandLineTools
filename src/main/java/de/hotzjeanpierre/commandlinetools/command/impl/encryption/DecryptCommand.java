@@ -18,6 +18,7 @@ package de.hotzjeanpierre.commandlinetools.command.impl.encryption;
 
 import de.hotzjeanpierre.commandlinetools.command.Command;
 import de.hotzjeanpierre.commandlinetools.command.CommandExecutionResult;
+import de.hotzjeanpierre.commandlinetools.command.parameter.CommonTypes;
 import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
 import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
 import de.hotzjeanpierre.commandlinetools.command.utils.files.*;
@@ -71,49 +72,49 @@ public class DecryptCommand extends Command {
                 new Parameter[]{
                         new Parameter(
                                 PARAMETER_NAME_SOURCE,
-                                File.class,
+                                CommonTypes.FilterMode,
                                 PARAMETER_DESCRIPTION_SOURCE,
                                 0
                         ),
                         new Parameter(
                                 PARAMETER_NAME_DELETESOURCE,
-                                Boolean.class,
+                                CommonTypes.Primitives.Boolean,
                                 PARAMETER_DESCRIPTION_DELETESOURCE,
                                 true
                         ),
                         new Parameter(
                                 PARAMETER_NAME_FILTER,
-                                String.class,
+                                CommonTypes.String,
                                 PARAMETER_DESCRIPTION_FILTER,
                                 "encr"
                         ),
                         new Parameter(
                                 PARAMETER_NAME_FILTERMODE,
-                                FilterMode.class,
+                                CommonTypes.FilterMode,
                                 PARAMETER_DESCRIPTION_FILTERMODE,
                                 FilterMode.AllowOnly
                         ),
                         new Parameter(
                                 PARAMETER_NAME_SUBDIRECTORIES,
-                                Boolean.class,
+                                CommonTypes.Primitives.Boolean,
                                 PARAMETER_DESCRIPTION_SUBDIRECTORIES,
                                 true
                         ),
                         new Parameter(
                                 PARAMETER_NAME_OUTPUTPATH,
-                                File.class,
+                                CommonTypes.FilterMode,
                                 PARAMETER_DESCRIPTION_OUTPUTPATH,
                                 1
                         ),
                         new Parameter(
                                 PARAMETER_NAME_FORMAT,
-                                FileNamingTemplate.class,
+                                CommonTypes.FileNamingTemplate,
                                 PARAMETER_DESCRIPTION_FORMAT,
                                 FileNamingTemplate.parse("{originallocation}{originalname}{extension}")
                         ),
                         new Parameter(
                                 PARAMETER_NAME_PASSWORD,
-                                String.class,
+                                CommonTypes.String,
                                 PARAMETER_DESCRIPTION_PASSWORD,
                                 2
                         )

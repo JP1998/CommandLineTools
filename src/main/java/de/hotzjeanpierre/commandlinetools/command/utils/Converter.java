@@ -16,6 +16,10 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils;
 
+import de.hotzjeanpierre.commandlinetools.command.parameter.EnumType;
+import de.hotzjeanpierre.commandlinetools.command.parameter.ObjectType;
+import de.hotzjeanpierre.commandlinetools.command.parameter.PrimitiveType;
+import de.hotzjeanpierre.commandlinetools.command.parameter.Type;
 import de.hotzjeanpierre.commandlinetools.command.utils.arrays.ArrayHelper;
 import de.hotzjeanpierre.commandlinetools.command.utils.files.FileNamingTemplate;
 import org.jetbrains.annotations.Nullable;
@@ -28,11 +32,15 @@ import java.util.regex.Pattern;
  * back into their type. To support types that are not by default supported
  * you'll have to extend this class and parse the given type yourself.
  *
- * @see Converter#convert(String, Class)
+ * @see Converter#convert(String, Type)
  */
 public class Converter {
 
     private static final Pattern sFileNamePattern = Pattern.compile("^([A-Z]:)?[^<>:\"|?*]*$");
+
+    public static final Type Type_String = new ObjectType(String.class);
+    public static final Type Type_File = new ObjectType(File.class);
+    public static final Type Type_FileNamingTemplate = new ObjectType(FileNamingTemplate.class);
 
     /**
      * <p>This method converts an object from its String representation into its
@@ -78,22 +86,22 @@ public class Converter {
      */
     @Nullable
     @SuppressWarnings({"unchecked"})
-    public Object convert(String representation, Class toConvertTo) {
-        if (String.class.equals(toConvertTo)) {                     // String
+    public Object convert(String representation, Type toConvertTo) {
+        if (Type_String.equals(toConvertTo)) {                     // String
             return representation;
-        } else if (File.class.equals(toConvertTo)) {                // File
+        } else if (Type_File.equals(toConvertTo)) {                // File
             if(!sFileNamePattern.matcher(representation).matches()) {
                 return null;
             } else {
                 return new File(representation);
             }
-        } else if (toConvertTo == FileNamingTemplate.class) {       // FileNamingTemplate
+        } else if (Type_FileNamingTemplate.equals(toConvertTo)) {       // FileNamingTemplate
             try {
                 return FileNamingTemplate.parse(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (Boolean.class.equals(toConvertTo) || boolean.class.equals(toConvertTo)) {             // boolean
+        } else if (PrimitiveType.BOOLEAN.equals(toConvertTo)) {             // boolean
             if(representation.trim().equalsIgnoreCase("true")) {
                 return true;
             } else if(representation.trim().equalsIgnoreCase("false")) {
@@ -101,50 +109,50 @@ public class Converter {
             } else {
                 return null;
             }
-        } else if (Double.class.equals(toConvertTo) || double.class.equals(toConvertTo)) {              // double
+        } else if (PrimitiveType.DOUBLE.equals(toConvertTo)) {              // double
             try {
                 return Double.parseDouble(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (Float.class.equals(toConvertTo) || float.class.equals(toConvertTo)) {               // float
+        } else if (PrimitiveType.FLOAT.equals(toConvertTo)) {               // float
             try {
                 return Float.parseFloat(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (Byte.class.equals(toConvertTo) || byte.class.equals(toConvertTo)) {                // byte
+        } else if (PrimitiveType.BYTE.equals(toConvertTo)) {                // byte
             try {
                 return Byte.parseByte(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (Short.class.equals(toConvertTo) || short.class.equals(toConvertTo)) {               // short
+        } else if (PrimitiveType.SHORT.equals(toConvertTo)) {               // short
             try {
                 return Short.parseShort(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (Character.class.equals(toConvertTo) || char.class.equals(toConvertTo)) {           // char
+        } else if (PrimitiveType.CHAR.equals(toConvertTo)) {           // char
             if (representation.length() > 1) {
                 return null;
             }
             return representation.charAt(0);
-        } else if (Integer.class.equals(toConvertTo) || int.class.equals(toConvertTo)) {             // int
+        } else if (PrimitiveType.INT.equals(toConvertTo)) {             // int
             try {
                 return Integer.parseInt(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (Long.class.equals(toConvertTo) || long.class.equals(toConvertTo)) {                // long
+        } else if (PrimitiveType.LONG.equals(toConvertTo)) {                // long
             try {
                 return Long.parseLong(representation);
             } catch (Exception e) {
                 return null;
             }
-        } else if (toConvertTo != null && toConvertTo.isEnum()) {   // any enum
+        } else if (toConvertTo.isEnum()) {   // any enum
             try {
-                return Enum.valueOf(toConvertTo, representation);
+                return Enum.valueOf(((EnumType) toConvertTo).getEnumType(), representation);
             } catch (Exception e) {
                 return null;
             }

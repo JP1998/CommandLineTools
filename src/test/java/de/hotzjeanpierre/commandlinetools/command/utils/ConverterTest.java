@@ -16,6 +16,9 @@
 
 package de.hotzjeanpierre.commandlinetools.command.utils;
 
+import de.hotzjeanpierre.commandlinetools.command.parameter.CommonTypes;
+import de.hotzjeanpierre.commandlinetools.command.parameter.EnumType;
+import de.hotzjeanpierre.commandlinetools.command.parameter.ObjectType;
 import de.hotzjeanpierre.commandlinetools.command.utils.files.FileNamingTemplate;
 import org.junit.Test;
 
@@ -30,7 +33,7 @@ public class ConverterTest {
     @Test
     public void testStringConversion() {
         assertThat(
-                new Converter().convert("some string", String.class),
+                new Converter().convert("some string", CommonTypes.String),
                 is("some string")
         );
     }
@@ -38,7 +41,7 @@ public class ConverterTest {
     @Test
     public void testFileConversionValid() {
         assertThat(
-                new Converter().convert("/asdf/ghjk lmno/pqrs.txt", File.class),
+                new Converter().convert("/asdf/ghjk lmno/pqrs.txt", CommonTypes.File),
                 is(new File("/asdf/ghjk lmno/pqrs.txt"))
         );
     }
@@ -46,7 +49,7 @@ public class ConverterTest {
     @Test
     public void testFileConversionInvalid() {
         assertThat(
-                new Converter().convert("/asd?/ghjk.jpg", File.class),
+                new Converter().convert("/asd?/ghjk.jpg", CommonTypes.File),
                 nullValue()
         );
     }
@@ -54,7 +57,7 @@ public class ConverterTest {
     @Test
     public void testFileNamingTemplateConversionValid() {
         assertThat(
-                new Converter().convert("{index:10}asdf - fdsa{extension}", FileNamingTemplate.class),
+                new Converter().convert("{index:10}asdf - fdsa{extension}", CommonTypes.FileNamingTemplate),
                 is(FileNamingTemplate.parse("{index:10}asdf - fdsa{extension}"))
         );
     }
@@ -62,7 +65,7 @@ public class ConverterTest {
     @Test
     public void testFileNamingTemplateConversionInvalid() {
         assertThat(
-                new Converter().convert("{indax:10}asdf - fdsa{extension}", FileNamingTemplate.class),
+                new Converter().convert("{indax:10}asdf - fdsa{extension}", CommonTypes.FileNamingTemplate),
                 nullValue()
         );
     }
@@ -70,7 +73,7 @@ public class ConverterTest {
     @Test
     public void testBooleanConversionValidTrue() {
         assertThat(
-                new Converter().convert("true", Boolean.class),
+                new Converter().convert("true", CommonTypes.Primitives.Boolean),
                 is(true)
         );
     }
@@ -78,7 +81,7 @@ public class ConverterTest {
     @Test
     public void testBooleanConversionValidFalse() {
         assertThat(
-                new Converter().convert("false", Boolean.class),
+                new Converter().convert("false", CommonTypes.Primitives.Boolean),
                 is(false)
         );
     }
@@ -86,7 +89,7 @@ public class ConverterTest {
     @Test
     public void testBooleanConversionInvalid() {
         assertThat(
-                new Converter().convert("true af", Boolean.class),
+                new Converter().convert("true af", CommonTypes.Primitives.Boolean),
                 nullValue()
         );
     }
@@ -94,7 +97,7 @@ public class ConverterTest {
     @Test
     public void testDoubleConversionValid() {
         assertThat(
-                new Converter().convert("1.234e+4", Double.class),
+                new Converter().convert("1.234e+4", CommonTypes.Primitives.Double),
                 is(1.234e+4d)
         );
     }
@@ -102,7 +105,7 @@ public class ConverterTest {
     @Test
     public void testDoubleConversionInvalid() {
         assertThat(
-                new Converter().convert("1.2.3.4", Double.class),
+                new Converter().convert("1.2.3.4", CommonTypes.Primitives.Double),
                 nullValue()
         );
     }
@@ -110,7 +113,7 @@ public class ConverterTest {
     @Test
     public void testFloatConversionValid() {
         assertThat(
-                new Converter().convert("1.234e+4", Float.class),
+                new Converter().convert("1.234e+4", CommonTypes.Primitives.Float),
                 is(1.234e+4f)
         );
     }
@@ -118,7 +121,7 @@ public class ConverterTest {
     @Test
     public void testFloatConversionInvalid() {
         assertThat(
-                new Converter().convert("1.2.3.4", Float.class),
+                new Converter().convert("1.2.3.4", CommonTypes.Primitives.Float),
                 nullValue()
         );
     }
@@ -126,7 +129,7 @@ public class ConverterTest {
     @Test
     public void testByteConversionValid() {
         assertThat(
-                new Converter().convert("125", Byte.class),
+                new Converter().convert("125", CommonTypes.Primitives.Byte),
                 is((byte) 125)
         );
     }
@@ -134,7 +137,7 @@ public class ConverterTest {
     @Test
     public void testByteConversionInvalid() {
         assertThat(
-                new Converter().convert("12345", Byte.class),
+                new Converter().convert("12345", CommonTypes.Primitives.Byte),
                 nullValue()
         );
     }
@@ -142,7 +145,7 @@ public class ConverterTest {
     @Test
     public void testShortConversionValid() {
         assertThat(
-                new Converter().convert("23456", Short.class),
+                new Converter().convert("23456", CommonTypes.Primitives.Short),
                 is((short) 23456)
         );
     }
@@ -150,7 +153,7 @@ public class ConverterTest {
     @Test
     public void testShortConversionInvalid() {
         assertThat(
-                new Converter().convert("123456", Short.class),
+                new Converter().convert("123456", CommonTypes.Primitives.Short),
                 nullValue()
         );
     }
@@ -158,7 +161,7 @@ public class ConverterTest {
     @Test
     public void testCharacterConversionValid() {
         assertThat(
-                new Converter().convert("a", Character.class),
+                new Converter().convert("a", CommonTypes.Primitives.Character),
                 is('a')
         );
     }
@@ -166,7 +169,7 @@ public class ConverterTest {
     @Test
     public void testCharacterConversionInvalid() {
         assertThat(
-                new Converter().convert("ab", Character.class),
+                new Converter().convert("ab", CommonTypes.Primitives.Character),
                 nullValue()
         );
     }
@@ -174,7 +177,7 @@ public class ConverterTest {
     @Test
     public void testIntegerConversionValid() {
         assertThat(
-                new Converter().convert("12345678", Integer.class),
+                new Converter().convert("12345678", CommonTypes.Primitives.Integer),
                 is(12345678)
         );
     }
@@ -182,7 +185,7 @@ public class ConverterTest {
     @Test
     public void testIntegerConversionInvalid() {
         assertThat(
-                new Converter().convert("ab", Integer.class),
+                new Converter().convert("ab", CommonTypes.Primitives.Integer),
                 nullValue()
         );
     }
@@ -190,7 +193,7 @@ public class ConverterTest {
     @Test
     public void testLongConversionValid() {
         assertThat(
-                new Converter().convert("123456789101112", Long.class),
+                new Converter().convert("123456789101112", CommonTypes.Primitives.Long),
                 is(123456789101112L)
         );
     }
@@ -198,7 +201,7 @@ public class ConverterTest {
     @Test
     public void testLongConversionInvalid() {
         assertThat(
-                new Converter().convert("ab", Long.class),
+                new Converter().convert("ab", CommonTypes.Primitives.Long),
                 nullValue()
         );
     }
@@ -206,7 +209,7 @@ public class ConverterTest {
     @Test
     public void testEnumConversionValid() {
         assertThat(
-                new Converter().convert("BLOCKED", Thread.State.class),
+                new Converter().convert("BLOCKED", new EnumType(Thread.State.class)),
                 is(Thread.State.BLOCKED)
         );
     }
@@ -214,7 +217,7 @@ public class ConverterTest {
     @Test
     public void testEnumConversionInvalid() {
         assertThat(
-                new Converter().convert("anything but a valid string", Thread.State.class),
+                new Converter().convert("anything but a valid string", new EnumType(Thread.State.class)),
                 nullValue()
         );
     }
@@ -222,7 +225,7 @@ public class ConverterTest {
     @Test
     public void testAnyInvalidConversion() {
         assertThat(
-                new Converter().convert("anything", Object.class),
+                new Converter().convert("anything", new ObjectType(Object.class)),
                 nullValue()
         );
     }

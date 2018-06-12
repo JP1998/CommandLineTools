@@ -17,6 +17,7 @@
 package de.hotzjeanpierre.commandlinetools;
 
 import de.hotzjeanpierre.commandlinetools.command.*;
+import de.hotzjeanpierre.commandlinetools.command.parameter.CommonTypes;
 import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
 import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
 import de.hotzjeanpierre.commandlinetools.command.utils.arrays.ArrayHelper;
@@ -189,7 +190,7 @@ public class Main implements ICommandLineApplication {
                             new Parameter[] {
                                     new Parameter(
                                             "surprise",
-                                            Integer.class,
+                                            CommonTypes.Primitives.Integer,
                                             "A little surprise.",
                                             (Object) (-1)
                                     )

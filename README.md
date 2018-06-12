@@ -123,13 +123,14 @@ public class SampleCommand extends Command {
                 new Parameter(
                     "param1",
                     String.class,
-                    "This parameter is to do something like this."
+                    "This parameter is to do something like this.",
+                    1
                 ),
                 new Parameter(
                     "param2",
                     Integer.class,
                     "Some integer parameter with default value 123",
-                    123
+                    (Integer) 123
                 )
             }
         );

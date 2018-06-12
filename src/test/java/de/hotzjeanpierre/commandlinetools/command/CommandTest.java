@@ -21,6 +21,8 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 
 import de.hotzjeanpierre.commandlinetools.command.exceptions.*;
+import de.hotzjeanpierre.commandlinetools.command.parameter.CommonTypes;
+import de.hotzjeanpierre.commandlinetools.command.parameter.ObjectType;
 import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
 import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
 import de.hotzjeanpierre.commandlinetools.command.testutilities.CommandTestingStream;
@@ -112,7 +114,7 @@ public class CommandTest {
     public void testCommandAcceptingParameterList() {
         Parameter toRetrieve = new Parameter(
                 "someparameter2",
-                SomeClass.class,
+                new ObjectType(SomeClass.class),
                 "some description",
                 0
         );
@@ -122,7 +124,7 @@ public class CommandTest {
                         "somecommand",
                         "some description",
                         new Parameter[]{
-                                new Parameter("irrelevant", SomeSubClass.class, "some irrelevant description", 0),
+                                new Parameter("irrelevant", new ObjectType(SomeSubClass.class), "some irrelevant description", 0),
                                 toRetrieve
                         },
                         false) {
@@ -226,9 +228,9 @@ public class CommandTest {
                         "command_testunknownparameter",
                         "some description",
                         new Parameter[] {
-                                new Parameter("supportedparam1", SomeClass.class, "some description", new SomeClass(1, 2.3)),
-                                new Parameter("supportedparam2", SomeClass.class, "some description", new SomeClass(1, 2.3)),
-                                new Parameter("supportedparam2", SomeClass.class, "some description", new SomeClass(1, 2.3))
+                                new Parameter("supportedparam1", new ObjectType(SomeClass.class), "some description", new SomeClass(1, 2.3)),
+                                new Parameter("supportedparam2", new ObjectType(SomeClass.class), "some description", new SomeClass(1, 2.3)),
+                                new Parameter("supportedparam2", new ObjectType(SomeClass.class), "some description", new SomeClass(1, 2.3))
                         }
                 )
         );
@@ -243,9 +245,9 @@ public class CommandTest {
                         "command_testparametertypemismatch",
                         "some description",
                         new Parameter[] {
-                                new Parameter("supportedparam1", SomeClass.class, "some description", new SomeClass(1, 2.3)),
-                                new Parameter("supportedparam2", SomeClass.class, "some description", new SomeClass(1, 2.3)),
-                                new Parameter("supportedparam2", SomeClass.class, "some description", new SomeClass(1, 2.3))
+                                new Parameter("supportedparam1", new ObjectType(SomeClass.class), "some description", new SomeClass(1, 2.3)),
+                                new Parameter("supportedparam2", new ObjectType(SomeClass.class), "some description", new SomeClass(1, 2.3)),
+                                new Parameter("supportedparam2", new ObjectType(SomeClass.class), "some description", new SomeClass(1, 2.3))
                         }
                 )
         );
@@ -260,7 +262,7 @@ public class CommandTest {
                         "command_testparametertypevalid",
                         "some description",
                         new Parameter[] {
-                                new Parameter("supportedparam1", String.class, "some description", 0)
+                                new Parameter("supportedparam1", CommonTypes.String, "some description", 0)
                         }
                 )
         );
@@ -275,7 +277,7 @@ public class CommandTest {
                         "command_testduplicateparameterfailing",
                         "some description",
                         new Parameter[] {
-                                new Parameter("supportedparam1", String.class, "some description", 0)
+                                new Parameter("supportedparam1", CommonTypes.String, "some description", 0)
                         }
                 )
         );
@@ -290,7 +292,7 @@ public class CommandTest {
                         "command_testdefaultvaluetaken",
                         "some description",
                         new Parameter[]{
-                                new Parameter("supportedparam1", String.class, "some description", "default")
+                                new Parameter("supportedparam1", CommonTypes.String, "some description", "default")
                         }
                 )
         );
@@ -305,7 +307,7 @@ public class CommandTest {
                         "command_testmissingparameterwithoutdefaultvaluefailing",
                         "some description",
                         new Parameter[]{
-                                new Parameter("supportedparam1", SomeClass.class, "description", null)
+                                new Parameter("supportedparam1", new ObjectType(SomeClass.class), "description", null)
                         }
                 )
         );
@@ -321,13 +323,13 @@ public class CommandTest {
                 new Parameter[]{
                         new Parameter(
                                 "supportedparam1",
-                                String.class,
+                                CommonTypes.String,
                                 "This is the description of the parameter.\nIts default value will do this and that.",
                                 "Hello World"
                         ),
                         new Parameter(
                                 "supportedparam2",
-                                String.class,
+                                CommonTypes.String,
                                 "This is the description of another parameter.\nIts has no default value.",
                                 0
                         ),
@@ -529,13 +531,13 @@ public class CommandTest {
                     new Parameter[]{
                             new Parameter(
                                     "bool1",
-                                    Boolean.class,
+                                    CommonTypes.Primitives.Boolean,
                                     "some boolean parameter",
                                     0
                             ),
                             new Parameter(
                                     "bool2",
-                                    Boolean.class,
+                                    CommonTypes.Primitives.Boolean,
                                     "some other boolean parameter",
                                     true
                             )
