@@ -44,6 +44,11 @@ public class EnumType implements Type {
     }
 
     @Override
+    public boolean isSubType(Type t) {
+        return false;
+    }
+
+    @Override
     public boolean isEnum() {
         return true;
     }

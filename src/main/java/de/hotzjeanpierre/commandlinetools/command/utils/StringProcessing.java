@@ -637,12 +637,30 @@ public class StringProcessing {
     public static String stretch(String toStretch, char filler, int length, boolean insertBefore) {
         StringBuilder result = new StringBuilder(toStretch);
 
-        while (result.length() < length) {
-            if(insertBefore) {
-                result.insert(0, filler);
-            } else {
-                result.append(filler);
-            }
+        String toInsert = multiply(Character.toString(filler), length - toStretch.length());
+
+        if(insertBefore) {
+            result.insert(0, toInsert);
+        } else {
+            result.append(toInsert);
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * This method concatenates the string with itself n times and returns the result.
+     *
+     * @param str the string to concatenate with itself
+     * @param n how often the string is supposed to be concatenated with itself
+     * @return the given string concatenated n times with itself
+     */
+    @NotNull
+    public static String multiply(String str, int n) {
+        StringBuilder result = new StringBuilder();
+
+        for(int i = 0; i < n; i++) {
+            result.append(str);
         }
 
         return result.toString();

@@ -24,6 +24,8 @@ public interface Type {
 
     String getSimpleName();
 
+    boolean isSubType(Type t);
+
     boolean isEnum();
 
 }

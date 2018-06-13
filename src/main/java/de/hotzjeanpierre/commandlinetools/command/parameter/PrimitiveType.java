@@ -45,11 +45,6 @@ public class PrimitiveType implements Type {
         return false;
     }
 
-    public boolean equals(PrimitiveType obj) {
-        return obj.wrapperClass.equals(wrapperClass) &&
-                obj.primitiveClass.equals(primitiveClass);
-    }
-
     @Override
     public String getName() {
         return primitiveClass.getName();
@@ -58,6 +53,16 @@ public class PrimitiveType implements Type {
     @Override
     public String getSimpleName() {
         return primitiveClass.getSimpleName();
+    }
+
+    @Override
+    public boolean isSubType(Type t) {
+        return false;
+    }
+
+    public boolean equals(PrimitiveType obj) {
+        return obj.wrapperClass.equals(wrapperClass) &&
+                obj.primitiveClass.equals(primitiveClass);
     }
 
     @Override

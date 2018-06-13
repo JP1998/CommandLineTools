@@ -44,6 +44,11 @@ public class ObjectType implements Type {
         return type.getSimpleName();
     }
 
+    @Override
+    public boolean isSubType(Type t) {
+        return t instanceof ObjectType && ((ObjectType) t).type.isAssignableFrom(type);
+    }
+
     public boolean equals(ObjectType obj) {
         return obj.type.equals(type);
     }
