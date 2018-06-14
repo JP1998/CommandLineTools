@@ -30,8 +30,8 @@ public class ArrayType implements Type {
 
     @Override
     public boolean isValidValue(Object o) {
-        return o instanceof Array &&
-                ((Array) o).conformsToType(this);
+        return o == null || (o instanceof Array &&
+                ((Array) o).conformsToType(this));
     }
 
     public Type getContainedType() {

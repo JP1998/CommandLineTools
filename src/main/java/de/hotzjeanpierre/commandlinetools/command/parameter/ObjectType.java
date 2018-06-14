@@ -26,7 +26,7 @@ public class ObjectType implements Type {
 
     @Override
     public boolean isValidValue(Object o) {
-        return type.isInstance(o);
+        return o == null || type.isInstance(o);
     }
 
     @Override

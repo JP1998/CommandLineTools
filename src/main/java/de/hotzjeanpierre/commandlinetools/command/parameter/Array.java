@@ -27,6 +27,65 @@ public class Array implements Iterable {
     private Type elementType;
     private int dimensions;
 
+    public Array(Type t, int dimensions, Object... elements) {
+        this.elementType = t;
+        this.dimensions = dimensions;
+
+            this.elements = new Object[elements.length];
+
+        if(dimensions < 1) {
+            throw new IllegalArgumentException(StringProcessing.format(
+                    "You cannot create an array with {0} dimensions.",
+                    dimensions
+            ));
+        } else if(dimensions == 1) {
+            for(int i = 0; i < elements.length; i++) {
+                if(elementType.isValidValue(elements[i])) {
+                    this.elements[i] = elements[i];
+                } else if(elements[i] != null) {
+                    throw new IllegalArgumentException(StringProcessing.format(
+                            "Cannot add value of type {0} into an array of type {2}.",
+                            elements[i].getClass().getSimpleName(),
+                            elementType.getSimpleName()
+                    ));
+                } else {
+                    throw new IllegalArgumentException(StringProcessing.format(
+                            "Cannot add null-value into an array of type {2}.",
+                            elementType.getSimpleName()
+                    ));
+                }
+            }
+        } else {
+            for(int i = 0; i < elements.length; i++) {
+                if(elements[i] instanceof Array) {
+                    Array toInsert = (Array) elements[i];
+                    if (!elementType.isSubType(toInsert.elementType)) {
+                        throw new IllegalArgumentException(StringProcessing.format(
+                                "Cannot insert array of type {0} into an array of type {b}.",
+                                toInsert.elementType.getSimpleName(),
+                                elementType.getSimpleName()
+                        ));
+                    } else if (this.dimensions != toInsert.dimensions + 1) {
+                        throw new IllegalArgumentException(StringProcessing.format(
+                                "Cannot insert array with {0} dimensions into an array with {1} dimensions.",
+                                toInsert.dimensions,
+                                this.dimensions
+                        ));
+                    } else {
+                        this.elements[i] = elements[i];
+                    }
+                } else if(elements[i] == null) {
+                    this.elements[i] = null;
+                } else {
+                    throw new IllegalArgumentException(StringProcessing.format(
+                            "Cannot insert element into array an {0}-dimensional array.",
+                            this.dimensions
+                    ));
+                }
+            }
+        }
+    }
+
     public int length() {
         return elements.length;
     }
@@ -154,10 +213,41 @@ public class Array implements Iterable {
         return false;
     }
 
-    private static int[] stripLast(int[] arr) {
+    private static int[] stripLast(@NotNull int[] arr) {
         int[] result = new int[(arr.length > 0)? arr.length - 1 : 0];
         System.arraycopy(arr, 0, result, 0, result.length);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return StringProcessing.format(
+                "{0}{1} {2}",
+                elementType.getSimpleName(),
+                StringProcessing.multiply("[]", this.dimensions),
+                createValueString()
+        );
+    }
+
+    private String createValueString() {
+        StringBuilder result = new StringBuilder("{ ");
+
+        for(int i = 0; i < this.elements.length; i++) {
+            if(i > 0) {
+                result.append(", ");
+            }
+            if(this.elements[i] != null) {
+                if (this.dimensions > 1) {
+                    result.append(((Array) this.elements[i]).createValueString());
+                } else {
+                    result.append(this.elements[i].toString());
+                }
+            } else {
+                result.append("null");
+            }
+        }
+
+        return result.append(" }").toString();
     }
 
     private class ArrayIterator implements Iterator {
