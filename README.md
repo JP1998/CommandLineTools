@@ -103,8 +103,9 @@ package com.yourname.yourproject.commands;
 
 import de.commandlinetools.command.Command;
 import de.commandlinetools.command.CommandExecutionResult;
-import de.commandlinetools.command.Parameter;
-import de.commandlinetools.command.ParameterValuesList;
+import de.commandlinetools.command.parameter.CommonTypes;
+import de.commandlinetools.command.parameter.Parameter;
+import de.commandlinetools.command.parameter.ParameterValuesList;
 
 public class SampleCommand extends Command {
     
@@ -122,13 +123,13 @@ public class SampleCommand extends Command {
             new Parameter[] {
                 new Parameter(
                     "param1",
-                    String.class,
+                    CommonTypes.String,
                     "This parameter is to do something like this.",
                     1
                 ),
                 new Parameter(
                     "param2",
-                    Integer.class,
+                    CommonTypes.Primitives.Integer,
                     "Some integer parameter with default value 123",
                     (Integer) 123
                 )
@@ -169,14 +170,18 @@ A little example converter class could be as follows:
 package com.yourname.yourproject.commands.utils;
 
 import de.hotzjeanpierre.commandlinetools.command.utils.Converter;
+import de.hotzjeanpierre.commandlinetools.command.parameter.Type;
 
 public class CustomConverter extends Converter { 
     
+    private static final Type CustomType1_Type = new ObjectType(CustomType1.class);
+    private static final Type CustomType2_Type = new ObjectType(CustomType2.class);
+
     @Override
-    public void convert(String representation, Class type) {
-        if(CustomType1.class.equals(type)) {
+    public void convert(String representation, Type type) {
+        if(CustomType1_Type.equals(type)) {
             return CustomType1.parse(representation);
-        } else if(CustomType2.class.equals(type)) {
+        } else if(CustomType2_Type.equals(type)) {
             // as the documentation of Converter#convert(String, Class) declares
             // you should not throw any exceptions from the convert-method
             // but instead return the value null as soon as you recognize an invalid format
@@ -210,7 +215,4 @@ public class CustomConverter extends Converter {
 - creating the possibility for smart auto-complete in the ui-client
 - adding the possibility to add a custom ICommandLine-type to the Main-class,
     which should be able to be used with certain command-line arguments
-- creating the possibility to easily parse arrays of arbitrary (but parseable, as determined by the used Converter-object) type
-  - extend the regex used in StringProcessing#tokenize(String) to allow arrays with whitespace but without the string denominator
-  - handle nested arrays (maybe with recursion?)
-- allow nested command calls (like "list find asdf C:/Users/", which should list all the files in any directory containing the phrase "asdf" in "C:/Users/")?
+- allow nested command calls (like "list (find asdf C:/Users/)", which should list all the files in any directory containing the phrase "asdf" in "C:/Users/")?
