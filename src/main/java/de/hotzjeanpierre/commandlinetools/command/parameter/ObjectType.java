@@ -16,7 +16,10 @@
 
 package de.hotzjeanpierre.commandlinetools.command.parameter;
 
-public class ObjectType implements Type {
+/**
+ * This class represents a type which allows values of a given class.
+ */
+public final class ObjectType implements Type {
 
     private Class type;
 
@@ -46,7 +49,8 @@ public class ObjectType implements Type {
 
     @Override
     public boolean isSubType(Type t) {
-        return t instanceof ObjectType && ((ObjectType) t).type.isAssignableFrom(type);
+        return t instanceof ObjectType &&
+                ((ObjectType) t).type.isAssignableFrom(type);
     }
 
     public boolean equals(ObjectType obj) {

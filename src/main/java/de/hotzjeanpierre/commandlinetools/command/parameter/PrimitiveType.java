@@ -16,7 +16,11 @@
 
 package de.hotzjeanpierre.commandlinetools.command.parameter;
 
-public class PrimitiveType implements Type {
+/**
+ * This class represents a primitive type which allows values of the primitive types wrapper class
+ * or of the primitive type itself.
+ */
+public final class PrimitiveType implements Type {
 
     public static final PrimitiveType BOOLEAN   = new PrimitiveType(Boolean.class, boolean.class);
     public static final PrimitiveType DOUBLE    = new PrimitiveType(Double.class, double.class);
@@ -67,9 +71,7 @@ public class PrimitiveType implements Type {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof PrimitiveType) {
-            return equals((PrimitiveType) obj);
-        }
-        return false;
+        return obj instanceof PrimitiveType &&
+                equals((PrimitiveType) obj);
     }
 }

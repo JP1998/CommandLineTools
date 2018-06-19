@@ -141,4 +141,19 @@ public class ArrayHelper {
 
         return result;
     }
+
+    /**
+     * This method will strip the last element from the given array and return
+     * the it. This means that this method will return an array with a length
+     * one less than the given array (or with length 0, if the array is already
+     * empty) but the elements are equal and in order inserted into the new array.
+     *
+     * @param arr the array from which the last element is to be stripped
+     * @return the array with the last element removed
+     */
+    public static int[] stripLast(@NotNull int[] arr) {
+        int[] result = new int[(arr.length > 0)? arr.length - 1 : 0];
+        System.arraycopy(arr, 0, result, 0, result.length);
+        return result;
+    }
 }

@@ -16,29 +16,38 @@
 
 package de.hotzjeanpierre.commandlinetools.command.parameter;
 
+import de.hotzjeanpierre.commandlinetools.command.utils.files.FileNamingTemplate;
+import de.hotzjeanpierre.commandlinetools.command.utils.files.FilterMode;
+
+/**
+ * This class defines some types that are ready for use.
+ */
 public final class CommonTypes {
 
     private CommonTypes() {}
 
+    /**
+     * This class defines all the primitive types.
+     */
     public static final class Primitives {
 
         private Primitives() {}
 
-        public static final PrimitiveType Boolean = PrimitiveType.BOOLEAN;
-        public static final PrimitiveType Double = PrimitiveType.DOUBLE;
-        public static final PrimitiveType Float = PrimitiveType.FLOAT;
-        public static final PrimitiveType Byte = PrimitiveType.BYTE;
-        public static final PrimitiveType Short = PrimitiveType.SHORT;
-        public static final PrimitiveType Character = PrimitiveType.CHAR;
-        public static final PrimitiveType Integer = PrimitiveType.INT;
-        public static final PrimitiveType Long = PrimitiveType.LONG;
+        public static final PrimitiveType Boolean                   = PrimitiveType.BOOLEAN;
+        public static final PrimitiveType Double                    = PrimitiveType.DOUBLE;
+        public static final PrimitiveType Float                     = PrimitiveType.FLOAT;
+        public static final PrimitiveType Byte                      = PrimitiveType.BYTE;
+        public static final PrimitiveType Short                     = PrimitiveType.SHORT;
+        public static final PrimitiveType Character                 = PrimitiveType.CHAR;
+        public static final PrimitiveType Integer                   = PrimitiveType.INT;
+        public static final PrimitiveType Long                      = PrimitiveType.LONG;
 
     }
 
-    public static final ObjectType String = new ObjectType(java.lang.String.class);
-    public static final ObjectType File = new ObjectType(java.io.File.class);
-    public static final ObjectType FileNamingTemplate = new ObjectType(de.hotzjeanpierre.commandlinetools.command.utils.files.FileNamingTemplate.class);
+    public static final ObjectType String                           = new ObjectType(java.lang.String.class);
+    public static final ObjectType File                             = new ObjectType(java.io.File.class);
+    public static final ObjectType FileNamingTemplate               = new ObjectType(FileNamingTemplate.class);
 
-    public static final EnumType FilterMode = new EnumType(de.hotzjeanpierre.commandlinetools.command.utils.files.FilterMode.class);
+    public static final EnumType FilterMode                         = new EnumType(FilterMode.class);
 
 }

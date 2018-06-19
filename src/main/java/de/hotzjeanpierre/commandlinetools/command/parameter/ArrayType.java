@@ -18,7 +18,11 @@ package de.hotzjeanpierre.commandlinetools.command.parameter;
 
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 
-public class ArrayType implements Type {
+/**
+ * This type represents an array of arbitrary dimension with
+ * any type of elements (except arrays) contained.
+ */
+public final class ArrayType implements Type {
 
     private Type containedType;
     private int dimensions;

@@ -16,7 +16,10 @@
 
 package de.hotzjeanpierre.commandlinetools.command.parameter;
 
-public class EnumType implements Type {
+/**
+ * This class represents an enumerated type which allows values of given enum.
+ */
+public final class EnumType implements Type {
 
     private Class enumType;
 
