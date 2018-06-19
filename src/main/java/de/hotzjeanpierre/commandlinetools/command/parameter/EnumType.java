@@ -56,6 +56,11 @@ public final class EnumType implements Type {
         return true;
     }
 
+    @Override
+    public boolean isArray() {
+        return false;
+    }
+
     public boolean equals(EnumType obj) {
         return obj.enumType.equals(enumType);
     }

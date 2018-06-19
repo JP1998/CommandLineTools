@@ -38,6 +38,11 @@ public final class ObjectType implements Type {
     }
 
     @Override
+    public boolean isArray() {
+        return false;
+    }
+
+    @Override
     public String getName() {
         return type.getName();
     }

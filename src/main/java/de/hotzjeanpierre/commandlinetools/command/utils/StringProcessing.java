@@ -251,6 +251,9 @@ public class StringProcessing {
                 // will let i point to the first character outside of the string,
                 // which will make String#substring(int, int) include only the last double quote.
                 i = findEndOfString(command, i) - 1;
+            } else {
+                // minus one again because of aforementioned reason
+                i = findEndOfArrayElement(command, i) - 1;
             }
             i++;
         }
@@ -326,6 +329,23 @@ public class StringProcessing {
      */
     private static int findEndOfSimpleParameter(@NotNull String command, int i) {
         while (i < command.length() && !Character.isWhitespace(command.charAt(i))) {
+            i++;
+        }
+        return i;
+    }
+
+    /**
+     * This method finds the index of the first character not belonging to the
+     * array element that starts at the given index i.
+     *
+     * @param command the command that contains the array element to find
+     * @param i the index at which the array element starts
+     * @return the index of the first character that is not in the element
+     */
+    private static int findEndOfArrayElement(@NotNull String command, int i) {
+        while (i < command.length() && !Character.isWhitespace(command.charAt(i)) &&
+                command.charAt(i) != '{' && command.charAt(i) != '}' &&
+                command.charAt(i) != ',') {
             i++;
         }
         return i;
@@ -574,6 +594,43 @@ public class StringProcessing {
             i++;
         }
         return i;
+    }
+
+    /**
+     * This method tokenizes a string that represents an array.
+     * For this purpose there are only three types of tokens used:
+     * the opening bracket ("{"}, the closing bracket ("}") and any
+     * kind of value contained within the array.
+     *
+     * @param representation the tokenized array as described above
+     * @return the array containing all the single tokens
+     */
+    @NotNull
+    public static String[] tokenizeArray(@NotNull String representation) {
+        List<String> tokens = new ArrayList<>();
+        int i = 0;
+
+        while (i < representation.length()) {
+            i = skipWhiteSpace(representation, i);
+
+            if(representation.charAt(i) == '{') {
+                tokens.add("{");
+            } else if (representation.charAt(i) == '}') {
+                tokens.add("}");
+            } else if(representation.charAt(i) == '"') {
+                int start = i;
+                i = findEndOfString(representation, i);
+                tokens.add(descape(representation.substring(start + 1, i - 1)));
+            } else if(representation.charAt(i) != ',') {
+                int start = i;
+                i = findEndOfArrayElement(representation, i);
+                tokens.add(representation.substring(start, i));
+            }
+            i++;
+        }
+
+        String[] result = new String[tokens.size()];
+        return tokens.toArray(result);
     }
 
     /**

@@ -74,6 +74,11 @@ public final class ArrayType implements Type {
         return false;
     }
 
+    @Override
+    public boolean isArray() {
+        return true;
+    }
+
     public boolean equals(ArrayType at) {
         return this.containedType.equals(at.containedType) &&
                 this.dimensions == at.dimensions;

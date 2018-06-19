@@ -72,6 +72,13 @@ public interface Type {
     boolean isSubType(Type t);
 
     /**
+     * This method should determine whether the represented type is an array.
+     *
+     * @return whether {@code this} represents an array
+     */
+    boolean isArray();
+
+    /**
      * This method should determine whether the represented type is an enum.
      *
      * @return whether {@code this} represents an enumerated type

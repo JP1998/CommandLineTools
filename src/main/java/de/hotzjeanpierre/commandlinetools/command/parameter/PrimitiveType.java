@@ -50,6 +50,11 @@ public final class PrimitiveType implements Type {
     }
 
     @Override
+    public boolean isArray() {
+        return false;
+    }
+
+    @Override
     public String getName() {
         return primitiveClass.getName();
     }
