@@ -251,7 +251,7 @@ public class StringProcessing {
                 // will let i point to the first character outside of the string,
                 // which will make String#substring(int, int) include only the last double quote.
                 i = findEndOfString(command, i) - 1;
-            } else {
+            } else if(command.charAt(i) != ',') {
                 // minus one again because of aforementioned reason
                 i = findEndOfArrayElement(command, i) - 1;
             }
