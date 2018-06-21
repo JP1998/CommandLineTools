@@ -1,5 +1,5 @@
 
-
+- make StringProcessing#descape(String) also support unicode escapes like "\uD800\uDC01"
 
 - Updating README.md to have actually usable code examples lol
   - the last section (creation of a new command) has ordinals to be added

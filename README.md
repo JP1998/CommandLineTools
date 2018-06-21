@@ -1,7 +1,9 @@
 # CommandLineTools [![Build Status](https://travis-ci.org/JP1998/CommandLineTools.svg?branch=master)](https://travis-ci.org/JP1998/CommandLineTools)
 
-This is a small project that is trying to aim at programmers and computer-affine people. It creates a command line tool,
-which is implementing more complex tasks like bulk renaming of files by a certain pattern, or en- / decrypting files with a password.
+This is a small project that is trying to aim at programmers and computer-affine people. It creates a command line,
+which is implementing more complex tasks like bulk renaming of files by a certain pattern, or en- / decrypting files
+with a password. Furthermore it makes it way easier to simply implement own commands that can then be used by you or
+other people you deliver your solution to.
 
 ## Table of contents
 
@@ -15,28 +17,61 @@ which is implementing more complex tasks like bulk renaming of files by a certai
 
 To be able to use custom commands you'll need to assure that your commands are loaded into the pool of supported commands, which can be achieved by
 calling `Command.assureLoadingOfCommands(String...)` with the fully qualified class name of your command class (more about creating custom
-commands [here](#creation-of-a-new-command)). After you made sure that this has happened you can obtain an `ExecutableCommand` by
-calling `Command.parse(String)`, which will give your command the right parameters as soon as you do `ExecutableCommand.execute()`.
+commands [here](#creation-of-a-new-command)). This is automatically done for the default commands such as `encrypt`. After you made sure that
+this has happened you can obtain an `ExecutableCommand` by calling `Command.parse(String)`, which will give your command the right parameters
+as soon as you call `ExecutableCommand.execute()`.
 
 The method `Command.parse(String)` takes in a string in a format specified as follows:
 The first word (sequence of characters not interrupted by whitespace) has to be a command name, where a command name is defined to
 begin with either a standard latin character (a-z; upper or lower case) or an underscore, and may be followed by aforementioned
 characters or a digit (0-9).
-After the commands name you can give any parameter explicitly by first writing the parameter name and afterwards the value, which will
-be parsed. The value (or rather anything after the command name) can be either given without double quotes, which means the word will
-be parsed as is, or you can include it within double quotes, which means you can include whitespace, but you'll have to escape
-characters like '\n' for a line break.
+After the commands name you can give any parameter a value explicitly by first writing the parameter name and afterwards the value, which will
+be attempted to be parsed and to an object of the desired type. The value (or rather anything after the command name) can be either given
+without double quotes, which means the word will be used as is, or you can include it within double quotes, which means you can include
+whitespace, but you'll have to escape special characters like '\n' for a line break. You will have to note though that only the standard
+escape sequences `\\`, `\"`, `\'`, `\t`, `\n`, `\b`, `\r`and `\f` are supported.
 Thus a parameter of type integer can be given as '`"-123"`' and a parameter of type String can be given as '`asdf`'.
-The single parameters can also be given implicitly by writing the values in the order of the
+The value of parameters can also be given implicitly by writing the values in the order of the
 ordinals of the parameters, while parameters that were explicitly given before the implicit assignment will be skipped. Also
 parameters of type 'Boolean' can be given explicitly while still only using a single word, by adding the prefix '`--`' (for '`true`')
 or '`--not-`' (for '`false`') to the parameter name.
 
-Considering a command named 'samplecommand' with two parameters: 'param1' having the type of String and no default value
+The name, type and ordinal of the parameters of a command can be read by calling the `help`-command. For example the command `help encrypt` will
+print any available information about the `list`-command. The output will look as follows:
+```
+John Doe>help encrypt
+Printing help for command 'encrypt': 
+encrypt: 
+    This command allows you to encrypt multiple files into several encrypted files.
+    It supports filtering of files within a folder, formatting of the filename of the resulting files
+    and recursive searching for files that are to be encrypted.
+  Parameters: 
+    -  filter (String|): The filter to apply to the search of files.
+    -  subdir (boolean|true): Whether to also search within sub directories for files to encrypt.
+    -  filtermode (FilterMode|None): [None, Filter, AllowOnly]; the filter mode to apply.
+    3. password (String): The password to use for encrypting the files.
+    1. src (File): The folder of the files to encrypt.
+    -  format (FileNamingTemplate|{index:10}.encr): The template to use for the name of the encrypted files.
+    -  delsrc (boolean|true): Whether to delete the source files, or not.
+    2. out (File): Where to save the encrypted files.
+
+```
+
+As you can see there is a brief description of the command after the actual name of the command. Such a description is also provided
+for any parameter that can be applied to the command. In case the parameter has an ordinal it will be printed before the parameters
+name. In case it has no ordinal there will be a dash instead. The type of the parameter is given after the parameters name in brackets.
+The default value of the parameter is given after its type (in the same brackets) while delimited by a vertical dash.
+In case the parameter is of enumerated type the valid values for this type will be given as first in the description of the parameter
+collected in rectangular brackets.
+
+Considering the previously shown `encrypt`-command you can call said command with the parameters `password="asdf1234"`,
+`src="/somedirectory/toEncrypt/"` and `out="/somedirectory/encrypted/"` as shown in the command sample below.
+
+You can also create a command named 'samplecommand' with two parameters: 'param1' having the type of String and no default value
 and 'param2' having the type of Integer and the default value of 123, whereas 'param1' has the ordinal 1 and 'param2' the ordinal 2
-([Code of the command creation can be seen here](#creation-of-a-new-command)), the following code will execute said command first
-with the values of `param1="this is some string"` and `param2=321`, then with the values `param1="some other parameter"`
-and the default value for `param2`, and finally with the values `param1="asdf1234"` and `param2=456`:
+([Code of the command creation can be seen here](#creation-of-a-new-command)), in the following code sample this command will
+execute said command first with the values of `param1="this is some string"` and `param2=321`, then with the values
+`param1="some other parameter"` and the default value for `param2`, and finally with the values `param1="asdf1234"` and `param2=456`:
 
 ```Java
 package com.yourname.yourproject;
@@ -46,11 +81,32 @@ import de.commandlinetools.command.Command;
 public class Main {
     
     public static void main(String[] args) {
+        // examples of calling the encrypt command.
+        // As this is a default command you don't have to assure the loading of it
+        Command.parse(
+            // here the parameters are only given through implicit assignments
+            "encrypt /somedirectory/toEncrypt/ /somedirectory/encrypted/ asdf1234"
+        ).execute();
+
+        Command.parse(
+            // here only the parameter out is given explicitly
+            // since its value is given before it is tried to be assigned implicitly
+            // it is simply skipped in the list of implicit parameters
+            "encrypt out /somedirectory/encrypted/ /somedirectory/toEncrypt/ asdf1234"
+        ).execute();
+
+        Command.parse(
+            // here all of the parameters are given explicitly whereas the order does not matter whatsoever
+            "encrypt password asdf1234 out /somedirectory/encrypted/  src /somedirectory/toEncrypt/"
+        ).execute();
+
+        // now we have to load the mentioned custom command
         Command.assureLoadingOfCommands(
             "com.yourname.yourproject.commands.SampleCommand"
             // Your other command classes can be listed here too, with commas separated
         );
         
+        // now we can use it as already explained before with explicit or implicit value assignments
         Command.parse(
             "samplecommand param1 \"this is some string\" param2 321"
         ).execute();
