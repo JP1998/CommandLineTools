@@ -55,7 +55,7 @@ public class StringProcessingTest {
     public void testTokenizingValid() {
         assertThat(
                 StringProcessing.tokenizeCommand(
-                        "asdf ghjk lmno pqrs \"\\\"Hello World!\\\"\"{{\"asdf\\n\"}, { 123,4567, 98765}  ,{asdf}}"
+                        "asdf ghjk lmno pqrs \"\\\"Hello World!\\\"\"{{\"asdf\\n\\u0054\"}, { 123,4567, 98765}  ,{asdf}}"
                 ),
                 is(new String[] {
                         "asdf",
@@ -63,7 +63,7 @@ public class StringProcessingTest {
                         "lmno",
                         "pqrs",
                         "\"Hello World!\"",
-                        "{{\"asdf\\n\"}, { 123,4567, 98765}  ,{asdf}}"
+                        "{{\"asdf\\n\\u0054\"}, { 123,4567, 98765}  ,{asdf}}"
                 })
         );
     }

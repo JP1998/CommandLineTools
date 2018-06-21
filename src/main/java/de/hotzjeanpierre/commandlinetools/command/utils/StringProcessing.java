@@ -406,7 +406,7 @@ public class StringProcessing {
                 }
             } else {
                 // "validate" any characters in a simple string
-                i =validateSimpleParameter(command, i);
+                i = validateSimpleParameter(command, i);
                 if(i == -1) {
                     return false;
                 }
@@ -477,7 +477,7 @@ public class StringProcessing {
     private static int validateString(@NotNull String command, int i) {
         // all the characters that form a valid escape sequence
         final Character[] validEscapeSequences = new Character[] {
-                't', 'b', 'n', 'r', 'f', '\'', '\"', '\\' };
+                't', 'b', 'n', 'r', 'f', '\'', '\"', '\\', 'u' };
 
         // a flag to indicate whether we're still in the string
         boolean inString = true;
@@ -633,17 +633,84 @@ public class StringProcessing {
         return tokens.toArray(result);
     }
 
+    private static final Pattern UNICODE_CODEPOINT_PATTERN = Pattern.compile("^[a-fA-F0-9]{4}$");
+
     /**
-     * Descapes any exscape-sequence inside a string. Only supports standard escape sequences like '\n' or '\t'.
+     * Descapes any exscape-sequence inside a string. This method supports standard escape sequences like '\n' or '\t'
+     * as well as unicode escape sequences like '\u0054' for an uppercase t ('T').
      *
      * @param str the string containing escape sequences
      * @return the string with descaped escape-sequences
      */
     @NotNull
     private static String descape(@NotNull String str) {
-        return str.replace("\\t", "\t").replace("\\b", "\b").replace("\\n", "\n")
-                .replace("\\r", "\r").replace("\\f", "\f").replace("\\'", "\'")
-                .replace("\\\"", "\"").replace("\\\\", "\\");
+        int i = 0;
+        int occurrence = str.indexOf('\\', i);
+
+        while (occurrence >= 0) {
+            String replacement;
+            int skippedCharacters;
+            switch (str.charAt(occurrence + 1)) {
+                case 't':
+                    replacement = "\t";
+                    skippedCharacters = 2;
+                    break;
+                case 'b':
+                    replacement = "\b";
+                    skippedCharacters = 2;
+                    break;
+                case 'n':
+                    replacement = "\n";
+                    skippedCharacters = 2;
+                    break;
+                case 'r':
+                    replacement = "\r";
+                    skippedCharacters = 2;
+                    break;
+                case 'f':
+                    replacement = "\f";
+                    skippedCharacters = 2;
+                    break;
+                case '\'':
+                    replacement = "\'";
+                    skippedCharacters = 2;
+                    break;
+                case '\"':
+                    replacement = "\"";
+                    skippedCharacters = 2;
+                    break;
+                case '\\':
+                    replacement = "\\";
+                    skippedCharacters = 2;
+                    break;
+                case 'u':
+                    skippedCharacters = 6;
+
+                    String unicodeCodePoint = str.substring(occurrence + 2, occurrence + 6);
+                    if(UNICODE_CODEPOINT_PATTERN.matcher(unicodeCodePoint).matches()) {
+                        int literalCodePoint = Integer.parseInt(unicodeCodePoint, 16);
+                        replacement = new String(Character.toChars(literalCodePoint));
+                    } else {
+                        throw new IllegalArgumentException(StringProcessing.format(
+                                "Malformed unicode escape sequence '{0}' recognized.",
+                                str.substring(occurrence, occurrence + 6)
+                        ));
+                    }
+                    break;
+                default: throw new IllegalArgumentException(StringProcessing.format(
+                        "Illegal escape sequence '{0}' recognized.",
+                        str.substring(occurrence, occurrence + 2),
+                        str
+                ));
+            }
+
+            str = str.substring(0, occurrence) + replacement + str.substring(occurrence + skippedCharacters);
+
+            i = occurrence;
+            occurrence = str.indexOf('\\', i);
+        }
+
+        return str;
     }
 
     /**
