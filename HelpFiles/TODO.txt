@@ -1,5 +1,4 @@
 
-- make StringProcessing#descape(String) also support unicode escapes like "\uD800\uDC01"
 
 - Updating README.md to have actually usable code examples lol
   - the last section (creation of a new command) has ordinals to be added
@@ -29,10 +28,10 @@
   - interpreter for brainfuck
   - interpreter for false
 - a GUI that is more comfortable to use than the cli of Win7
-  - giving the possibility of a implicit parameter passing through a defined order for the parameters without default values
-  /- giving the possibility of viewing / recalling history with arrow keys
-    - maybe adding a cap of the amount of records that are being captured
-    - maybe adding a possibility of clearing the record history (for improved security with passwords)
+  //- giving the possibility of a implicit parameter passing through a defined order for the parameters without default values
+  //- giving the possibility of viewing / recalling history with arrow keys
+  //  - maybe adding a cap of the amount of records that are being captured
+  //  - maybe adding a possibility of clearing the record history (for improved security with passwords)
 //   - giving the possibility of a short notation for boolean parameters ("--<name>" for true and "--not-<name>" for false)
 //   - text-based but created with a window
 //   - using streams to read / write (so System.out and Scanner may still be used)
@@ -67,3 +66,4 @@
 //   - makes it easier to extend commands later on
 //   - makes it easier to implement an easy CLI in other environments (like a Swing- or JavaFX-window)
 // - Change filenamingtemplates extension to include the point!
+// - make StringProcessing#descape(String) also support unicode escapes like "\uD800\uDC01"

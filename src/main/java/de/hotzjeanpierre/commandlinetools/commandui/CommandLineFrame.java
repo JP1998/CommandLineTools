@@ -56,9 +56,9 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
     private void init() {
         this.initView();
 
-
         TextComponentOutputStream newStdOut = new TextComponentOutputStream(cliTextArea);
         TextComponentInputStream newStdIn = new TextComponentInputStream(cliTextArea);
+        newStdIn.setMaxAmountOfRecords(20);
 
         System.setErr(new PrintStream(newStdOut));
         System.setOut(new PrintStream(newStdOut));
@@ -157,7 +157,6 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
             return g;
         }
     }
-
 
     private void onDispose() {
         try {

@@ -62,6 +62,11 @@ public class TextComponentInputStream extends InputStream {
     private int currentlySelectedRecord;
 
     /**
+     * Contains the maximum amount of records to keep track of in the history.
+     */
+    private int maxAmountOfRecords;
+
+    /**
      * This list contains the records of the history of all the submitted inputs.
      * The newest entry will be at index 0.
      */
@@ -126,8 +131,31 @@ public class TextComponentInputStream extends InputStream {
 
         blockingQueue = new LinkedBlockingQueue<>();
 
+        this.maxAmountOfRecords = 20;
         this.records = new ArrayList<>();
         this.records_workingcopy = new ArrayList<>();
+    }
+
+    /**
+     * This method gives you the current maximum amount of
+     * records this stream keeps track of in its history.
+     */
+    public int getMaxAmountOfRecords() {
+        return maxAmountOfRecords;
+    }
+
+    /**
+     * This method allows you to set the maximum amount of
+     * records this stream keeps track of in its history.
+     * Any values below {@code 0} will be simply ignored.
+     *
+     * @param maxAmountOfRecords the maximum amount of
+     *                          records in the history of this stream
+     */
+    public void setMaxAmountOfRecords(int maxAmountOfRecords) {
+        if(maxAmountOfRecords >= 0) {
+            this.maxAmountOfRecords = maxAmountOfRecords;
+        }
     }
 
     @Override
@@ -234,6 +262,10 @@ public class TextComponentInputStream extends InputStream {
 
         HistoryRecord submittingRecord = records_workingcopy.get(currentlySelectedRecord);
         records.add(0, submittingRecord);
+
+        if(records.size() > maxAmountOfRecords) {
+            records.remove(records.size() - 1);
+        }
 
         System.arraycopy(
                 submittingRecord.getData(),
