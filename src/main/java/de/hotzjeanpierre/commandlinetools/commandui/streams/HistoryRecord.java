@@ -63,10 +63,10 @@ public class HistoryRecord {
         this.offset = off;
 
         int backtrack = 0;
-        if(data[off + capturedChars - 1] == '\n') {
+        if(capturedChars >= 1 && data[off + capturedChars - 1] == '\n') {
             backtrack++;
         }
-        if(data[off + capturedChars - 2] == '\r') {
+        if(capturedChars >= 2 && data[off + capturedChars - 2] == '\r') {
             backtrack++;
         }
 
