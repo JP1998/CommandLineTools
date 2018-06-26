@@ -17,6 +17,7 @@
 package de.hotzjeanpierre.commandlinetools;
 
 import de.hotzjeanpierre.commandlinetools.command.*;
+import de.hotzjeanpierre.commandlinetools.command.exceptions.CommandNotSupportedException;
 import de.hotzjeanpierre.commandlinetools.command.parameter.CommonTypes;
 import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
 import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
@@ -98,6 +99,11 @@ public class Main implements ICommandLineApplication {
                 input = reader.nextLine();
                 cmd = Command.parseCommand(input);
                 error = false;
+            } catch (CommandNotSupportedException exc) {
+
+                cmd = Command.parseShellCommand(input);
+                error = false;
+
             } catch (Exception exc) {
                 System.out.println("Seems like your instruction included mistakes. Here's the error message:");
                 System.out.println(exc.getMessage());

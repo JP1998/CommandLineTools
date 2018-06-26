@@ -21,10 +21,15 @@ import de.hotzjeanpierre.commandlinetools.command.parameter.*;
 import de.hotzjeanpierre.commandlinetools.command.utils.Assurance;
 import de.hotzjeanpierre.commandlinetools.command.utils.Converter;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
+import de.hotzjeanpierre.commandlinetools.command.utils.files.CommonFileUtilities;
+import de.hotzjeanpierre.commandlinetools.command.utils.stream.InputStreamRedirect;
+import de.hotzjeanpierre.commandlinetools.command.utils.stream.PrintStreamStreamRedirect;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
 
@@ -565,7 +570,11 @@ public abstract class Command implements NamingValidator {
         Map<String, Parameter.Value> arguments = filterSupplementAndConvertList(template, valueList);
 
         // finally create the actually executable command
-        return template.new ExecutableCommand(arguments);
+        return template.new CustomExecutableCommand(arguments);
+    }
+
+    public static ShellCommand parseShellCommand(String toParse) {
+        return new ShellCommand(StringProcessing.tokenizeCommand(toParse));
     }
 
     /**
@@ -861,11 +870,96 @@ public abstract class Command implements NamingValidator {
      */
     protected abstract CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream);
 
+    public interface ExecutableCommand {
+
+        boolean isDeleteInput();
+
+        CommandExecutionResult execute();
+
+        CommandExecutionResult execute(PrintStream out);
+    }
+
+    public static class ShellCommand implements ExecutableCommand {
+
+        private String[] arguments;
+
+        private ShellCommand(String[] args) {
+            this.arguments = args;
+        }
+
+        @Override
+        public boolean isDeleteInput() {
+            return false;
+        }
+
+        @Override
+        public CommandExecutionResult execute() {
+            String lowerOSName = System.getProperty("os.name").toLowerCase();
+
+            int exit;
+
+            try {
+                File inputRedirectFile = new File(CommonFileUtilities.getWorkingDirectory(), "CommandLineTools_InputRedirection");
+                File outputRedirectFile = new File(CommonFileUtilities.getWorkingDirectory(), "CommandLineTools_OutputRedirection");
+                File errorRedirectFile = new File(CommonFileUtilities.getWorkingDirectory(), "CommandLineTools_ErrorRedirection");
+
+                InputStreamRedirect inputRedirect = new InputStreamRedirect(System.in, inputRedirectFile);
+                PrintStreamStreamRedirect outputRedirect = new PrintStreamStreamRedirect(outputRedirectFile, System.out);
+                PrintStreamStreamRedirect errorRedirect = new PrintStreamStreamRedirect(errorRedirectFile, System.out);
+
+                Process p = new ProcessBuilder(buildArguments(lowerOSName, arguments))
+                        .redirectInput(inputRedirectFile)
+                        .redirectOutput(outputRedirectFile)
+                        .redirectError(errorRedirectFile)
+                        .start();
+
+
+                inputRedirect.start();
+                outputRedirect.start();
+                errorRedirect.start();
+
+                exit = p.waitFor();
+
+                inputRedirect.requestStop();
+                outputRedirect.requestStop();
+                errorRedirect.requestStop();
+
+            } catch (IOException | InterruptedException e) {
+                exit = -1;
+            }
+
+            return new CommandExecutionResult.Builder()
+                    .setSuccess(exit == 0)
+                    .build();
+        }
+
+        private static String[] buildArguments(String lowerOSName, String[] args) {
+            boolean windows = lowerOSName.contains("window");
+            int offset = (windows)? 2 : 0;
+
+            String[] result = new String[args.length + offset];
+
+            if(windows) {
+                result[0] = "cmd";
+                result[1] = "/c";
+            }
+
+            System.arraycopy(args, 0, result, offset, args.length);
+
+            return result;
+        }
+
+        @Override
+        public CommandExecutionResult execute(PrintStream out) {
+            return execute();
+        }
+    }
+
     /**
      * This class is simply a wrapper class,
      * that makes it even easier to execute a parsed command.
      */
-    public class ExecutableCommand {
+    public class CustomExecutableCommand implements ExecutableCommand {
 
         /**
          * The parameterlist that was given for the execution of the ExecutableCommand
@@ -878,7 +972,7 @@ public abstract class Command implements NamingValidator {
          *
          * @param args     The parameterlist that is given for the execution of the ExecutableCommand
          */
-        private ExecutableCommand(Map<String, Parameter.Value> args) {
+        private CustomExecutableCommand(Map<String, Parameter.Value> args) {
             this.args = new ParameterValuesList(args);
         }
 

@@ -201,4 +201,19 @@ public class CommonFileUtilities {
 
         return false;
     }
+
+    @NotNull
+    public static File getWorkingDirectory() {
+        String workingDirectory;
+
+        final String OSNAME = (System.getProperty("os.name")).toUpperCase();
+
+        if (OSNAME.contains("WIN")) {
+            workingDirectory = System.getenv("AppData");
+        } else {
+            workingDirectory = System.getProperty("user.home");
+            workingDirectory += "/Library/Application Support";
+        }
+        return new File(workingDirectory);
+    }
 }
