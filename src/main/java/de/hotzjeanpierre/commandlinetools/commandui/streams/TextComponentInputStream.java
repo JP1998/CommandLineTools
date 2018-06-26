@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import static java.awt.event.KeyEvent.VK_V;
+import static java.awt.event.KeyEvent.VK_X;
+
 /**
  * This class may be used to create an InputStream using a {@link JTextComponent}.<br>
  * It provides enough functionality to be efficiently used as stdin (by calling {@link System#setIn(InputStream)} with
@@ -95,7 +98,11 @@ public class TextComponentInputStream extends InputStream {
         this.console.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if(!e.isControlDown() && !e.isAltDown() && !e.isAltGraphDown() && console.getText().length() == console.getCaretPosition()) {
+                if(e.isControlDown() || e.isAltDown() || e.isAltGraphDown()) {
+                    return;
+                }
+
+                if(console.getText().length() == console.getCaretPosition()) {
                     blockingQueue.offer(e.getKeyChar());
                     console.setCaretPosition(console.getDocument().getLength());
                 } else {
@@ -106,6 +113,13 @@ public class TextComponentInputStream extends InputStream {
 
             @Override
             public void keyPressed(KeyEvent e){
+                if(e.isControlDown() || e.isAltDown() || e.isAltGraphDown()) {
+                    if(e.getKeyCode() == VK_V || e.getKeyCode() == VK_X) {
+                        e.consume();
+                    }
+                    return;
+                }
+
                 if(console.getCaretPosition() != console.getText().length()) {
                     e.consume();
                 }
