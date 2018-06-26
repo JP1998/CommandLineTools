@@ -19,6 +19,7 @@ package de.hotzjeanpierre.commandlinetools.command.utils.stream;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 
 import java.io.*;
+import java.nio.charset.Charset;
 
 public class PrintStreamStreamRedirect extends Thread {
 
@@ -52,12 +53,12 @@ public class PrintStreamStreamRedirect extends Thread {
 
     @Override
     public void run() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(src))) {
-            char[] buffer = new char[1024];
+        try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(src))) {
+            byte[] buffer = new byte[1024];
             int readLength = 0;
 
             while(redirecting || readLength > 0) {
-                if(reader.ready()) {
+                if(reader.available() > 0) {
                     readLength = reader.read(buffer, 0, buffer.length);
                     dest.print(new String(buffer, 0, readLength));
                 } else {

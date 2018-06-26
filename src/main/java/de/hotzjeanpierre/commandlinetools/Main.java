@@ -100,10 +100,17 @@ public class Main implements ICommandLineApplication {
                 cmd = Command.parseCommand(input);
                 error = false;
             } catch (CommandNotSupportedException exc) {
-
-                cmd = Command.parseShellCommand(input);
-                error = false;
-
+                cli.getUsedInputStream().setRecordInput(false);
+                System.out.print("Your command has not been recognized.\nShould we try to execute it as shell command? [y/n] ");
+                String answer = reader.nextLine();
+                System.out.println();
+                if(answer.trim().toLowerCase().startsWith("y")) {
+                    cmd = Command.parseShellCommand(input);
+                    error = false;
+                } else {
+                    error = true;
+                }
+                cli.getUsedInputStream().setRecordInput(true);
             } catch (Exception exc) {
                 System.out.println("Seems like your instruction included mistakes. Here's the error message:");
                 System.out.println(exc.getMessage());
@@ -112,6 +119,8 @@ public class Main implements ICommandLineApplication {
             }
 
             if (!error) {
+
+                cli.getUsedInputStream().setRecordInput(false);
 
                 cli.onStartExecution(input);
 
@@ -127,6 +136,8 @@ public class Main implements ICommandLineApplication {
                 }
 
                 cli.onEndExecution();
+
+                cli.getUsedInputStream().setRecordInput(true);
             }
         }
 
