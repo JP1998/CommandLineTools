@@ -94,7 +94,7 @@ public class TextComponentInputStream extends CommandLineInputStream {
         this.console.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if(e.isControlDown() || e.isAltDown() || e.isAltGraphDown()) {
+                if(e.isControlDown() || e.isAltDown()) {
                     return;
                 }
 
@@ -109,7 +109,7 @@ public class TextComponentInputStream extends CommandLineInputStream {
 
             @Override
             public void keyPressed(KeyEvent e){
-                if(e.isControlDown() || e.isAltDown() || e.isAltGraphDown()) {
+                if(e.isControlDown() || e.isAltDown()) {
                     if(e.getKeyCode() == VK_V || e.getKeyCode() == VK_X) {
                         e.consume();
                     }
