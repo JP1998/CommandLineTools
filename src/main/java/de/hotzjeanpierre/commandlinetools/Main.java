@@ -32,23 +32,32 @@ public class Main implements ICommandLineApplication {
     private static final Main APPLICATION = new Main();
 
     private static final ICommandLine DEFAULT_CLI = new ICommandLine() {
-        @Override
-        public void setupCLI(ICommandLineApplication associatedApplication) { }
+        private CommandLineInputStream usedInputStream;
 
         @Override
-        public void clearCLI() {
-            String lowerOSName = System.getProperty("os.name").toLowerCase();
+        public void setupCLI(ICommandLineApplication associatedApplication) {
+            usedInputStream = new CommandLineInputStreamWrapper(System.in) {
+                @Override
+                public void clear() {
+                    String lowerOSName = System.getProperty("os.name").toLowerCase();
 
-            if(lowerOSName.contains("window")) {
-                try {
-                    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
+                    if(lowerOSName.contains("window")) {
+                        try {
+                            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                        } catch (IOException | InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        System.out.print("\033[H\033[2J");
+                        System.out.flush();
+                    }
                 }
-            } else {
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-            }
+            };
+        }
+
+        @Override
+        public CommandLineInputStream getUsedInputStream() {
+            return usedInputStream;
         }
 
         @Override
@@ -102,7 +111,7 @@ public class Main implements ICommandLineApplication {
 
                 if(cmd.isDeleteInput()) {
                     // Delete the input made before writing the output that results from the command
-                    cli.clearCLI();
+                    cli.getUsedInputStream().clear();
                 }
 
                 CommandExecutionResult result = cmd.execute();
@@ -172,7 +181,7 @@ public class Main implements ICommandLineApplication {
 
         @Override
         protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
-            APPLICATION.cli.clearCLI();
+            APPLICATION.cli.getUsedInputStream().clear();
             return new CommandExecutionResult.Builder()
                     .setSuccess(true)
                     .build();

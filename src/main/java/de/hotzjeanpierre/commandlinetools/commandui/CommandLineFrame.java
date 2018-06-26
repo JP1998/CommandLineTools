@@ -16,6 +16,7 @@
 
 package de.hotzjeanpierre.commandlinetools.commandui;
 
+import de.hotzjeanpierre.commandlinetools.command.CommandLineInputStream;
 import de.hotzjeanpierre.commandlinetools.command.ICommandLine;
 import de.hotzjeanpierre.commandlinetools.command.ICommandLineApplication;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
@@ -41,6 +42,8 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
     private JTextArea cliTextArea;
     private JScrollPane scrollPane;
 
+    private TextComponentInputStream usedInputStream;
+
     public CommandLineFrame() {
         new Thread(this::init).start();
 
@@ -57,12 +60,12 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
         this.initView();
 
         TextComponentOutputStream newStdOut = new TextComponentOutputStream(cliTextArea);
-        TextComponentInputStream newStdIn = new TextComponentInputStream(cliTextArea);
-        newStdIn.setMaxAmountOfRecords(20);
+        usedInputStream = new TextComponentInputStream(cliTextArea);
+        usedInputStream.setMaxAmountOfRecords(20);
 
         System.setErr(new PrintStream(newStdOut));
         System.setOut(new PrintStream(newStdOut));
-        System.setIn(newStdIn);
+        System.setIn(usedInputStream);
 
         this.pack();
 
@@ -185,8 +188,8 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
     }
 
     @Override
-    public void clearCLI() {
-        this.cliTextArea.setText("");
+    public CommandLineInputStream getUsedInputStream() {
+        return usedInputStream;
     }
 
     @Override

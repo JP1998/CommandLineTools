@@ -16,6 +16,7 @@
 
 package de.hotzjeanpierre.commandlinetools.commandui.streams;
 
+import de.hotzjeanpierre.commandlinetools.command.CommandLineInputStream;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +42,7 @@ import static java.awt.event.KeyEvent.VK_X;
  * When typed by the user the text is always assumed to be at the end of the text of the component,
  * whereas there might be some problems occurring when using this stream with concurrency.
  */
-public class TextComponentInputStream extends InputStream {
+public class TextComponentInputStream extends CommandLineInputStream {
 
     /**
      * This Queue contains all the characters typed by the user into the text component
@@ -63,11 +64,6 @@ public class TextComponentInputStream extends InputStream {
      * record that is currently selected.
      */
     private int currentlySelectedRecord;
-
-    /**
-     * Contains the maximum amount of records to keep track of in the history.
-     */
-    private int maxAmountOfRecords;
 
     /**
      * This list contains the records of the history of all the submitted inputs.
@@ -145,31 +141,10 @@ public class TextComponentInputStream extends InputStream {
 
         blockingQueue = new LinkedBlockingQueue<>();
 
-        this.maxAmountOfRecords = 20;
+        setMaxAmountOfRecords(20);
+        setRecordInput(true);
         this.records = new ArrayList<>();
         this.records_workingcopy = new ArrayList<>();
-    }
-
-    /**
-     * This method gives you the current maximum amount of
-     * records this stream keeps track of in its history.
-     */
-    public int getMaxAmountOfRecords() {
-        return maxAmountOfRecords;
-    }
-
-    /**
-     * This method allows you to set the maximum amount of
-     * records this stream keeps track of in its history.
-     * Any values below {@code 0} will be simply ignored.
-     *
-     * @param maxAmountOfRecords the maximum amount of
-     *                          records in the history of this stream
-     */
-    public void setMaxAmountOfRecords(int maxAmountOfRecords) {
-        if(maxAmountOfRecords >= 0) {
-            this.maxAmountOfRecords = maxAmountOfRecords;
-        }
     }
 
     @Override
@@ -275,9 +250,11 @@ public class TextComponentInputStream extends InputStream {
         } while(!closed && recordToUse.getAmountCapturedCharacters() < len && currentItem != '\n');
 
         HistoryRecord submittingRecord = records_workingcopy.get(currentlySelectedRecord);
-        records.add(0, submittingRecord);
+        if(isRecordInput()) {
+            records.add(0, submittingRecord);
+        }
 
-        if(records.size() > maxAmountOfRecords) {
+        if(records.size() > getMaxAmountOfRecords()) {
             records.remove(records.size() - 1);
         }
 
@@ -290,6 +267,11 @@ public class TextComponentInputStream extends InputStream {
         );
 
         return submittingRecord.getAmountCapturedCharacters();
+    }
+
+    @Override
+    public void clear() {
+        this.console.setText("");
     }
 
     @Override

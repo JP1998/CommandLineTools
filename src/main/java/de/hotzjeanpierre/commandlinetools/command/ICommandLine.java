@@ -29,6 +29,14 @@ public interface ICommandLine {
     void setupCLI(ICommandLineApplication associatedApplication);
 
     /**
+     * This method is supposed to return the {@link CommandLineInputStream}
+     * this command line is using for input.
+     *
+     * @return the used CommandLineInputStream
+     */
+    CommandLineInputStream getUsedInputStream();
+
+    /**
      * This method is called whenever the execution of a command starts.
      *
      * @param cmd the input that lead to the execution of the command
@@ -39,11 +47,6 @@ public interface ICommandLine {
      * This method is called whenever the execution of a command has ended.
      */
     default void onEndExecution() {}
-
-    /**
-     * This method is supposed to clear the command line.
-     */
-    void clearCLI();
 
     /**
      * This method is supposed to dispose the command line

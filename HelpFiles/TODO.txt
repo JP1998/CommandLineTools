@@ -1,16 +1,12 @@
 
 
+
+- making the execution of shell / console commands possible
+- adding the possibility to add a custom ICommandLine-type to the Main-class,
+    which should be able to be used with certain command-line arguments
 - Updating README.md to have actually usable code examples lol
   - the last section (creation of a new command) has ordinals to be added
   - the code sample needs a cast to int in the second parameter and needs a ordinal in the first
-
-- creating the possibility to easily parse arrays of arbitrary (but parseable, as determined by the used Converter-object) type
-  - extend the regex used in StringProcessing#tokenize(String) to allow arrays with whitespace but without the string denominator
-  - handle nested arrays (maybe with recursion?)
-  - apparently we'll have to create a custom Array-type
-- adding the possibility to add a custom ICommandLine-type to the Main-class,
-    which should be able to be used with certain command-line arguments
-- making the execution of shell / console commands possible
 - maybe implement lazy conversion for parameter values?
   -> could improve runtime for commands with parameters that are
      not always used but have an expensive conversion
@@ -27,11 +23,15 @@
   - password generator / manager
   - interpreter for brainfuck
   - interpreter for false
-- a GUI that is more comfortable to use than the cli of Win7
-  //- giving the possibility of a implicit parameter passing through a defined order for the parameters without default values
-  //- giving the possibility of viewing / recalling history with arrow keys
-  //  - maybe adding a cap of the amount of records that are being captured
-  //  - maybe adding a possibility of clearing the record history (for improved security with passwords)
+// - creating the possibility to easily parse arrays of arbitrary (but parseable, as determined by the used Converter-object) type
+//   - extend the regex used in StringProcessing#tokenize(String) to allow arrays with whitespace but without the string denominator
+//   - handle nested arrays (maybe with recursion?)
+//   - apparently we'll have to create a custom Array-type
+// - a GUI that is more comfortable to use than the cli of Win7
+//   - giving the possibility of a implicit parameter passing through a defined order for the parameters without default values
+//   - giving the possibility of viewing / recalling history with arrow keys
+//     - maybe adding a cap of the amount of records that are being captured
+//     - maybe adding a possibility of clearing the record history (for improved security with passwords)
 //   - giving the possibility of a short notation for boolean parameters ("--<name>" for true and "--not-<name>" for false)
 //   - text-based but created with a window
 //   - using streams to read / write (so System.out and Scanner may still be used)
