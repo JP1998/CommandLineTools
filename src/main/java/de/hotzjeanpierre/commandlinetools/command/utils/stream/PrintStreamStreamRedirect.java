@@ -19,7 +19,6 @@ package de.hotzjeanpierre.commandlinetools.command.utils.stream;
 import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 
 import java.io.*;
-import java.nio.charset.Charset;
 
 public class PrintStreamStreamRedirect extends Thread {
 

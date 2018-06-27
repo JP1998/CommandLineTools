@@ -56,5 +56,8 @@ public class InputStreamRedirect extends Thread {
                 }
             }
         } catch (IOException ignored) {}
+
+        // noinspection ResultOfMethodCallIgnored
+        dest.delete();
     }
 }
