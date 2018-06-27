@@ -38,7 +38,7 @@ import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
  * value of {@code null}. This value thus also cannot be assigned
  * to a parameter.
  */
-public class Parameter implements NamingValidator {
+public class Parameter /* implements NamingValidator */ {
 
     /**
      * The name of the parameter; used for identification in parsing a command
@@ -129,7 +129,7 @@ public class Parameter implements NamingValidator {
             throw new IllegalArgumentException("Description of a parameter may not be empty.");
         }
 
-        assureNameValidity(
+        NamingValidator.assureNameValidity(
                 name,
                 "The parameter name '{0}' you were trying to assign is not valid.",
                 name

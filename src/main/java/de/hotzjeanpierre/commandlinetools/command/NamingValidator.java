@@ -26,12 +26,12 @@ import java.util.regex.Pattern;
  * with alphabetical characters, digits or an underscore.
  * It can therefor be used to validate for example variable or parameter names.
  */
-public interface NamingValidator {
+public class NamingValidator {
 
     /**
      * The pattern to validate names with.
      */
-    Pattern sNameValidatorPattern =
+    private static final Pattern sNameValidatorPattern =
             Pattern.compile("^[_a-zA-Z][_a-zA-Z0-9]*$");
 
     /**
@@ -39,7 +39,7 @@ public interface NamingValidator {
      *
      * @param name the name to validate
      */
-    default void assureNameValidity(String name) {
+    public static void assureNameValidity(String name) {
         assureNameValidity(name, "The name '{0}' is not valid.", name);
     }
 
@@ -49,7 +49,7 @@ public interface NamingValidator {
      * @param name        the name to validate
      * @param failMessage the message to give the exception in case it is thrown
      */
-    default void assureNameValidity(String name, String failMessage) {
+    public static void assureNameValidity(String name, String failMessage) {
         assureNameValidity(name, failMessage, new Object[0]);
     }
 
@@ -60,7 +60,7 @@ public interface NamingValidator {
      * @param failMessageFormat the format for the message of the exception as specified in {@link StringProcessing#format(String, Object...)}
      * @param replacements      the Objects to write into the wildcards of the messages format
      */
-    default void assureNameValidity(String name, String failMessageFormat, Object... replacements) {
+    public static void assureNameValidity(String name, String failMessageFormat, Object... replacements) {
         if (!sNameValidatorPattern.matcher(name).matches()) {
             throw new InvalidNameException(
                     (replacements.length == 0)? failMessageFormat : StringProcessing.format(failMessageFormat, replacements)
@@ -72,8 +72,8 @@ public interface NamingValidator {
      * The exception that is thrown as soon as an invalid name is tried to
      * be validated.
      */
-    class InvalidNameException extends RuntimeException {
-        InvalidNameException(String message) {
+    public static class InvalidNameException extends RuntimeException {
+        /* package-protected */ InvalidNameException(String message) {
             super(message);
         }
     }

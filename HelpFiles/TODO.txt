@@ -1,7 +1,6 @@
 
 
 
-- making the execution of shell / console commands possible
 - adding the possibility to add a custom ICommandLine-type to the Main-class,
     which should be able to be used with certain command-line arguments
 - Updating README.md to have actually usable code examples lol
@@ -12,7 +11,8 @@
      not always used but have an expensive conversion
 - implement some kind of lightweight pattern matching for Filtering files
 - creating the possibility for smart auto-complete in the ui-client
-- allow nested command calls (like "list find asdf C:/Users/", which should list all the files in any directory containing the phrase "asdf" in "C:/Users/")?
+- allow nested command calls (like "list find asdf C:/Users/", which should list all
+    the files in any directory containing the phrase "asdf" in "C:/Users/")?
 - some default command such as:
   - bulk renaming files within a directory
     - having an option for the folder to rename the contained files of
@@ -23,6 +23,7 @@
   - password generator / manager
   - interpreter for brainfuck
   - interpreter for false
+// - making the execution of shell / console commands possible
 // - creating the possibility to easily parse arrays of arbitrary (but parseable, as determined by the used Converter-object) type
 //   - extend the regex used in StringProcessing#tokenize(String) to allow arrays with whitespace but without the string denominator
 //   - handle nested arrays (maybe with recursion?)

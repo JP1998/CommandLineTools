@@ -18,36 +18,36 @@ package de.hotzjeanpierre.commandlinetools.command;
 
 import org.junit.Test;
 
-public class NamingValidatorTest implements NamingValidator {
+public class NamingValidatorTest /*implements NamingValidator*/ {
 
     @Test
     public void testValidName_withoutmessage() {
-        assureNameValidity("_asd_123ASDF");
+        NamingValidator.assureNameValidity("_asd_123ASDF");
     }
 
     @Test(expected = NamingValidator.InvalidNameException.class)
     public void testNameBeginningWithDigit_withoutmessage() {
-        assureNameValidity("123asdf");
+        NamingValidator.assureNameValidity("123asdf");
     }
 
     @Test(expected = NamingValidator.InvalidNameException.class)
     public void testNameContainingWhitespace_withoutmessage() {
-        assureNameValidity("_asdf asdf");
+        NamingValidator.assureNameValidity("_asdf asdf");
     }
 
     @Test
     public void testValidName_withmessage() {
-        assureNameValidity("_asd_123ASDF", "some error message.");
+        NamingValidator.assureNameValidity("_asd_123ASDF", "some error message.");
     }
 
     @Test(expected = NamingValidator.InvalidNameException.class)
     public void testNameBeginningWithDigit_withmessage() {
-        assureNameValidity("123asdf", "some error message.");
+        NamingValidator.assureNameValidity("123asdf", "some error message.");
     }
 
     @Test(expected = NamingValidator.InvalidNameException.class)
     public void testNameContainingWhitespace_withmessage() {
-        assureNameValidity("_asdf asdf", "some error { message");
+        NamingValidator.assureNameValidity("_asdf asdf", "some error { message");
     }
 
 }

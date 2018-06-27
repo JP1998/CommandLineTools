@@ -169,7 +169,7 @@ import java.util.*;
  *
  * @see Converter
  */ // TODO: Update description
-public abstract class Command implements NamingValidator {
+public abstract class Command /* implements NamingValidator */ {
 
     /*                                                                 *
      * =============================================================== *
@@ -325,7 +325,7 @@ public abstract class Command implements NamingValidator {
             throw new IllegalArgumentException("Description of the command may not be empty.");
         }
 
-        assureNameValidity(
+        NamingValidator.assureNameValidity(
                 name,
                 "The command name '{0}' you were trying to assign is not valid.",
                 name
