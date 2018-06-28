@@ -21,11 +21,12 @@ import de.hotzjeanpierre.commandlinetools.command.exceptions.CommandNotSupported
 import de.hotzjeanpierre.commandlinetools.command.parameter.CommonTypes;
 import de.hotzjeanpierre.commandlinetools.command.parameter.Parameter;
 import de.hotzjeanpierre.commandlinetools.command.parameter.ParameterValuesList;
-import de.hotzjeanpierre.commandlinetools.command.utils.arrays.ArrayHelper;
-import de.hotzjeanpierre.commandlinetools.commandui.CommandLineFrame;
+import de.hotzjeanpierre.commandlinetools.commandui.FrameCommandLine;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main implements ICommandLineApplication {
@@ -64,6 +65,27 @@ public class Main implements ICommandLineApplication {
         @Override
         public void disposeCLI() { }
     };
+
+    private static final Map<String, ICommandLine> sAvailableCommandLines;
+
+    static {
+        sAvailableCommandLines = new HashMap<>();
+        addCommandLine("default", DEFAULT_CLI);
+        addCommandLine("ui", new FrameCommandLine());
+    }
+
+    public static void addCommandLine(String term, ICommandLine cmd) {
+        NamingValidator.assureNameValidity(
+                term,
+                "The term '{0}' is not easy to give as parameter and is thus not allowed as name of a commandline.",
+                term
+        );
+
+        if(cmd != null && !sAvailableCommandLines.containsKey(term) &&
+                !sAvailableCommandLines.containsValue(cmd)) {
+            sAvailableCommandLines.put(term, cmd);
+        }
+    }
 
     public static void main(String[] args) {
         APPLICATION.execute(args);
@@ -150,11 +172,19 @@ public class Main implements ICommandLineApplication {
     }
 
     private static ICommandLine determineCLI(String[] args) {
-        if(ArrayHelper.containsAny(args, "ui", "-ui", "/ui")) {
-            return new CommandLineFrame();
-        } else {
-            return DEFAULT_CLI;
+        ICommandLine commandLineToUse = null;
+
+        for(int i = 0; i < args.length; i++) {
+            if(args[i].trim().toLowerCase().equals("--cli") && args.length > i + 1) {
+                commandLineToUse = sAvailableCommandLines.get(args[i + 1].trim().toLowerCase());
+            }
         }
+
+        if(commandLineToUse == null) {
+            commandLineToUse = DEFAULT_CLI;
+        }
+
+        return commandLineToUse;
     }
 
     @SuppressWarnings("unused")
@@ -262,27 +292,30 @@ public class Main implements ICommandLineApplication {
 
         @Override
         protected CommandExecutionResult execute(ParameterValuesList params, PrintStream outputStream) {
-            switch ((int) params.getValue("surprise")) {
-                case 1:
-                    if(APPLICATION.cli instanceof CommandLineFrame) {
-                        CommandLineFrame frame = ((CommandLineFrame) APPLICATION.cli);
+            int surprisecode = (int) params.getValue("surprise");
 
-                        if(frame.isSurprise1()) {
+            if(surprisecode > 0) {
+                if(APPLICATION.cli instanceof FrameCommandLine) {
+                    FrameCommandLine uicli = (FrameCommandLine) APPLICATION.cli;
+
+                    if(!uicli.isValidSurprise(surprisecode)) {
+                        for(String line : APPLICATION_INFORMATION) {
+                            System.out.println(line);
+                        }
+                    } else {
+                        if(uicli.isSurprise(surprisecode)) {
                             System.out.println("You've been unbamboozled!");
-                            System.out.println();
                         } else {
                             System.out.println("You've been bamboozled!");
-                            System.out.println();
                         }
-
-                        frame.setSurprise1(!frame.isSurprise1());
+                        System.out.println();
+                        uicli.toggleSurprise((int) params.getValue("surprise"));
                     }
-                    break;
-                default:
-                    for(String line : APPLICATION_INFORMATION) {
-                        System.out.println(line);
-                    }
-
+                }
+            } else {
+                for(String line : APPLICATION_INFORMATION) {
+                    System.out.println(line);
+                }
             }
 
             return new CommandExecutionResult.Builder()

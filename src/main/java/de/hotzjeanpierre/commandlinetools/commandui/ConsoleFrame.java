@@ -34,9 +34,7 @@ import java.io.PrintStream;
 /**
  * Created by Jonny on 16.04.2018.
  */
-public class CommandLineFrame extends JFrame implements ICommandLine {
-
-    private static final String DEFAULT_TITLE = "CommandLineTools v1.0.0-SNAPSHOT";
+public class ConsoleFrame extends JFrame {
 
     private JPanel rootPanel;
     private JTextArea cliTextArea;
@@ -44,19 +42,7 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
 
     private TextComponentInputStream usedInputStream;
 
-    public CommandLineFrame() {
-        new Thread(this::init).start();
-
-        try {
-            synchronized (this) {
-                this.wait();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void init() {
+    public ConsoleFrame(final ICommandLineApplication appl, String title) {
         this.initView();
 
         TextComponentOutputStream newStdOut = new TextComponentOutputStream(cliTextArea);
@@ -74,20 +60,15 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                associatedApplication.onCLITermination();
+                appl.onCLITermination();
                 onDispose();
                 dispose();
             }
         });
 
-        this.setVisible(true);
+        this.setTitle(title);
         this.setSize(600, 400);
-
-        this.setTitle(DEFAULT_TITLE);
-
-        synchronized (this) {
-            this.notify();
-        }
+        this.setVisible(true);
     }
 
     private boolean surprise1;
@@ -170,30 +151,7 @@ public class CommandLineFrame extends JFrame implements ICommandLine {
         }
     }
 
-    private ICommandLineApplication associatedApplication;
-
-    @Override
-    public void setupCLI(ICommandLineApplication associatedApplication) {
-        this.associatedApplication = associatedApplication;
-    }
-
-    @Override
-    public void onStartExecution(String cmd) {
-        setTitle(StringProcessing.format("Executing \"{0}\"", cmd));
-    }
-
-    @Override
-    public void onEndExecution() {
-        setTitle(DEFAULT_TITLE);
-    }
-
-    @Override
     public CommandLineInputStream getUsedInputStream() {
         return usedInputStream;
-    }
-
-    @Override
-    public void disposeCLI() {
-        this.dispose();
     }
 }
