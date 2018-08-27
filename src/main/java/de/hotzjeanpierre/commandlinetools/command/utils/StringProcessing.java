@@ -89,8 +89,7 @@ public class StringProcessing {
 
             boolean found = wildcards.find();
 
-            resultBuilder.append(format.substring(0,
-                    (found) ? wildcards.start() : format.length()));
+            resultBuilder.append(format, 0, (found) ? wildcards.start() : format.length());
 
             while (found) {
                 // replace while saving end
@@ -100,8 +99,7 @@ public class StringProcessing {
                 // find next
                 found = wildcards.find();
                 // add plain text in between
-                resultBuilder.append(format.substring(start,
-                        (found) ? wildcards.start() : format.length()));
+                resultBuilder.append(format, start, (found) ? wildcards.start() : format.length());
             }
 
             return resultBuilder.toString();
@@ -606,7 +604,7 @@ public class StringProcessing {
      * @return the array containing all the single tokens
      */
     @NotNull
-    public static String[] tokenizeArray(@NotNull String representation) {
+    /* package-protected */ static String[] tokenizeArray(@NotNull String representation) {
         List<String> tokens = new ArrayList<>();
         int i = 0;
 

@@ -255,7 +255,7 @@ public class Main implements ICommandLineApplication {
             );
         }
 
-        protected InfoCommand(String name, String description, Parameter[] paramList)
+        private InfoCommand(String name, String description, Parameter[] paramList)
                 throws NullPointerException, IllegalArgumentException {
             super(name, description, paramList);
         }

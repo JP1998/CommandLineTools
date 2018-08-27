@@ -27,12 +27,10 @@ public class FrameCommandLine implements ICommandLine {
     private static final Integer[] VALIDSURPRISECODES = { 1 };
     private static final String DEFAULT_TITLE = "CommandLineTools v1.0.0-SNAPSHOT";
 
-    private ICommandLineApplication associatedApplication;
     private ConsoleFrame shownConsole;
 
     @Override
     public void setupCLI(ICommandLineApplication associatedApplication) {
-        this.associatedApplication = associatedApplication;
         this.shownConsole = new ConsoleFrame(associatedApplication, DEFAULT_TITLE);
     }
 

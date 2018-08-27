@@ -321,8 +321,7 @@ public class FileNamingTemplate {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null ||
-                !(obj instanceof FileNamingTemplate) ||
+        if(!(obj instanceof FileNamingTemplate) ||
                 template.length != ((FileNamingTemplate) obj).template.length) {
             return false;
         }
@@ -377,8 +376,7 @@ public class FileNamingTemplate {
 
         @Override
         public boolean equals(Object obj) {
-            return obj != null &&
-                    obj instanceof OriginalNameToken;
+            return obj instanceof OriginalNameToken;
         }
     }
 
@@ -419,8 +417,7 @@ public class FileNamingTemplate {
 
         @Override
         public boolean equals(Object obj) {
-            return obj != null &&
-                    obj instanceof IndexToken &&
+            return obj instanceof IndexToken &&
                     length == ((IndexToken) obj).length;
         }
     }
@@ -448,8 +445,7 @@ public class FileNamingTemplate {
 
         @Override
         public boolean equals(Object obj) {
-            return obj != null &&
-                    obj instanceof ExtensionToken;
+            return obj instanceof ExtensionToken;
         }
     }
 
@@ -476,8 +472,7 @@ public class FileNamingTemplate {
 
         @Override
         public boolean equals(Object obj) {
-            return obj != null &&
-                    obj instanceof OriginalLocationToken;
+            return obj instanceof OriginalLocationToken;
         }
     }
 
@@ -508,8 +503,7 @@ public class FileNamingTemplate {
 
         @Override
         public boolean equals(Object obj) {
-            return obj != null &&
-                    obj instanceof TextToken &&
+            return obj instanceof TextToken &&
                     text.equals(((TextToken) obj).text);
         }
     }

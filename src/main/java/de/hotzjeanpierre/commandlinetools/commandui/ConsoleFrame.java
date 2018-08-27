@@ -17,9 +17,7 @@
 package de.hotzjeanpierre.commandlinetools.commandui;
 
 import de.hotzjeanpierre.commandlinetools.command.CommandLineInputStream;
-import de.hotzjeanpierre.commandlinetools.command.ICommandLine;
 import de.hotzjeanpierre.commandlinetools.command.ICommandLineApplication;
-import de.hotzjeanpierre.commandlinetools.command.utils.StringProcessing;
 import de.hotzjeanpierre.commandlinetools.commandui.streams.TextComponentInputStream;
 import de.hotzjeanpierre.commandlinetools.commandui.streams.TextComponentOutputStream;
 
@@ -36,9 +34,7 @@ import java.io.PrintStream;
  */
 public class ConsoleFrame extends JFrame {
 
-    private JPanel rootPanel;
     private JTextArea cliTextArea;
-    private JScrollPane scrollPane;
 
     private TextComponentInputStream usedInputStream;
 
@@ -82,7 +78,7 @@ public class ConsoleFrame extends JFrame {
     }
 
     private void initView() {
-        rootPanel = new JPanel(new BorderLayout(0, 0));
+        JPanel rootPanel = new JPanel(new BorderLayout(0, 0));
         rootPanel.setBackground(Color.BLACK);
 
         cliTextArea = new JTextArea() {
@@ -99,7 +95,7 @@ public class ConsoleFrame extends JFrame {
         cliTextArea.setSelectionColor(Color.GRAY);
         cliTextArea.setSelectedTextColor(Color.LIGHT_GRAY);
 
-        scrollPane = new JScrollPane(cliTextArea);
+        JScrollPane scrollPane = new JScrollPane(cliTextArea);
         rootPanel.add(scrollPane, BorderLayout.CENTER);
 
         JPanel westPanel = new JPanel();

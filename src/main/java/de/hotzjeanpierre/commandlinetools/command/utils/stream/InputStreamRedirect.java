@@ -23,6 +23,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * This class may be used to redirect any arbitrary inputstream to a File.
+ * This can be used to "redirect" an inputstream within a process of the JVM
+ * to a process outside of the JVM but has been started by it.
+ * This can be done by first creating an InputStreamRedirect-object with a defined file
+ * and afterwards calling {@link ProcessBuilder#redirectInput(File)} with said file
+ * while creating the Process.
+ */
 public class InputStreamRedirect extends Thread {
 
     private InputStream src;

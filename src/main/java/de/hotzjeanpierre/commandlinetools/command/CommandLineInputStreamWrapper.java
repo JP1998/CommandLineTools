@@ -29,7 +29,7 @@ public abstract class CommandLineInputStreamWrapper extends CommandLineInputStre
 
     private InputStream wrappedInputStream;
 
-    public CommandLineInputStreamWrapper(InputStream wrappedInputStream) {
+    protected CommandLineInputStreamWrapper(InputStream wrappedInputStream) {
         this.wrappedInputStream = wrappedInputStream;
     }
 
