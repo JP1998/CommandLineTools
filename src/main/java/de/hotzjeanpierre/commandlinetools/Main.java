@@ -284,7 +284,7 @@ public class Main implements ICommandLineApplication {
                 "This work is open source, whereas you can view the source code of /",
                 "contribute to this project at https://github.com/JP1998/CommandLineTools.",
                 "",
-                "Following there is a list of all contributors at time of compilation:",
+                "Following is a list of all contributors at time of compilation:",
                 "Jean-Pierre Hotz (https://github.com/JP1998)",
                 "Thor77 (https://github.com/Thor77)",
                 ""
