@@ -1,5 +1,6 @@
 
-
+- sub-commands that can easily be implemented for easily distinguishing between functionalities
+  that belong to a certain program (like how "git add" belongs to "git")
 - a GUI that is more comfortable to use than the cli of Win7
   - add a limit to the amount of lines to print without user interaction
       => make status of paging for in and out streams to prevent paging to happen for input prompts
