@@ -1,6 +1,11 @@
 - sub-commands that can easily be implemented for easily distinguishing between functionalities
   that belong to a certain program (like how "git add" belongs to "git")
+- Updating README.md to have actually usable code examples lol
+  - the last section (creation of a new command) has ordinals to be added
+  - the code sample needs a cast to int in the second parameter and needs a ordinal in the first
 - a GUI that is more comfortable to use than the cli of Win7
+  - create a stream, that differentiates between password and plain text input
+    (to prevent leaking of credentials)
   - add a limit to the amount of lines to print without user interaction
       => make status of paging for in and out streams to prevent paging to happen for input prompts
          implement paging commands:
@@ -14,16 +19,13 @@
 //   - giving the possibility of a short notation for boolean parameters ("--<name>" for true and "--not-<name>" for false)
 //   - text-based but created with a window
 //   - using streams to read / write (so System.out and Scanner may still be used)
-- Updating README.md to have actually usable code examples lol
-  - the last section (creation of a new command) has ordinals to be added
-  - the code sample needs a cast to int in the second parameter and needs a ordinal in the first
+- allow nested command calls (like "list find asdf C:/Users/", which should list all
+    the files in any directory containing the phrase "asdf" in "C:/Users/")?
 - maybe implement lazy conversion for parameter values?
   -> could improve runtime for commands with parameters that are
      not always used but have an expensive conversion
 - implement some kind of lightweight pattern matching for Filtering files
 - creating the possibility for smart auto-complete in the ui-client
-- allow nested command calls (like "list find asdf C:/Users/", which should list all
-    the files in any directory containing the phrase "asdf" in "C:/Users/")?
 - some default command such as:
   - bulk renaming files within a directory
     - having an option for the folder to rename the contained files of
