@@ -1,6 +1,7 @@
 *.iml
 target/
-.idea/*
+out/
+.idea/
 !.idea/copyright/
 lib/
 src/main/java/de/hotzjeanpierre/commandlinetools/command/impl/utils/asdf.java

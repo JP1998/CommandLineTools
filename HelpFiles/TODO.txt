@@ -1,4 +1,3 @@
-
 - sub-commands that can easily be implemented for easily distinguishing between functionalities
   that belong to a certain program (like how "git add" belongs to "git")
 - a GUI that is more comfortable to use than the cli of Win7

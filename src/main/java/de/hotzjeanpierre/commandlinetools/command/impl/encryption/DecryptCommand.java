@@ -72,7 +72,7 @@ public class DecryptCommand extends Command {
                 new Parameter[]{
                         new Parameter(
                                 PARAMETER_NAME_SOURCE,
-                                CommonTypes.FilterMode,
+                                CommonTypes.File,
                                 PARAMETER_DESCRIPTION_SOURCE,
                                 0
                         ),
@@ -102,7 +102,7 @@ public class DecryptCommand extends Command {
                         ),
                         new Parameter(
                                 PARAMETER_NAME_OUTPUTPATH,
-                                CommonTypes.FilterMode,
+                                CommonTypes.File,
                                 PARAMETER_DESCRIPTION_OUTPUTPATH,
                                 1
                         ),
