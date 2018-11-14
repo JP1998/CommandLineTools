@@ -127,7 +127,8 @@ public class StringProcessing {
 
                 if (replacementIndex >= replacements.length) {
                     throw new StringProcessingFormatException(StringProcessing.format(
-                            "Format requires more replacements than you gave us. Expected (at least):{0}; Given:{1}",
+                            "Format requires more replacements than you gave us. Expected (at least):{0} (Index {1}); Given:{2}",
+                            replacementIndex + 1,
                             replacementIndex,
                             replacements.length
                     ));
